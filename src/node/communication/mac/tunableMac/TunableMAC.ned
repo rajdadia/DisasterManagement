@@ -19,8 +19,8 @@ package node.communication.mac.tunableMac;
 
 simple TunableMAC like node.communication.mac.iMac {
  parameters: 
-	bool collectTraceInfo = default (true);//changed default to true Raj 18/10/2018
-	bool printStateTransitions = default (true);//changed default to true Raj 18/10/2018
+	bool collectTraceInfo = default (false);//changed default to true Raj 18/10/2018
+	bool printStateTransitions = default (false);//changed default to true Raj 18/10/2018
 
 	//=============== These are main parameters which can be tuned ================
 

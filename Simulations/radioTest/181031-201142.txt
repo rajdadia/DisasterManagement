@@ -1,0 +1,75 @@
+Castalia| what:General (1)
+Castalia| when:2018-10-31 20:11
+Castalia| label:General
+Castalia|	module:SN.node[0].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79838 
+Castalia|	module:SN.node[0].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			334 Failed with NO interference
+Castalia|			1 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			1 TX pkts
+Castalia|	module:SN.node[0].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			1 Received from App
+Castalia|			1 received data pkts
+Castalia|			1 sent data pkts
+Castalia|	module:SN.node[0].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			1 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			1 RREP pkt (S)
+Castalia|		simple output name:Timers expired
+Castalia|			2 route
+Castalia|	module:SN.node[1].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.46026 
+Castalia|	module:SN.node[1].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			1 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			335 TX pkts
+Castalia|	module:SN.node[1].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			1 Overflown
+Castalia|			336 Received from App
+Castalia|			1 received data pkts
+Castalia|			335 sent data pkts
+Castalia|	module:SN.node[1].Communication.Routing
+Castalia|		simple output name:Buffer overflow
+Castalia|			144 
+Castalia|		simple output name:Pkt received
+Castalia|			1 RREP pkt (D)
+Castalia|		simple output name:Pkt sent
+Castalia|			32 DATA pkt (BS)
+Castalia|			300 DATA pkt (S)
+Castalia|			1 RREPack pkt
+Castalia|			3 RREQ pkt (F)
+Castalia|			3 RREQ pkt (S)
+Castalia|		simple output name:Timers expired
+Castalia|			57 route
+Castalia|			1 rreq
+Castalia|			1 rreq broadcasted
+Castalia|		histogram name:RREQ response time, in s
+Castalia|		histogram_min:0 histogram_max:10
+Castalia|		histogram_values 1 0 0 0 0 0 0 0 0 0 0
+Castalia|	module:SN.node[2].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79784 
+Castalia|	module:SN.node[2].Communication.Radio
+Castalia|		simple output name:TXed pkts
+Castalia|			2 TX pkts
+Castalia|	module:SN.node[2].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			2 Received from App
+Castalia|			2 sent data pkts
+Castalia|	module:SN.node[2].Communication.Routing
+Castalia|		simple output name:Buffer overflow
+Castalia|			467 
+Castalia|		simple output name:Pkt sent
+Castalia|			2 RREQ pkt (F)
+Castalia|			2 RREQ pkt (S)
+Castalia|		simple output name:Timers expired
+Castalia|			1 rreq
+Castalia|			1 rreq broadcasted

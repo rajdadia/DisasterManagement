@@ -27,7 +27,7 @@ network SN {
 
 	int numPhysicalProcesses = default (1);
 	string physicalProcessName = default ("CustomizablePhysicalProcess");
-	string debugInfoFileName = default ("modyyyy.txt");
+	string debugInfoFileName = default ("Castalia-Trace.txt");
 	
 	// The following two parameters should not be modified. Their default values are used only when we execute Castalia from OMNeT++ IDE
 	// When we execute Castalia from the command line, their values are automatically changed to "true" and "file", respectively
