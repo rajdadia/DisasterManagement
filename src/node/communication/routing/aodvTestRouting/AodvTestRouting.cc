@@ -54,7 +54,7 @@ void AodvTestRouting::startup()
 	rreqExpTime = netTraversalTime;
 	rreqExpTimeB = pathDiscoveryTime;
 
-    trace() << "AODV : T : Tanny is a bad boy";
+    trace() << "AODV : T : Tanny is a bad bad boy";
 
 
 	//test to choose the adaptation of aodv timers (depending of smac parameters)
