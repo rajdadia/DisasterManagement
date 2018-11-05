@@ -19,6 +19,9 @@
 #include "RoutingPacket_m.h"
 // }}
 
+
+const SimTime string2simTime(const char* x);//added by raj
+const char * simTime2string(SimTime t);//added by raj
 /**
  * Class generated from <tt>src/node/communication/routing/aodvTestRouting/AodvTestRoutingControlPacket.msg:30</tt> by nedtool.
  * <pre>
@@ -54,7 +57,7 @@ class PacketRREQ : public ::RoutingPacket
     opp_string srcIP_var;
     unsigned long srcSN_var;
     double lifetime_var;
-    double propDelay;//added a new parameter by Raj 19/10/18
+    SimTime propDelay;//added a new parameter by Raj 19/10/18
 
   private:
     void copy(const PacketRREQ& other);
@@ -97,8 +100,8 @@ class PacketRREQ : public ::RoutingPacket
     virtual void setSrcSN(unsigned long srcSN);
     virtual double getLifetime() const;
     virtual void setLifetime(double lifetime);
-    virtual double getpropDelay() const;//added by Raj 19/10/18
-    virtual void setpropDelay(double x);// added by Raj 19/10/18
+    virtual SimTime getpropDelay() const;//added by Raj 19/10/18
+    virtual void setpropDelay(SimTime x);// added by Raj 19/10/18
 };
 
 inline void doPacking(cCommBuffer *b, PacketRREQ& obj) {obj.parsimPack(b);}

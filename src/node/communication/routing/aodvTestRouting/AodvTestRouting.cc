@@ -54,7 +54,7 @@ void AodvTestRouting::startup()
 	rreqExpTime = netTraversalTime;
 	rreqExpTimeB = pathDiscoveryTime;
 
-    trace() << "AODV : T : Tanny is a bad bad boy"<<simTime();//added simTime() by raj on 5/11/2018
+    trace() << "AODV : T : Tanny is a bad bad boy  ";//added simTime() by raj on 5/11/2018
 
 
 	//test to choose the adaptation of aodv timers (depending of smac parameters)
@@ -530,8 +530,9 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	//update route for the originator
 	updateRoute(string(pkt->getSrcIP()), pkt->getSrcSN(), true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,0);
 
-    double pDelay = pkt->getpropDelay();//added the following statements Raj 
-    pDelay = (double)clock() - pDelay;//added the following statements Raj
+    SimTime pDelay1 = pkt->getpropDelay();//added the following statements Raj 
+    SimTime pDelay2 = simTime() ;//added the following statements Raj
+    SimTime pDelay=pDelay2- pDelay1;//added the following statements Raj
 
     if(string(pkt->getDstIP()).compare(SELF_NETWORK_ADDRESS)==0) //current node is the destination (RFC3561 chapter 6.6.1)
     {
@@ -545,7 +546,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
         collectOutput("Pkt sent","RREP pkt (S)");
 	    trace() << "AODV : RREQ : reach destination - origin: " << string(pkt->getSrcIP())
                                                         << " id: " << pkt->getRreqID();
-	    trace() << "AODV : RREP :"<< (double)clock()<<" succ "<< pDelay <<" : sent (is the destination)";//added the pdelay here Raj
+	    trace() << "AODV : RREP :"<< pDelay<<" pDelay =  "<< pDelay2<<"(pDelay2-pDelay1)"<<pDelay1 <<" : sent (is the destination)";//added the pdelay here Raj
 
 
         sendPktRREP(0, string(pkt->getSrcIP()), string(SELF_NETWORK_ADDRESS), currSN, timeout, false, pkt->getRreqID());
@@ -728,7 +729,7 @@ void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dst
 	rreq->setSrcSN(srcSN);
 	rreq->setSource(SELF_NETWORK_ADDRESS);
 	rreq->setDestination(dstIP.c_str());
-    double pDelay = (double)clock();
+    SimTime pDelay = simTime();//added this line for pdelay by Raj on 19/10/18
     rreq->setpropDelay(pDelay);//added this line for pdelay by Raj on 19/10/18
 
 	if (getTimer(AODV_RREQ_RATE_LIMIT_TIMER).dbl() <= 0)

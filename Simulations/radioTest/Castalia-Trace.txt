@@ -1,8 +1,8 @@
 
-0.003536244016  SN.node[1].Communication.Routing         AODV : T : Tanny is a bad bad boy0.003536244016
-0.027539895218  SN.node[0].Communication.Routing         AODV : T : Tanny is a bad bad boy0.027539895218
+0.003536244016  SN.node[1].Communication.Routing         AODV : T : Tanny is a bad bad boy  
+0.027539895218  SN.node[0].Communication.Routing         AODV : T : Tanny is a bad bad boy  
 0.027539895218  SN.node[0].Application                   Not sending packets
-0.035407391109  SN.node[2].Communication.Routing         AODV : T : Tanny is a bad bad boy0.035407391109
+0.035407391109  SN.node[2].Communication.Routing         AODV : T : Tanny is a bad bad boy  
 0.203537606789  SN.node[1].Application                   Sending packet #0
 0.203537606789  SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 0.203537606789  SN.node[1].Communication.Routing         Received [App generic packet] from application layer
@@ -17,7 +17,7 @@
 0.204037606788  SN.node[0].Communication.Routing         AODV : R : new route created to 1
 0.204037606788  SN.node[0].Communication.Routing         AODV : RREQ : RX : final dst - origin: 1 id: 1
 0.204037606788  SN.node[0].Communication.Routing         AODV : RREQ : reach destination - origin: 1 id: 1
-0.204037606788  SN.node[0].Communication.Routing         AODV : RREP :77 succ 1 : sent (is the destination)
+0.204037606788  SN.node[0].Communication.Routing         AODV : RREP :0.000499999999 pDelay =  0.204037606788(pDelay2-pDelay1)0.203537606789 : sent (is the destination)
 0.218470159348  SN.node[1].Communication.Routing         Received [AODV routing RREP packet] from MAC layer
 0.218470159348  SN.node[1].Communication.Routing         AODV : RREP : RX : origin (AODV dst): 0 destination (AODv src): 1 from: 0 rreqID: 1
 0.218470159348  SN.node[1].Communication.Routing         AODV : R : new route created to 0
@@ -6187,7 +6187,7 @@
 95.40468576524  SN.node[0].Communication.Routing         AODV : R : new route created to 1
 95.40468576524  SN.node[0].Communication.Routing         AODV : RREQ : RX : final dst - origin: 1 id: 3
 95.40468576524  SN.node[0].Communication.Routing         AODV : RREQ : reach destination - origin: 1 id: 3
-95.40468576524  SN.node[0].Communication.Routing         AODV : RREP :256 succ 0 : sent (is the destination)
+95.40468576524  SN.node[0].Communication.Routing         AODV : RREP :0.000499999999 pDelay =  95.40468576524(pDelay2-pDelay1)95.404185765241 : sent (is the destination)
 95.409055742212 SN.node[1].Communication.Routing         Received [AODV routing RREP packet] from MAC layer
 95.409055742212 SN.node[1].Communication.Routing         AODV : RREP : RX : origin (AODV dst): 0 destination (AODv src): 1 from: 0 rreqID: 3
 95.409055742212 SN.node[1].Communication.Routing         AODV : R : new route created to 0
@@ -6420,7 +6420,7 @@
 97.424293826591 SN.node[0].Communication.Routing         AODV : R : new route created to 1
 97.424293826591 SN.node[0].Communication.Routing         AODV : RREQ : RX : final dst - origin: 1 id: 4
 97.424293826591 SN.node[0].Communication.Routing         AODV : RREQ : reach destination - origin: 1 id: 4
-97.424293826591 SN.node[0].Communication.Routing         AODV : RREP :274 succ 18 : sent (is the destination)
+97.424293826591 SN.node[0].Communication.Routing         AODV : RREP :1.820106177081 pDelay =  97.424293826591(pDelay2-pDelay1)95.60418764951 : sent (is the destination)
 97.433502066478 SN.node[1].Communication.Routing         Received [AODV routing RREP packet] from MAC layer
 97.433502066478 SN.node[1].Communication.Routing         AODV : RREP : RX : origin (AODV dst): 0 destination (AODv src): 1 from: 0 rreqID: 4
 97.433502066478 SN.node[1].Communication.Routing         AODV : R : new route created to 0
@@ -6508,7 +6508,7 @@
 98.089917469028 SN.node[0].Communication.Routing         AODV : R : new route created to 1
 98.089917469028 SN.node[0].Communication.Routing         AODV : RREQ : RX : final dst - origin: 1 id: 5
 98.089917469028 SN.node[0].Communication.Routing         AODV : RREQ : reach destination - origin: 1 id: 5
-98.089917469028 SN.node[0].Communication.Routing         AODV : RREP :279 succ 4 : sent (is the destination)
+98.089917469028 SN.node[0].Communication.Routing         AODV : RREP :0.485716191788 pDelay =  98.089917469028(pDelay2-pDelay1)97.60420127724 : sent (is the destination)
 98.203797893452 SN.node[1].Communication.Routing         AODV : T : AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER expired
 98.203797893452 SN.node[1].Communication.Routing         AODV : R : expired route to 0
 98.204205365559 SN.node[1].Application                   Sending packet #490

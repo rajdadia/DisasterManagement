@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
+#include <simtime.h>
 #include "AodvTestRoutingControlPacket_m.h"
 
 USING_NAMESPACE
@@ -25,8 +27,6 @@ template<typename T>
 void doUnpacking(cCommBuffer *, T& t) {
     throw cRuntimeError("Parsim error: no doUnpacking() function for type %s or its base class (check .msg and _m.cc/h files!)",opp_typename(typeid(t)));
 }
-
-
 
 
 // Template rule for outputting std::vector<T> types
@@ -262,12 +262,12 @@ void PacketRREQ::setLifetime(double lifetime)
     this->lifetime_var = lifetime;
 }
 
-double PacketRREQ::getpropDelay() const//added a function by Raj on 19/10/18
+SimTime PacketRREQ::getpropDelay() const//added a function by Raj on 19/10/18
 {
     return propDelay;
 }
 
-void PacketRREQ::setpropDelay(double x)//added a function by Raj on 19/10/18
+void PacketRREQ::setpropDelay(SimTime x)//added a function by Raj on 19/10/18
 {
     this->propDelay=x;
 }
@@ -415,7 +415,7 @@ const char *PacketRREQDescriptor::getFieldTypeString(void *object, int field) co
         "string",
         "unsigned long",
         "double",
-        "double",//added by Raj on 19/10/18
+        "SimTime",//added by Raj on 19/10/18
     };
     return (field>=0 && field<13) ? fieldTypeStrings[field] : NULL;//changed from 12 to 13 by Raj on 19/10/18
 }
@@ -469,7 +469,7 @@ std::string PacketRREQDescriptor::getFieldAsString(void *object, int field, int 
         case 9: return oppstring2string(pp->getSrcIP());
         case 10: return ulong2string(pp->getSrcSN());
         case 11: return double2string(pp->getLifetime());
-        case 12: return double2string(pp->getpropDelay());//added by raj 19/10/18
+        case 12: return simTime2string(pp->getpropDelay());//added by raj 19/10/18
         default: return "";
     }
 }
@@ -496,9 +496,25 @@ bool PacketRREQDescriptor::setFieldAsString(void *object, int field, int i, cons
         case 9: pp->setSrcIP((value)); return true;
         case 10: pp->setSrcSN(string2ulong(value)); return true;
         case 11: pp->setLifetime(string2double(value)); return true;
-        case 12: pp->setpropDelay(string2double(value)); return true;//added by raj on 19/10/18
+        case 12: pp->setpropDelay(string2simTime(value)); return true;//added by raj on 19/10/18
         default: return false;
     }
+}
+
+const char * simTime2string(SimTime t)//raj on 5/11/2018
+{ 
+    std::string s = t.SimTime::str();
+    const char * w = s.c_str();
+
+//char* SimTime::str  (   char *  buf  )  const [inline]
+
+    return w;
+}
+
+const SimTime string2simTime(const char* x)//raj on 5/11/2018
+{ 
+    const SimTime s = SimTime::parse(x);
+    return s;
 }
 
 const char *PacketRREQDescriptor::getFieldStructName(void *object, int field) const
