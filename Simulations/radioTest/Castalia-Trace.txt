@@ -3,7 +3,6 @@
 0.027539895218  SN.node[0].Communication.Routing         AODV : T : Tanny is a bad bad boy  
 0.027539895218  SN.node[0].Application                   Not sending packets
 0.027539895218  SN.node[0].Communication.Routing         sugar
-0.027539895218  SN.node[0].Communication.Routing         AODV : T : Tanny is a bad bad boy  
 0.035407391109  SN.node[2].Communication.Routing         AODV : T : Tanny is a bad bad boy  
 0.203537606789  SN.node[1].Application                   Sending packet #0
 0.203537606789  SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer

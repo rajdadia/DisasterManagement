@@ -195,6 +195,7 @@ class AodvTestRouting: public VirtualRouting
 	void processBufferedRREQ();
 	bool isBlacklisted(const char* neib);
 	void setBlacklistTimer(const char* neib);
+	void sendSugar();//created a new fucntion to handle SUGAR by raj 6/11/18.
 };
 
 #endif

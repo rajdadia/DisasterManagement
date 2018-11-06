@@ -98,6 +98,7 @@ void VirtualRouting::handleMessage(cMessage * msg)
 		case SUGAR://added case Sugar for when cmessage of name sugar shall be recieved by raj on 6/11/18.
 		{
 			trace()<<"sugar";
+			break;
 		}
 
 		case NODE_STARTUP:
