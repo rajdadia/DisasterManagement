@@ -26,7 +26,9 @@ void ThroughputTest::startup()
 	if (packet_spacing > 0 && recipientAddress.compare(SELF_NETWORK_ADDRESS) != 0)
 		setTimer(SEND_PACKET, packet_spacing + startupDelay);
 	else
+	{
 		trace() << "Not sending packets";
+	}
 
 	declareOutput("Packets received per node");
 }
