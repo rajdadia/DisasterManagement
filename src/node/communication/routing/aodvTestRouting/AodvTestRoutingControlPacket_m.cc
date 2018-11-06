@@ -503,11 +503,8 @@ bool PacketRREQDescriptor::setFieldAsString(void *object, int field, int i, cons
 
 const char * simTime2string(SimTime t)//raj on 5/11/2018
 { 
-    std::string s = t.SimTime::str();
-    const char * w = s.c_str();
-
-//char* SimTime::str  (   char *  buf  )  const [inline]
-
+    std::string s = t.SimTime::str();//converting SimTime to Std::string
+    const char * w = s.c_str();//converting std::string to const char *
     return w;
 }
 
