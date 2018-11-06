@@ -28,6 +28,7 @@ void ThroughputTest::startup()
 	else
 	{
 		trace() << "Not sending packets";
+		sendCmessageSugar();//calling this fucntion to send the Sugar cMessage to the network layer by raj on 6/11/18.
 	}
 
 	declareOutput("Packets received per node");
@@ -74,3 +75,9 @@ void ThroughputTest::handleRadioControlMessage(RadioControlMessage *radioMsg)
 	}
 }
 
+//adding the function void sendCmessageSugar() here which will send the Cmessage Sugar to the network layer to generate the packet sugar by raj on 6/11/18.
+void ThroughputTest::sendCmessageSugar()
+{
+	cMessage * sugar = new cMessage("Sugar packet", SUGAR);
+	toNetworkLayer(sugar);
+}

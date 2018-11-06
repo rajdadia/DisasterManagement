@@ -48,7 +48,7 @@ enum CastaliaMessageTypes {
 
 	APPLICATION_PACKET = 50,
 
-	SUGAR = 69
+	SUGAR = 69//added cmessage packet kind for sugar message
 };
 
 #endif
