@@ -94,6 +94,12 @@ void AodvTestRouting::startup()
 
 }
 
+// void sendSugar()//creating fucntion to send sugar(RReQ) packets by Raj.
+// {
+//     currSN++;
+//     sendPktRREQ(0, 1, string(SELF_NETWORK_ADDRESS),string(BROADCAST_NETWORK_ADDRESS), currSN, unsigned long dstSN)
+// }
+
 void AodvTestRouting::finish()
 {
     VirtualRouting::finish();
@@ -410,7 +416,7 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 			return;
 	}
 
-	//a rreq is already processed
+	//if a rreq is not processed
 	else if(!(AodvTestRouting::checkRREQProcessed(string(destination))))
 	{
 			currSN++;
