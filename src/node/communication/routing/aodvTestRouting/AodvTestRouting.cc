@@ -102,7 +102,8 @@ void AodvTestRouting::sendSugar()//creating fucntion to send sugar(RReQ) packets
     currSN++;
     trace() << "starting implematation";
     std::string s = std::to_string(BROADCAST_MAC_ADDRESS);
-    char const *dst = s.c_str();
+    char const *dst = s.c_str();  
+    // const char* dst = tmp.c_str();string(BROADCAST_MAC_ADDRESS)
     // trace() << typeid(str(BROADCAST_MAC_ADDRESS)).name() ;
     sendPktRREQ(0, 1,string(SELF_NETWORK_ADDRESS) ,dst, currSN,0);
 }
@@ -726,7 +727,6 @@ void AodvTestRouting::receivePktHELLO(PacketHELLO* pkt)
 
 void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dstIP, unsigned long srcSN, unsigned long dstSN)
 {
-    trace()<<dstSN<<"dstSN";//added by raj on 4/1/2019 just
 	PacketRREQ* rreq = new PacketRREQ("AODV routing RREQ packet", NETWORK_LAYER_PACKET);
 	rreq->setFlagD(false);
 	rreq->setFlagG(false);
