@@ -35,6 +35,7 @@ class ThroughputTest: public VirtualApplication {
 	void fromNetworkLayer(ApplicationPacket *, const char *, double, double);
 	void handleRadioControlMessage(RadioControlMessage *);
 	void timerFiredCallback(int);
+	void sendCmessageSugar();//added this function which sends the cmessage to generate sugar to the network layer by raj on 6/11/18.
 };
 
 #endif				// _THROUGHPUTTEST_APPLICATIONMODULE_H_

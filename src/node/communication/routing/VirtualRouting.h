@@ -55,6 +55,7 @@ class VirtualRouting: public CastaliaModule, public TimerService {
 
 	virtual void initialize();
 	virtual void startup() { }
+	virtual void sendSugar();//Added function by Raj 
 	virtual void handleMessage(cMessage * msg);
 	virtual void finish();
 

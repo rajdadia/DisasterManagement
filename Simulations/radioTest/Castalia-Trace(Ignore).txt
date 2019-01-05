@@ -5,12 +5,14 @@
 0.027539895218  SN.node[0].Application                   Not sending packets
 0.027539895218  SN.node[0].Communication.Routing         sugar
 0.027539895218  SN.node[0].Communication.Routing         starting implematation
+0.027539895218  SN.node[0].Communication.Routing         0dstSN
 0.027539895218  SN.node[0].Communication.Routing         AODV : RREQ : generated for destination -1
 0.027539895218  SN.node[0].Communication.Routing         AODV : RREQ : forwarded to destination -1
 0.028039895217  SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.028039895217  SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 0
 0.028039895217  SN.node[1].Communication.Routing         AODV : R : new route created to 0
 0.028039895217  SN.node[1].Communication.Routing         AODV : R : new route created to 0
+0.028039895217  SN.node[1].Communication.Routing         0dstSN
 0.028039895217  SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination -1
 0.035407391109  SN.node[2].Communication.Routing         AODV : T : Testing purposes  
 0.035407391109  SN.node[2].Application                   please ignore
@@ -29,6 +31,7 @@
 0.235417632671  SN.node[2].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 0.235417632671  SN.node[2].Communication.Routing         Received [App generic packet] from application layer
 0.235417632671  SN.node[2].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+0.235417632671  SN.node[2].Communication.Routing         0dstSN
 0.235417632671  SN.node[2].Communication.Routing         AODV : RREQ : generated for destination 0
 0.235417632671  SN.node[2].Communication.Routing         AODV : RREQ : forwarded to destination 0
 0.235417632671  SN.node[2].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -2149,6 +2152,7 @@
 35.003774729291 SN.node[1].Communication.Routing         AODV : B1 : DATA sent (route valid) - destination 0 via 0
 35.029639400306 SN.node[0].Communication.Routing         AODV : T : RREQ (generated expired) with id : 1
 35.029639400306 SN.node[0].Communication.Routing         AODV : RREQ : rreq resent for destination : -1
+35.029639400306 SN.node[0].Communication.Routing         0dstSN
 35.029639400306 SN.node[0].Communication.Routing         AODV : RREQ : generated for destination -1
 35.029639400306 SN.node[0].Communication.Routing         AODV : RREQ : forwarded to destination -1
 35.037199664459 SN.node[2].Application                   Sending packet #174
@@ -2165,6 +2169,7 @@
 35.072125082648 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 0
 35.072125082648 SN.node[2].Communication.Routing         AODV : R : new route created to 0
 35.072125082648 SN.node[2].Communication.Routing         AODV : R : new route created to 0
+35.072125082648 SN.node[2].Communication.Routing         0dstSN
 35.072125082648 SN.node[2].Communication.Routing         AODV : RREQ : forwarded to destination -1
 35.085301592681 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 35.085301592681 SN.node[0].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 2
@@ -2179,6 +2184,7 @@
 35.203776092064 SN.node[1].Communication.Routing         AODV : B1 : DATA sent (route valid) - destination 0 via 0
 35.237209384649 SN.node[2].Communication.Routing         AODV : T : RREQ (generated expired) with id : 1
 35.237209384649 SN.node[2].Communication.Routing         AODV : RREQ : rreq resent for destination : 0
+35.237209384649 SN.node[2].Communication.Routing         2dstSN
 35.237209384649 SN.node[2].Communication.Routing         AODV : RREQ : generated for destination 0
 35.237209384649 SN.node[2].Communication.Routing         AODV : RREQ : forwarded to destination 0
 35.237209906021 SN.node[2].Application                   Sending packet #175
@@ -3687,6 +3693,7 @@
 60.203946438689 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 60.203946438689 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 60.203946438689 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+60.203946438689 SN.node[1].Communication.Routing         2dstSN
 60.203946438689 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 60.203946438689 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 60.203946438689 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -3721,6 +3728,7 @@
 60.403947801462 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 60.403947801462 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 60.403947801462 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+60.403947801462 SN.node[1].Communication.Routing         3dstSN
 60.403947801462 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 60.403947801462 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 60.403947801462 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -3755,6 +3763,7 @@
 60.603949164235 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 60.603949164235 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 60.603949164235 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+60.603949164235 SN.node[1].Communication.Routing         4dstSN
 60.603949164235 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 60.603949164235 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 60.603949164235 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -3789,6 +3798,7 @@
 60.803950527008 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 60.803950527008 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 60.803950527008 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+60.803950527008 SN.node[1].Communication.Routing         5dstSN
 60.803950527008 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 60.803950527008 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 60.803950527008 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -3823,6 +3833,7 @@
 61.003951889781 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 61.003951889781 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 61.003951889781 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+61.003951889781 SN.node[1].Communication.Routing         6dstSN
 61.003951889781 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 61.003951889781 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 61.003951889781 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -6260,6 +6271,7 @@
 95.203776987151 SN.node[1].Communication.Routing         AODV : R : expired route to 0
 95.204184402469 SN.node[1].Communication.Routing         AODV : T : RREQ (generated expired) with id : 5
 95.204184402469 SN.node[1].Communication.Routing         AODV : RREQ : rreq resent for destination : 0
+95.204184402469 SN.node[1].Communication.Routing         6dstSN
 95.204184402469 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 95.204184402469 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 95.204184923964 SN.node[1].Application                   Sending packet #475
@@ -6362,6 +6374,7 @@
 95.404186286737 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 95.404186286737 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 95.404186286737 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+95.404186286737 SN.node[1].Communication.Routing         7dstSN
 95.404186286737 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 95.404186286737 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 95.404186286737 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -6570,6 +6583,7 @@
 97.404199914467 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 97.404199914467 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 97.404199914467 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+97.404199914467 SN.node[1].Communication.Routing         8dstSN
 97.404199914467 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 97.404199914467 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 97.404199914467 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -6644,6 +6658,7 @@
 98.004204002786 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 98.004204002786 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 98.004204002786 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+98.004204002786 SN.node[1].Communication.Routing         9dstSN
 98.004204002786 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 98.004204002786 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 98.004204002786 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -6680,6 +6695,7 @@
 98.204205365559 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 98.204205365559 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 98.204205365559 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+98.204205365559 SN.node[1].Communication.Routing         10dstSN
 98.204205365559 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 98.204205365559 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 98.204205365559 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -6717,6 +6733,7 @@
 98.404206728332 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 98.404206728332 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 98.404206728332 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+98.404206728332 SN.node[1].Communication.Routing         11dstSN
 98.404206728332 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 98.404206728332 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 98.404206728332 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -6753,6 +6770,7 @@
 98.604208091105 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 98.604208091105 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 98.604208091105 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+98.604208091105 SN.node[1].Communication.Routing         12dstSN
 98.604208091105 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 98.604208091105 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 98.604208091105 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -6789,6 +6807,7 @@
 98.804209453878 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 98.804209453878 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 98.804209453878 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+98.804209453878 SN.node[1].Communication.Routing         13dstSN
 98.804209453878 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 98.804209453878 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 98.804209453878 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0
@@ -6825,6 +6844,7 @@
 99.004210816651 SN.node[1].Application                   Sending [App generic packet] of size 2005 bytes to communication layer
 99.004210816651 SN.node[1].Communication.Routing         Received [App generic packet] from application layer
 99.004210816651 SN.node[1].Communication.Routing         AODV : A : DATA received from application layer - destination 0
+99.004210816651 SN.node[1].Communication.Routing         14dstSN
 99.004210816651 SN.node[1].Communication.Routing         AODV : RREQ : generated for destination 0
 99.004210816651 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 99.004210816651 SN.node[1].Communication.Routing         AODV : B2 : DATA buffered - destination 0

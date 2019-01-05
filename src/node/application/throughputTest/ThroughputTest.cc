@@ -17,16 +17,22 @@ Define_Module(ThroughputTest);
 void ThroughputTest::startup()
 {
 	packet_rate = par("packet_rate");
-	recipientAddress = par("nextRecipient").stringValue();
+	recipientAddress = par("nextRecipient").stringValue();	 	
 	startupDelay = par("startupDelay");
 
 	packet_spacing = packet_rate > 0 ? 1 / float (packet_rate) : -1;
 	dataSN = 0;
 
 	if (packet_spacing > 0 && recipientAddress.compare(SELF_NETWORK_ADDRESS) != 0)
+	{	
+		trace()<<"please ignore";//raj
 		setTimer(SEND_PACKET, packet_spacing + startupDelay);
+	}
 	else
+	{
 		trace() << "Not sending packets";
+		sendCmessageSugar();//calling this fucntion to send the Sugar cMessage to the network layer by raj on 6/11/18.
+	}
 
 	declareOutput("Packets received per node");
 }
@@ -42,6 +48,7 @@ void ThroughputTest::fromNetworkLayer(ApplicationPacket * rcvPacket,
 	// Packet has to be forwarded to the next hop recipient
 	} else {
 		ApplicationPacket* fwdPacket = rcvPacket->dup();
+		trace()<<"please ignore....2"<<recipientAddress.c_str();//raj
 		// Reset the size of the packet, otherwise the app overhead will keep adding on
 		fwdPacket->setByteLength(0);
 		toNetworkLayer(fwdPacket, recipientAddress.c_str());
@@ -72,3 +79,9 @@ void ThroughputTest::handleRadioControlMessage(RadioControlMessage *radioMsg)
 	}
 }
 
+//adding the function void sendCmessageSugar() here which will send the Cmessage Sugar to the network layer to generate the packet sugar by raj on 6/11/18.
+void ThroughputTest::sendCmessageSugar()
+{
+	cMessage * sugar = new cMessage("Sugar packet", SUGAR);
+	toNetworkLayer(sugar);
+}
