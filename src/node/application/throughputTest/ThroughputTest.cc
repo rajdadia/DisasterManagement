@@ -25,12 +25,12 @@ void ThroughputTest::startup()
 
 	if (packet_spacing > 0 && recipientAddress.compare(SELF_NETWORK_ADDRESS) != 0)
 	{	
-		trace()<<"please ignore";//raj
+		trace()<<"Starting application layer for every node except 0";//raj
 		setTimer(SEND_PACKET, packet_spacing + startupDelay);
 	}
 	else
 	{
-		trace() << "Not sending packets";
+		trace() << "Only for node 0, starting application layer.";
 		sendCmessageSugar();//calling this fucntion to send the Sugar cMessage to the network layer by raj on 6/11/18.
 	}
 
