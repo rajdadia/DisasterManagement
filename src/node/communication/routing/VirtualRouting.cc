@@ -61,6 +61,11 @@ void VirtualRouting::toApplicationLayer(cMessage * msg)
 	send(msg, "toCommunicationModule");
 }
 
+void VirtualRouting::sendSugar()
+{
+	trace()<<"testing....123";
+}
+
 void VirtualRouting::encapsulatePacket(cPacket * pkt, cPacket * appPkt)
 {
 	RoutingPacket *netPkt = check_and_cast <RoutingPacket*>(pkt);
@@ -98,6 +103,7 @@ void VirtualRouting::handleMessage(cMessage * msg)
 		case SUGAR://added case Sugar for when cmessage of name sugar shall be recieved by raj on 6/11/18.
 		{
 			trace()<<"sugar";
+			sendSugar();
 			break;
 		}
 

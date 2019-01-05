@@ -25,6 +25,9 @@
 #include <ctime>
 #include <ratio>
 #include <chrono>
+#include <typeinfo>
+#include <string>
+
 using namespace std;
 Define_Module(AodvTestRouting);
 
@@ -54,7 +57,7 @@ void AodvTestRouting::startup()
 	rreqExpTime = netTraversalTime;
 	rreqExpTimeB = pathDiscoveryTime;
 
-    trace() << "AODV : T : Tanny is a bad bad boy  ";//added simTime() by raj on 5/11/2018
+    trace() << "AODV : T : Testing purposes  ";//added simTime() by raj on 5/11/2018
 
 
 	//test to choose the adaptation of aodv timers (depending of smac parameters)
@@ -94,11 +97,15 @@ void AodvTestRouting::startup()
 
 }
 
-// void sendSugar()//creating fucntion to send sugar(RReQ) packets by Raj.
-// {
-//     currSN++;
-//     sendPktRREQ(0, 1, string(SELF_NETWORK_ADDRESS),string(BROADCAST_NETWORK_ADDRESS), currSN, unsigned long dstSN)
-// }
+void AodvTestRouting::sendSugar()//creating fucntion to send sugar(RReQ) packets by Raj.
+{
+    currSN++;
+    trace() << "starting implematation";
+    std::string s = std::to_string(BROADCAST_MAC_ADDRESS);
+    char const *dst = s.c_str();
+    // trace() << typeid(str(BROADCAST_MAC_ADDRESS)).name() ;
+    sendPktRREQ(0, 1,string(SELF_NETWORK_ADDRESS) ,dst, currSN,0);
+}
 
 void AodvTestRouting::finish()
 {
@@ -719,6 +726,7 @@ void AodvTestRouting::receivePktHELLO(PacketHELLO* pkt)
 
 void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dstIP, unsigned long srcSN, unsigned long dstSN)
 {
+    trace()<<dstSN<<"dstSN";//added by raj on 4/1/2019 just
 	PacketRREQ* rreq = new PacketRREQ("AODV routing RREQ packet", NETWORK_LAYER_PACKET);
 	rreq->setFlagD(false);
 	rreq->setFlagG(false);
