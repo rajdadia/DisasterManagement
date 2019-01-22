@@ -105,7 +105,7 @@ void AodvTestRouting::sendSugar()//creating fucntion to send sugar(RReQ) packets
     char const *dst = s.c_str();  
     // const char* dst = tmp.c_str();string(BROADCAST_MAC_ADDRESS)
     // trace() << typeid(str(BROADCAST_MAC_ADDRESS)).name() ;
-    sendPktRREQ(0, 1,string(SELF_NETWORK_ADDRESS) ,dst, currSN,0);
+    sendPktRREQ(0, 1,string(SELF_NETWORK_ADDRESS) ,dst, currSN,0,SimTime());
 }
 
 void AodvTestRouting::finish()
@@ -162,7 +162,7 @@ void AodvTestRouting::timerFiredCallback(int index)
                 {
                     rreqID++;
                     trace() << "AODV : RREQ : rreq resent for destination : "<<nextExpiredRREQ;
-                    sendPktRREQ(0, rreqID, SELF_NETWORK_ADDRESS, nextExpiredRREQ,currSN, rtable->getDstSN(nextExpiredRREQ));
+                    sendPktRREQ(0, rreqID, SELF_NETWORK_ADDRESS, nextExpiredRREQ,currSN, rtable->getDstSN(nextExpiredRREQ),simTime());
                 }
                 else
                 {
@@ -429,7 +429,7 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 	{
 			currSN++;
 			rreqID++;
-			sendPktRREQ(0, rreqID, string(SELF_NETWORK_ADDRESS), string(destination), currSN, rtable->getDstSN(destination));
+			sendPktRREQ(0, rreqID, string(SELF_NETWORK_ADDRESS), string(destination), currSN, rtable->getDstSN(destination),simTime());
 			//buffer the packet
 
 	}
@@ -512,7 +512,14 @@ void AodvTestRouting::receivePktDATA(PacketDATA *pkt)
 
 void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double rssi, double lqi)
 {
-	if(isBlacklisted(pkt->getSource()))
+	SimTime prevTime = pkt->getpropDelay();//added the following statements Raj 
+    SimTime arrivalTime = simTime() ;//added the following statements Raj
+    SimTime pDelay=arrivalTime- prevTime;//added the following statements Raj
+
+    SimTime prevTotal = pkt->getpathDelay(); //added by raj 21/1
+    SimTime pathDelay = prevTotal + pDelay;  //added by raj 21/1
+
+    if(isBlacklisted(pkt->getSource()))
 	{
 	    trace() << "AODV : RREQ : discarded (blacklist) - origin: " << string(pkt->getSrcIP())
 	                                                       << " id: " << pkt->getRreqID()
@@ -521,12 +528,15 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	}
 
 
-
 	trace() << "AODV : RREQ : RX : origin: " << string(pkt->getSrcIP())
 				                                            << " id: " << pkt->getRreqID()
 				                                            << " destination: " << string(pkt->getDstIP())
-				                                            << " from: " << string(pkt->getSource());
+				                                            << " from: " << string(pkt->getSource())
+                                                            << " lqi: " << lqi
+                                                            << "RSSI:" << rssi
+                                                            << "Reliability: " << (rssi-lqi)/rssi;//added on 21/01/19 //Add RSSI
 	//updates a route to the previous hop without a valid seq number
+    trace() << "AODV : RREP : Path Delay:::"<<pathDelay ;//added on 21/1/19
 	updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0);
 
 	//check if this node is the origin of the request
@@ -544,10 +554,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	//update route for the originator
 	updateRoute(string(pkt->getSrcIP()), pkt->getSrcSN(), true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,0);
 
-    SimTime pDelay1 = pkt->getpropDelay();//added the following statements Raj 
-    SimTime pDelay2 = simTime() ;//added the following statements Raj
-    SimTime pDelay=pDelay2- pDelay1;//added the following statements Raj
-
+    
     if(string(pkt->getDstIP()).compare(SELF_NETWORK_ADDRESS)==0) //current node is the destination (RFC3561 chapter 6.6.1)
     {
         if(pkt->getDstSN()==currSN)
@@ -560,8 +567,8 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
         collectOutput("Pkt sent","RREP pkt (S)");
 	    trace() << "AODV : RREQ : reach destination - origin: " << string(pkt->getSrcIP())
                                                         << " id: " << pkt->getRreqID();
-	    trace() << "AODV : RREP :"<< pDelay<<" pDelay =  "<< pDelay2<<"(pDelay2-pDelay1)"<<pDelay1 <<" : sent (is the destination)";//added the pdelay here Raj
-
+	    trace() << "AODV : RREP :"<< pDelay<<" pDelay =  "<< arrivalTime<<"(arrivalTime-prevTime)"<<prevTime <<" : sent (is the destination)";//added the pdelay here Raj
+        trace() << "AODV : RREP : Path Delay:::"<<pathDelay ;//added on 21/1/19
 
         sendPktRREP(0, string(pkt->getSrcIP()), string(SELF_NETWORK_ADDRESS), currSN, timeout, false, pkt->getRreqID());
         return;
@@ -601,7 +608,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	else
 		dstSN = rtable->getDstSN(dstIP);
 
-	sendPktRREQ(hopcount, id, srcIP, dstIP, srcSN, dstSN);
+	sendPktRREQ(hopcount, id, srcIP, dstIP, srcSN, dstSN,pathDelay);//to be changed and pathDelay to be passed as a parameter.
 
 }
 
@@ -725,7 +732,7 @@ void AodvTestRouting::receivePktHELLO(PacketHELLO* pkt)
     }
 }
 
-void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dstIP, unsigned long srcSN, unsigned long dstSN)
+void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dstIP, unsigned long srcSN, unsigned long dstSN, SimTime pathDelay)
 {
 	PacketRREQ* rreq = new PacketRREQ("AODV routing RREQ packet", NETWORK_LAYER_PACKET);
 	rreq->setFlagD(false);
@@ -745,6 +752,8 @@ void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dst
 	rreq->setDestination(dstIP.c_str());
     SimTime pDelay = simTime();//added this line for pdelay by Raj on 19/10/18
     rreq->setpropDelay(pDelay);//added this line for pdelay by Raj on 19/10/18
+
+    rreq->setpathDelay(pathDelay);//added by raj on 21/1.
 
 	if (getTimer(AODV_RREQ_RATE_LIMIT_TIMER).dbl() <= 0)
 	{

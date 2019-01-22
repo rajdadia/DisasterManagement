@@ -15,97 +15,78 @@
 0               SN.node[0].Communication.Routing         AODV : RREQ : forwarded to destination -1
 0.000628007677  SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.000628007677  SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 0 lqi: 9.8574RSSI:-90.1426Reliability: 1.10935
-0.000628007677  SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::0.000628007677
 0.000628007677  SN.node[1].Communication.Routing         AODV : R : new route created to 0
 0.000628007677  SN.node[1].Communication.Routing         AODV : R : new route created to 0
 0.000628007677  SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination -1
 0.000628007677  SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.000628007677  SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 0 lqi: 9.8574RSSI:-90.1426Reliability: 1.10935
-0.000628007677  SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::0.000628007677
 0.000628007677  SN.node[2].Communication.Routing         AODV : R : new route created to 0
 0.000628007677  SN.node[2].Communication.Routing         AODV : R : new route created to 0
 0.000628007677  SN.node[2].Communication.Routing         AODV : RREQ : forwarded to destination -1
 0.000628007677  SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.000628007677  SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 0 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-0.000628007677  SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::0.000628007677
 0.000628007677  SN.node[3].Communication.Routing         AODV : R : new route created to 0
 0.000628007677  SN.node[3].Communication.Routing         AODV : R : new route created to 0
 0.000628007677  SN.node[3].Communication.Routing         AODV : RREQ : forwarded to destination -1
 0.004435536627  SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.004435536627  SN.node[0].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 1 lqi: 9.8574RSSI:-90.1426Reliability: 1.10935
-0.004435536627  SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::0.004435536627
 0.004435536627  SN.node[0].Communication.Routing         AODV : R : new route created to 1
 0.004435536627  SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.004435536627  SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 1 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-0.004435536627  SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::0.004435536627
 0.004435536627  SN.node[2].Communication.Routing         AODV : R : new route created to 1
 0.004435536627  SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.004435536627  SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.004435536627  SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 1 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-0.004435536627  SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::0.004435536627
 0.004435536627  SN.node[3].Communication.Routing         AODV : R : new route created to 1
 0.004435536627  SN.node[3].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.004435536627  SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.004435536627  SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 1 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-0.004435536627  SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::0.004435536627
 0.004435536627  SN.node[4].Communication.Routing         AODV : R : new route created to 1
 0.004435536627  SN.node[4].Communication.Routing         AODV : R : new route created to 0
 0.004435536627  SN.node[4].Communication.Routing         AODV : RREQ : forwarded to destination -1
 0.006948095934  SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.006948095934  SN.node[0].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 2 lqi: 9.8574RSSI:-90.1426Reliability: 1.10935
-0.006948095934  SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::0.006948095934
 0.006948095934  SN.node[0].Communication.Routing         AODV : R : new route created to 2
 0.006948095934  SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.006948095934  SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 2 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-0.006948095934  SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::0.006948095934
 0.006948095934  SN.node[1].Communication.Routing         AODV : R : new route created to 2
 0.006948095934  SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.006948095934  SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.006948095934  SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 2 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-0.006948095934  SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::0.006948095934
 0.006948095934  SN.node[3].Communication.Routing         AODV : R : new route created to 2
 0.006948095934  SN.node[3].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.006948095934  SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.006948095934  SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 2 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-0.006948095934  SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::0.006948095934
 0.006948095934  SN.node[4].Communication.Routing         AODV : R : new route created to 2
 0.006948095934  SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.012750227065  SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.012750227065  SN.node[0].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 4 lqi: 5.16292RSSI:-93.8371Reliability: 1.05502
-0.012750227065  SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::0.012750227065
 0.012750227065  SN.node[0].Communication.Routing         AODV : R : new route created to 4
 0.012750227065  SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.012750227065  SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 4 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-0.012750227065  SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::0.012750227065
 0.012750227065  SN.node[1].Communication.Routing         AODV : R : new route created to 4
 0.012750227065  SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.012750227065  SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.012750227065  SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 4 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-0.012750227065  SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::0.012750227065
 0.012750227065  SN.node[2].Communication.Routing         AODV : R : new route created to 4
 0.012750227065  SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.012750227065  SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.012750227065  SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 4 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-0.012750227065  SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::0.012750227065
 0.012750227065  SN.node[3].Communication.Routing         AODV : R : new route created to 4
 0.012750227065  SN.node[3].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.015825693985  SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.015825693985  SN.node[0].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 3 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-0.015825693985  SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::0.015825693985
 0.015825693985  SN.node[0].Communication.Routing         AODV : R : new route created to 3
 0.015825693985  SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.015825693985  SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-0.015825693985  SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::0.015825693985
 0.015825693985  SN.node[1].Communication.Routing         AODV : R : new route created to 3
 0.015825693985  SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.015825693985  SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.015825693985  SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-0.015825693985  SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::0.015825693985
 0.015825693985  SN.node[2].Communication.Routing         AODV : R : new route created to 3
 0.015825693985  SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.015825693985  SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 0.015825693985  SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 3 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-0.015825693985  SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::0.015825693985
 0.015825693985  SN.node[4].Communication.Routing         AODV : R : new route created to 3
 0.015825693985  SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 0.100005998585  SN.node[0].Communication.Routing         AODV : T : AODV_RREQ_RATE_LIMIT_TIMER expired
@@ -6428,17 +6409,14 @@
 39.081885853834 SN.node[0].Application                   Received packet #194 from node 1
 39.084731693404 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 39.084731693404 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 0 lqi: 9.8574RSSI:-90.1426Reliability: 1.10935
-39.084731693404 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::39.084731693404
 39.084731693404 SN.node[1].Communication.Routing         AODV : R : new route created to 0
 39.084731693404 SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 39.084731693404 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 39.084731693404 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 0 lqi: 9.8574RSSI:-90.1426Reliability: 1.10935
-39.084731693404 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::39.084731693404
 39.084731693404 SN.node[2].Communication.Routing         AODV : R : new route created to 0
 39.084731693404 SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 39.084731693404 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 39.084731693404 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 1 destination: -1 from: 0 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-39.084731693404 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::39.084731693404
 39.084731693404 SN.node[3].Communication.Routing         AODV : R : new route created to 0
 39.084731693404 SN.node[3].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 0 id: 1
 39.155277792583 SN.node[0].Communication.Routing         Received [AODV routing data packet] from MAC layer
@@ -10025,7 +10003,6 @@
 60.221273229513 SN.node[0].Application                   Received packet #299 from node 3
 60.222027678225 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 60.222027678225 SN.node[0].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 1 destination: 0 from: 3 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-60.222027678225 SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::60.222027678225
 60.222027678225 SN.node[0].Communication.Routing         AODV : R : new route created to 3
 60.222027678225 SN.node[0].Communication.Routing         AODV : R : new route created to 3
 60.222027678225 SN.node[0].Communication.Routing         AODV : RREQ : RX : final dst - origin: 3 id: 1
@@ -10034,19 +10011,16 @@
 60.222027678225 SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::60.222027678225
 60.222027678225 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 60.222027678225 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 1 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-60.222027678225 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::60.222027678225
 60.222027678225 SN.node[1].Communication.Routing         AODV : R : new route created to 3
 60.222027678225 SN.node[1].Communication.Routing         AODV : R : new route created to 3
 60.222027678225 SN.node[1].Communication.Routing         AODV : RREQ : buffered for destination 0
 60.222027678225 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 60.222027678225 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 1 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-60.222027678225 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::60.222027678225
 60.222027678225 SN.node[2].Communication.Routing         AODV : R : new route created to 3
 60.222027678225 SN.node[2].Communication.Routing         AODV : R : new route created to 3
 60.222027678225 SN.node[2].Communication.Routing         AODV : RREQ : buffered for destination 0
 60.222027678225 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 60.222027678225 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 1 destination: 0 from: 3 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-60.222027678225 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::60.222027678225
 60.222027678225 SN.node[4].Communication.Routing         AODV : R : new route created to 3
 60.222027678225 SN.node[4].Communication.Routing         AODV : R : new route created to 3
 60.222027678225 SN.node[4].Communication.Routing         AODV : RREQ : buffered for destination 0
@@ -10216,7 +10190,6 @@
 61.00312367641  SN.node[2].Communication.Routing         Packet buffered from application layer, buffer state: 5/32
 61.132925974691 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 61.132925974691 SN.node[0].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 2 lqi: 9.8574RSSI:-90.1426Reliability: 1.10935
-61.132925974691 SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::61.132925974691
 61.132925974691 SN.node[0].Communication.Routing         AODV : R : new route created to 2
 61.132925974691 SN.node[0].Communication.Routing         AODV : R : new route created to 2
 61.132925974691 SN.node[0].Communication.Routing         AODV : RREQ : RX : final dst - origin: 2 id: 1
@@ -10225,19 +10198,16 @@
 61.132925974691 SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::61.132925974691
 61.132925974691 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 61.132925974691 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 2 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-61.132925974691 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::61.132925974691
 61.132925974691 SN.node[1].Communication.Routing         AODV : R : new route created to 2
 61.132925974691 SN.node[1].Communication.Routing         AODV : R : new route created to 2
 61.132925974691 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 61.132925974691 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 61.132925974691 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 2 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-61.132925974691 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::61.132925974691
 61.132925974691 SN.node[3].Communication.Routing         AODV : R : new route created to 2
 61.132925974691 SN.node[3].Communication.Routing         AODV : R : new route created to 2
 61.132925974691 SN.node[3].Communication.Routing         AODV : RREQ : forwarded to destination 0
 61.132925974691 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 61.132925974691 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 2 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-61.132925974691 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::61.132925974691
 61.132925974691 SN.node[4].Communication.Routing         AODV : R : new route created to 2
 61.132925974691 SN.node[4].Communication.Routing         AODV : R : new route created to 2
 61.132925974691 SN.node[4].Communication.Routing         AODV : RREQ : forwarded to destination 0
@@ -10658,7 +10628,6 @@
 63.089233643041 SN.node[0].Application                   Received packet #299 from node 1
 63.089713643041 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 63.089713643041 SN.node[0].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 1 destination: 0 from: 1 lqi: 9.8574RSSI:-90.1426Reliability: 1.10935
-63.089713643041 SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::63.089713643041
 63.089713643041 SN.node[0].Communication.Routing         AODV : R : new route created to 1
 63.089713643041 SN.node[0].Communication.Routing         AODV : R : new route created to 1
 63.089713643041 SN.node[0].Communication.Routing         AODV : RREQ : RX : final dst - origin: 1 id: 1
@@ -10667,39 +10636,32 @@
 63.089713643041 SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::63.089713643041
 63.089713643041 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 63.089713643041 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 1 destination: 0 from: 1 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-63.089713643041 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::63.089713643041
 63.089713643041 SN.node[2].Communication.Routing         AODV : R : new route created to 1
 63.089713643041 SN.node[2].Communication.Routing         AODV : R : new route created to 1
 63.089713643041 SN.node[2].Communication.Routing         AODV : RREQ : forwarded to destination 0
 63.089713643041 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 63.089713643041 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 1 destination: 0 from: 1 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-63.089713643041 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::63.089713643041
 63.089713643041 SN.node[3].Communication.Routing         AODV : R : new route created to 1
 63.089713643041 SN.node[3].Communication.Routing         AODV : R : new route created to 1
 63.089713643041 SN.node[3].Communication.Routing         AODV : RREQ : forwarded to destination 0
 63.089713643041 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 63.089713643041 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 1 destination: 0 from: 1 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-63.089713643041 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::63.089713643041
 63.089713643041 SN.node[4].Communication.Routing         AODV : R : new route created to 1
 63.089713643041 SN.node[4].Communication.Routing         AODV : R : new route created to 1
 63.089713643041 SN.node[4].Communication.Routing         AODV : RREQ : forwarded to destination 0
 63.090193643041 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 63.090193643041 SN.node[0].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 1 lqi: 9.8574RSSI:-90.1426Reliability: 1.10935
-63.090193643041 SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::63.090193643041
 63.090193643041 SN.node[0].Communication.Routing         AODV : R : new route created to 1
 63.090193643041 SN.node[0].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 1
 63.090193643041 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 63.090193643041 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 1 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-63.090193643041 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::63.090193643041
 63.090193643041 SN.node[2].Communication.Routing         AODV : R : new route created to 1
 63.090193643041 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 63.090193643041 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 1 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-63.090193643041 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::63.090193643041
 63.090193643041 SN.node[3].Communication.Routing         AODV : R : new route created to 1
 63.090193643041 SN.node[3].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 1
 63.090193643041 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 63.090193643041 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 1 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-63.090193643041 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::63.090193643041
 63.090193643041 SN.node[4].Communication.Routing         AODV : R : new route created to 1
 63.090193643041 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 1
 63.091791491258 SN.node[3].Communication.Routing         Received [AODV routing RREP packet] from MAC layer
@@ -11638,19 +11600,16 @@
 66.220522051246 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 1 id: 2 from1
 66.220522051246 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 66.220522051246 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 1 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-66.220522051246 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::66.220522051246
 66.220522051246 SN.node[2].Communication.Routing         AODV : R : new route created to 1
 66.220522051246 SN.node[2].Communication.Routing         AODV : R : new route created to 1
 66.220522051246 SN.node[2].Communication.Routing         AODV : RREQ : forwarded to destination 0
 66.220522051246 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 66.220522051246 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 1 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-66.220522051246 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::66.220522051246
 66.220522051246 SN.node[3].Communication.Routing         AODV : R : new route created to 1
 66.220522051246 SN.node[3].Communication.Routing         AODV : R : new route created to 1
 66.220522051246 SN.node[3].Communication.Routing         AODV : RREQ : forwarded to destination 0
 66.220522051246 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 66.220522051246 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 1 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-66.220522051246 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::66.220522051246
 66.220522051246 SN.node[4].Communication.Routing         AODV : R : new route created to 1
 66.220522051246 SN.node[4].Communication.Routing         AODV : R : new route created to 1
 66.220522051246 SN.node[4].Communication.Routing         AODV : RREQ : forwarded to destination 0
@@ -11684,32 +11643,26 @@
 66.227242051246 SN.node[4].Communication.Routing         AODV : RERR : RX : from: 1
 66.231540412953 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 66.231540412953 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 4 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-66.231540412953 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::66.231540412953
 66.231540412953 SN.node[1].Communication.Routing         AODV : R : new route created to 4
 66.231540412953 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 66.231540412953 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 4 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-66.231540412953 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::66.231540412953
 66.231540412953 SN.node[2].Communication.Routing         AODV : R : new route created to 4
 66.231540412953 SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 1 id: 2
 66.231540412953 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 66.231540412953 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 4 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-66.231540412953 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::66.231540412953
 66.231540412953 SN.node[3].Communication.Routing         AODV : R : new route created to 4
 66.231540412953 SN.node[3].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 1 id: 2
 66.233444119114 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 66.233444119114 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 1 id: 1 from2
 66.233444119114 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 66.233444119114 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 1 destination: 0 from: 2 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-66.233444119114 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::66.233444119114
 66.233444119114 SN.node[1].Communication.Routing         AODV : R : new route created to 2
 66.233444119114 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 66.233444119114 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 1 destination: 0 from: 2 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-66.233444119114 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::66.233444119114
 66.233444119114 SN.node[3].Communication.Routing         AODV : R : new route created to 2
 66.233444119114 SN.node[3].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 1 id: 1
 66.233444119114 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 66.233444119114 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 1 destination: 0 from: 2 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-66.233444119114 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::66.233444119114
 66.233444119114 SN.node[4].Communication.Routing         AODV : R : new route created to 2
 66.233444119114 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 1 id: 1
 66.233924119114 SN.node[0].Communication.Routing         Received [AODV routing RREP ACK packet] from MAC layer
@@ -11916,19 +11869,16 @@
 67.208804119114 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 2 id: 2 from2
 67.208804119114 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.208804119114 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 2 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-67.208804119114 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::67.208804119114
 67.208804119114 SN.node[1].Communication.Routing         AODV : R : new route created to 2
 67.208804119114 SN.node[1].Communication.Routing         AODV : R : new route created to 2
 67.208804119114 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 67.208804119114 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.208804119114 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 2 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-67.208804119114 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::67.208804119114
 67.208804119114 SN.node[3].Communication.Routing         AODV : R : new route created to 2
 67.208804119114 SN.node[3].Communication.Routing         AODV : R : new route created to 2
 67.208804119114 SN.node[3].Communication.Routing         AODV : RREQ : forwarded to destination 0
 67.208804119114 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.208804119114 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 2 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-67.208804119114 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::67.208804119114
 67.208804119114 SN.node[4].Communication.Routing         AODV : R : new route created to 2
 67.208804119114 SN.node[4].Communication.Routing         AODV : R : new route created to 2
 67.208804119114 SN.node[4].Communication.Routing         AODV : RREQ : forwarded to destination 0
@@ -11936,62 +11886,50 @@
 67.209284119114 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 1 id: 2 from2
 67.209284119114 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.209284119114 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 2 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-67.209284119114 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::67.209284119114
 67.209284119114 SN.node[1].Communication.Routing         AODV : R : new route created to 2
 67.209284119114 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.209284119114 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 2 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-67.209284119114 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::67.209284119114
 67.209284119114 SN.node[3].Communication.Routing         AODV : R : new route created to 2
 67.209284119114 SN.node[3].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 1 id: 2
 67.209284119114 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.209284119114 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 2 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-67.209284119114 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::67.209284119114
 67.209284119114 SN.node[4].Communication.Routing         AODV : R : new route created to 2
 67.209284119114 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 1 id: 2
 67.220460429536 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.220460429536 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 4 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-67.220460429536 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::67.220460429536
 67.220460429536 SN.node[1].Communication.Routing         AODV : R : new route created to 4
 67.220460429536 SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 2
 67.220460429536 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.220460429536 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 4 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-67.220460429536 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::67.220460429536
 67.220460429536 SN.node[2].Communication.Routing         AODV : R : new route created to 4
 67.220460429536 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.220460429536 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 4 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-67.220460429536 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::67.220460429536
 67.220460429536 SN.node[3].Communication.Routing         AODV : R : new route created to 4
 67.220460429536 SN.node[3].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 2
 67.223577403474 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.223577403474 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 2 id: 1 from3
 67.223577403474 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.223577403474 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-67.223577403474 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::67.223577403474
 67.223577403474 SN.node[1].Communication.Routing         AODV : R : new route created to 3
 67.223577403474 SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 1
 67.223577403474 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.223577403474 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-67.223577403474 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::67.223577403474
 67.223577403474 SN.node[2].Communication.Routing         AODV : R : new route created to 3
 67.223577403474 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.223577403474 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 1 destination: 0 from: 3 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-67.223577403474 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::67.223577403474
 67.223577403474 SN.node[4].Communication.Routing         AODV : R : new route created to 3
 67.223577403474 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 1
 67.224057403474 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.224057403474 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 1 id: 1 from3
 67.224057403474 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.224057403474 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 1 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-67.224057403474 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::67.224057403474
 67.224057403474 SN.node[1].Communication.Routing         AODV : R : new route created to 3
 67.224057403474 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.224057403474 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 1 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-67.224057403474 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::67.224057403474
 67.224057403474 SN.node[2].Communication.Routing         AODV : R : new route created to 3
 67.224057403474 SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 1 id: 1
 67.224057403474 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 67.224057403474 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 1 destination: 0 from: 3 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-67.224057403474 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::67.224057403474
 67.224057403474 SN.node[4].Communication.Routing         AODV : R : new route created to 3
 67.224057403474 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 1 id: 1
 67.224537403474 SN.node[0].Communication.Routing         Received [AODV routing RREP ACK packet] from MAC layer
@@ -12261,19 +12199,16 @@
 68.264377403474 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 3 id: 2 from3
 68.264377403474 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.264377403474 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-68.264377403474 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::68.264377403474
 68.264377403474 SN.node[1].Communication.Routing         AODV : R : new route created to 3
 68.264377403474 SN.node[1].Communication.Routing         AODV : R : new route created to 3
 68.264377403474 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 68.264377403474 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.264377403474 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-68.264377403474 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::68.264377403474
 68.264377403474 SN.node[2].Communication.Routing         AODV : R : new route created to 3
 68.264377403474 SN.node[2].Communication.Routing         AODV : R : new route created to 3
 68.264377403474 SN.node[2].Communication.Routing         AODV : RREQ : forwarded to destination 0
 68.264377403474 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.264377403474 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 3 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-68.264377403474 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::68.264377403474
 68.264377403474 SN.node[4].Communication.Routing         AODV : R : new route created to 3
 68.264377403474 SN.node[4].Communication.Routing         AODV : R : new route created to 3
 68.264377403474 SN.node[4].Communication.Routing         AODV : RREQ : forwarded to destination 0
@@ -12281,94 +12216,76 @@
 68.264857403474 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 1 id: 2 from3
 68.264857403474 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.264857403474 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-68.264857403474 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::68.264857403474
 68.264857403474 SN.node[1].Communication.Routing         AODV : R : new route created to 3
 68.264857403474 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.264857403474 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-68.264857403474 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::68.264857403474
 68.264857403474 SN.node[2].Communication.Routing         AODV : R : new route created to 3
 68.264857403474 SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 1 id: 2
 68.264857403474 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.264857403474 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 1 id: 2 destination: 0 from: 3 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-68.264857403474 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::68.264857403474
 68.264857403474 SN.node[4].Communication.Routing         AODV : R : new route created to 3
 68.264857403474 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 1 id: 2
 68.265337403474 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.265337403474 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 2 id: 2 from3
 68.265337403474 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.265337403474 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-68.265337403474 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::68.265337403474
 68.265337403474 SN.node[1].Communication.Routing         AODV : R : new route created to 3
 68.265337403474 SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 2
 68.265337403474 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.265337403474 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-68.265337403474 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::68.265337403474
 68.265337403474 SN.node[2].Communication.Routing         AODV : R : new route created to 3
 68.265337403474 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.265337403474 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 3 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-68.265337403474 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::68.265337403474
 68.265337403474 SN.node[4].Communication.Routing         AODV : R : new route created to 3
 68.265337403474 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 2
 68.266703832917 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.266703832917 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 2 id: 2 from1
 68.266703832917 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.266703832917 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 1 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-68.266703832917 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::68.266703832917
 68.266703832917 SN.node[2].Communication.Routing         AODV : R : new route created to 1
 68.266703832917 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.266703832917 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 1 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-68.266703832917 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::68.266703832917
 68.266703832917 SN.node[3].Communication.Routing         AODV : R : new route created to 1
 68.266703832917 SN.node[3].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 2
 68.266703832917 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.266703832917 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 2 id: 2 destination: 0 from: 1 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-68.266703832917 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::68.266703832917
 68.266703832917 SN.node[4].Communication.Routing         AODV : R : new route created to 1
 68.266703832917 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 2 id: 2
 68.267183832917 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.267183832917 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 3 id: 2 from1
 68.267183832917 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.267183832917 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 1 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-68.267183832917 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::68.267183832917
 68.267183832917 SN.node[2].Communication.Routing         AODV : R : new route created to 1
 68.267183832917 SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 2
 68.267183832917 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.267183832917 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 1 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-68.267183832917 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::68.267183832917
 68.267183832917 SN.node[3].Communication.Routing         AODV : R : new route created to 1
 68.267183832917 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.267183832917 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 1 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-68.267183832917 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::68.267183832917
 68.267183832917 SN.node[4].Communication.Routing         AODV : R : new route created to 1
 68.267183832917 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 2
 68.276449341758 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.276449341758 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 4 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-68.276449341758 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::68.276449341758
 68.276449341758 SN.node[1].Communication.Routing         AODV : R : new route created to 4
 68.276449341758 SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 2
 68.276449341758 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.276449341758 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 4 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-68.276449341758 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::68.276449341758
 68.276449341758 SN.node[2].Communication.Routing         AODV : R : new route created to 4
 68.276449341758 SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 2
 68.276449341758 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.276449341758 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 4 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-68.276449341758 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::68.276449341758
 68.276449341758 SN.node[3].Communication.Routing         AODV : R : new route created to 4
 68.277654452693 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.277654452693 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 3 id: 2 from2
 68.277654452693 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.277654452693 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 2 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-68.277654452693 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::68.277654452693
 68.277654452693 SN.node[1].Communication.Routing         AODV : R : new route created to 2
 68.277654452693 SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 2
 68.277654452693 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.277654452693 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 2 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-68.277654452693 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::68.277654452693
 68.277654452693 SN.node[3].Communication.Routing         AODV : R : new route created to 2
 68.277654452693 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 68.277654452693 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 2 destination: 0 from: 2 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-68.277654452693 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::68.277654452693
 68.277654452693 SN.node[4].Communication.Routing         AODV : R : new route created to 2
 68.277654452693 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 2
 68.36437808337  SN.node[1].Communication.Routing         AODV : T : AODV_RREQ_RATE_LIMIT_TIMER expired
@@ -16870,19 +16787,16 @@
 95.199930396503 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 3 id: 3 from3
 95.199930396503 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.199930396503 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-95.199930396503 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::95.199930396503
 95.199930396503 SN.node[1].Communication.Routing         AODV : R : new route created to 3
 95.199930396503 SN.node[1].Communication.Routing         AODV : R : new route created to 3
 95.199930396503 SN.node[1].Communication.Routing         AODV : RREQ : forwarded to destination 0
 95.199930396503 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.199930396503 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 3 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-95.199930396503 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::95.199930396503
 95.199930396503 SN.node[2].Communication.Routing         AODV : R : new route created to 3
 95.199930396503 SN.node[2].Communication.Routing         AODV : R : new route created to 3
 95.199930396503 SN.node[2].Communication.Routing         AODV : RREQ : forwarded to destination 0
 95.199930396503 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.199930396503 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 3 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-95.199930396503 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::95.199930396503
 95.199930396503 SN.node[4].Communication.Routing         AODV : R : new route created to 3
 95.199930396503 SN.node[4].Communication.Routing         AODV : R : new route created to 3
 95.199930396503 SN.node[4].Communication.Routing         AODV : RREQ : forwarded to destination 0
@@ -16923,37 +16837,30 @@
 95.206173250251 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 3 id: 3 from1
 95.206173250251 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.206173250251 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 1 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-95.206173250251 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::95.206173250251
 95.206173250251 SN.node[2].Communication.Routing         AODV : R : new route created to 1
 95.206173250251 SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 3
 95.206173250251 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.206173250251 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 1 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-95.206173250251 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::95.206173250251
 95.206173250251 SN.node[3].Communication.Routing         AODV : R : new route created to 1
 95.206173250251 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.206173250251 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 1 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-95.206173250251 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::95.206173250251
 95.206173250251 SN.node[4].Communication.Routing         AODV : R : new route created to 1
 95.206173250251 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 3
 95.209518923786 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.209518923786 SN.node[0].Communication.Routing         AODV : RREQ : discarded (blacklist) - origin: 3 id: 3 from2
 95.209518923786 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.209518923786 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 2 lqi: 19.6124RSSI:-80.3876Reliability: 1.24397
-95.209518923786 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::95.209518923786
 95.209518923786 SN.node[1].Communication.Routing         AODV : R : new route created to 2
 95.209518923786 SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 3
 95.209518923786 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.209518923786 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 2 lqi: 23.2247RSSI:-76.7753Reliability: 1.3025
-95.209518923786 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::95.209518923786
 95.209518923786 SN.node[3].Communication.Routing         AODV : R : new route created to 2
 95.209518923786 SN.node[4].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.209518923786 SN.node[4].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 2 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-95.209518923786 SN.node[4].Communication.Routing         AODV : RREP : Path Delay:::95.209518923786
 95.209518923786 SN.node[4].Communication.Routing         AODV : R : new route created to 2
 95.209518923786 SN.node[4].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 3
 95.213714237713 SN.node[0].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.213714237713 SN.node[0].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 4 lqi: 5.16292RSSI:-93.8371Reliability: 1.05502
-95.213714237713 SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::95.213714237713
 95.213714237713 SN.node[0].Communication.Routing         AODV : R : new route created to 4
 95.213714237713 SN.node[0].Communication.Routing         AODV : R : new route created to 3
 95.213714237713 SN.node[0].Communication.Routing         AODV : RREQ : RX : final dst - origin: 3 id: 3
@@ -16962,17 +16869,14 @@
 95.213714237713 SN.node[0].Communication.Routing         AODV : RREP : Path Delay:::95.213714237713
 95.213714237713 SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.213714237713 SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 4 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-95.213714237713 SN.node[1].Communication.Routing         AODV : RREP : Path Delay:::95.213714237713
 95.213714237713 SN.node[1].Communication.Routing         AODV : R : new route created to 4
 95.213714237713 SN.node[1].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 3
 95.213714237713 SN.node[2].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.213714237713 SN.node[2].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 4 lqi: 14.8371RSSI:-85.1629Reliability: 1.17422
-95.213714237713 SN.node[2].Communication.Routing         AODV : RREP : Path Delay:::95.213714237713
 95.213714237713 SN.node[2].Communication.Routing         AODV : R : new route created to 4
 95.213714237713 SN.node[2].Communication.Routing         AODV : RREQ : discarded (already broadcasted) - origin: 3 id: 3
 95.213714237713 SN.node[3].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
 95.213714237713 SN.node[3].Communication.Routing         AODV : RREQ : RX : origin: 3 id: 3 destination: 0 from: 4 lqi: 12.3876RSSI:-87.6124Reliability: 1.14139
-95.213714237713 SN.node[3].Communication.Routing         AODV : RREP : Path Delay:::95.213714237713
 95.213714237713 SN.node[3].Communication.Routing         AODV : R : new route created to 4
 95.299429796691 SN.node[3].Communication.Routing         AODV : T : AODV_RREQ_RATE_LIMIT_TIMER expired
 95.299931076399 SN.node[1].Communication.Routing         AODV : T : AODV_RREQ_RATE_LIMIT_TIMER expired

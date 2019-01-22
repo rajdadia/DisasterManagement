@@ -19,6 +19,7 @@ void ThroughputTest::startup()
 	packet_rate = par("packet_rate");
 	recipientAddress = par("nextRecipient").stringValue();	 	
 	startupDelay = par("startupDelay");
+	
 
 	packet_spacing = packet_rate > 0 ? 1 / float (packet_rate) : -1;
 	dataSN = 0;
@@ -41,9 +42,9 @@ void ThroughputTest::fromNetworkLayer(ApplicationPacket * rcvPacket,
 		const char *source, double rssi, double lqi)
 {
 	int sequenceNumber = rcvPacket->getSequenceNumber();
-
+	
 	if (recipientAddress.compare(SELF_NETWORK_ADDRESS) == 0) {
-		trace() << "Received packet #" << sequenceNumber << " from node " << source;
+		trace() << "Received packet #" << sequenceNumber << " from node " << source; 
 		collectOutput("Packets received per node", atoi(source));
 	// Packet has to be forwarded to the next hop recipient
 	} else {

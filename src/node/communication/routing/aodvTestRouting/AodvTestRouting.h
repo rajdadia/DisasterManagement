@@ -32,7 +32,8 @@
 #include <math.h>
 #include <limits>
 
-
+const SimTime string2simTime(const char* x);//added on 22/1/19
+const char * simTime2string(SimTime t);//added on 22/1/19
 
 // types of packets
 enum AODVPacketTypes
@@ -184,7 +185,7 @@ class AodvTestRouting: public VirtualRouting
 	void receivePktHELLO(PacketHELLO* pkt);
 
 	//rreqSrc and rreqDst  are the value for all the AODV protocol : originator + finalDST
-	void sendPktRREQ(int hopCount, int rreqID, std::string srcIP, std::string dstIP, unsigned long srcSN, unsigned long dstSN);
+	void sendPktRREQ(int hopCount, int rreqID, std::string srcIP, std::string dstIP, unsigned long srcSN, unsigned long dstSN, SimTime pathDelay);
 	void sendPktRREP(int hopCount, std::string rreqSrc, std::string rreqDst, unsigned long dstSN, double lifetime, bool forwarding, int rreqID);
 	void sendPktHELLO();
 	//affDst : list of broken dst - affPre : list of affected precursors

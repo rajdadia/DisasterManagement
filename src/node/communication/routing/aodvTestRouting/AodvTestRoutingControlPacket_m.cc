@@ -69,7 +69,8 @@ PacketRREQ::PacketRREQ(const char *name, int kind) : ::RoutingPacket(name,kind)
     this->srcIP_var = 0;
     this->srcSN_var = 0;
     this->lifetime_var = 0;
-    this->propDelay = 0;//added by Raj on 19/10/18
+    this->propDelay = 0;//added by Raj on 19/10/18.
+    this->pathDelay = SimTime();//added on 21/1/19
 }
 
 PacketRREQ::PacketRREQ(const PacketRREQ& other) : ::RoutingPacket(other)
@@ -104,6 +105,7 @@ void PacketRREQ::copy(const PacketRREQ& other)
     this->srcSN_var = other.srcSN_var;
     this->lifetime_var = other.lifetime_var;
     this->propDelay=other.propDelay;//added by Raj on 19/10/18
+    this->pathDelay=other.pathDelay;//added on 21/1/19
 }
 
 void PacketRREQ::parsimPack(cCommBuffer *b)
@@ -122,6 +124,7 @@ void PacketRREQ::parsimPack(cCommBuffer *b)
     doPacking(b,this->srcSN_var);
     doPacking(b,this->lifetime_var);
     doPacking(b,this->propDelay);//addded by raj on 19/10/18
+    doPacking(b,this->pathDelay);//added on 21/1/19
 }
 
 void PacketRREQ::parsimUnpack(cCommBuffer *b)
@@ -140,6 +143,7 @@ void PacketRREQ::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->srcSN_var);
     doUnpacking(b,this->lifetime_var);
     doUnpacking(b,this->propDelay);//added by raj on 19/10/18
+    doUnpacking(b,this->pathDelay);//added on 21/1/19
 }
 
 bool PacketRREQ::getFlagJ() const
@@ -272,6 +276,16 @@ void PacketRREQ::setpropDelay(SimTime x)//added a function by Raj on 19/10/18
     this->propDelay=x;
 }
 
+SimTime PacketRREQ::getpathDelay() const//added on 21/1/19
+{
+    return pathDelay;
+}
+
+void PacketRREQ::setpathDelay(SimTime x)
+{
+    this->pathDelay=x;
+}
+
 class PacketRREQDescriptor : public cClassDescriptor
 {
   public:
@@ -344,6 +358,7 @@ unsigned int PacketRREQDescriptor::getFieldTypeFlags(void *object, int field) co
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,//added for propDelay by Raj on 19/10/18
+        FD_ISEDITABLE,//added for pathDelay on 21/1/19
     };
     return (field>=0 && field<13) ? fieldTypeFlags[field] : 0;//Changed from 12 to 13 to include propDelay
 }
@@ -370,8 +385,9 @@ const char *PacketRREQDescriptor::getFieldName(void *object, int field) const
         "srcSN",
         "lifetime",
         "propDelay",//added propDelay variable in the fieldname function by Raj on 19/10
+        "pathDelay",//added pathDelay on 21/1/19
     };
-    return (field>=0 && field<13) ? fieldNames[field] : NULL;//Changed from 12 to 13 to include propDelay
+    return (field>=0 && field<14) ? fieldNames[field] : NULL;//Changed from 12 to 14 to include propDelay and pathDelay
 }
 
 int PacketRREQDescriptor::findField(void *object, const char *fieldName) const
@@ -391,6 +407,7 @@ int PacketRREQDescriptor::findField(void *object, const char *fieldName) const
     if (fieldName[0]=='s' && strcmp(fieldName, "srcSN")==0) return base+10;
     if (fieldName[0]=='l' && strcmp(fieldName, "lifetime")==0) return base+11;
     if (fieldName[0]=='p' && strcmp(fieldName, "propDelay")==0) return base+12;//changed this line for propDelay by Raj on 19/10/18
+    if (fieldName[0]=='p' && strcmp(fieldName, "pathDelay")==0) return base+13;//added on 21/1/19
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -416,8 +433,9 @@ const char *PacketRREQDescriptor::getFieldTypeString(void *object, int field) co
         "unsigned long",
         "double",
         "SimTime",//added by Raj on 19/10/18
+        "SimTime",//added on 21/1/19
     };
-    return (field>=0 && field<13) ? fieldTypeStrings[field] : NULL;//changed from 12 to 13 by Raj on 19/10/18
+    return (field>=0 && field<14) ? fieldTypeStrings[field] : NULL;//changed from 12 to 13 by Raj on 19/10/18 changed to 14 on 21/1/19
 }
 
 const char *PacketRREQDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -470,6 +488,7 @@ std::string PacketRREQDescriptor::getFieldAsString(void *object, int field, int 
         case 10: return ulong2string(pp->getSrcSN());
         case 11: return double2string(pp->getLifetime());
         case 12: return simTime2string(pp->getpropDelay());//added by raj 19/10/18
+        case 13: return simTime2string(pp->getpathDelay());//added on 21/1/19
         default: return "";
     }
 }
@@ -497,6 +516,7 @@ bool PacketRREQDescriptor::setFieldAsString(void *object, int field, int i, cons
         case 10: pp->setSrcSN(string2ulong(value)); return true;
         case 11: pp->setLifetime(string2double(value)); return true;
         case 12: pp->setpropDelay(string2simTime(value)); return true;//added by raj on 19/10/18
+        case 13: pp->setpathDelay(string2simTime(value)); return true;//added on 21/1/19
         default: return false;
     }
 }

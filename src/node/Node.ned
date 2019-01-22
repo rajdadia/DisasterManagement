@@ -27,7 +27,7 @@ module Node {
 	double theta = default (0);
 	
 	double startupOffset = default (0);							//node startup offset (i.e. delay), in seconds 
-	double startupRandomization = default (0.05);				//node startup randomisation, in seconds
+	double startupRandomization = default (0.0);				//node startup randomisation, in seconds changed from 0.05
 	// Node will become active startupOffset + random(startupRandomization) 
 	// seconds after the start of simulation
 

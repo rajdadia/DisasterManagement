@@ -454,7 +454,7 @@ void TunableMAC::fromRadioLayer(cPacket * pkt, double rssi, double lqi)
 		}
 
 		case DATA_FRAME:{
-			toNetworkLayer(macFrame->decapsulate());
+			toNetworkLayer(decapsulatePacket(macFrame));//changed on 8/1/19 for fixing bug to trace lqi
 			collectOutput("TunableMAC packet breakdown", "received data pkts");
 			if (macState == MAC_STATE_RX) {
 				cancelTimer(ATTEMPT_TX);
