@@ -27,13 +27,16 @@
 #include <chrono>
 #include <typeinfo>
 #include <string>
+#include <chrono>
+#include <thread>
+#include <iostream>
 
 using namespace std;
 Define_Module(AodvTestRouting);
 
 void AodvTestRouting::startup()
 {
-	activeRouteTimeout = (double)par("activeRouteTimeout") / 1000.0;
+	activeRouteTimeout = (double)par("activeRouteTimeout") / 100.0;
 	allowedHelloLoss = par("allowedHelloLoss");
 	helloInterval = (double)par("helloInterval") / 1000.0;
 	localAddTTL = par("localAddTTL");
@@ -53,6 +56,7 @@ void AodvTestRouting::startup()
 	ttlThreshould = par("ttlThreshould");
 	shortestDelay = par("shortestDelay");
 	atmode = par("atmode");
+	callSugar = 3;//added by Raj on 5/2
 
 	rreqExpTime = netTraversalTime;
 	rreqExpTimeB = pathDiscoveryTime;
@@ -100,12 +104,14 @@ void AodvTestRouting::startup()
 void AodvTestRouting::sendSugar()//creating fucntion to send sugar(RReQ) packets by Raj.
 {
     currSN++;
-    trace() << "starting implematation";
+    trace() << "starting implematation ";
     std::string s = std::to_string(BROADCAST_MAC_ADDRESS);
     char const *dst = s.c_str();  
-    // const char* dst = tmp.c_str();string(BROADCAST_MAC_ADDRESS)
-    // trace() << typeid(str(BROADCAST_MAC_ADDRESS)).name() ;
-    sendPktRREQ(0, 1,string(SELF_NETWORK_ADDRESS) ,dst, currSN,0,SimTime());
+
+    //std::string path=getFullPath();//to check for node number. added by Raj on 5/2/2019
+    
+    
+    sendPktRREQ(0,(callSugar-3) ,string(SELF_NETWORK_ADDRESS) ,dst, currSN,0,SimTime());		
 }
 
 void AodvTestRouting::finish()
@@ -479,6 +485,20 @@ void AodvTestRouting::receivePktDATA(PacketDATA *pkt)
 	    trace() << "AODV : DATA : sent to application - origin: " << string(pkt->getSource());
 
 		toApplicationLayer(pkt->decapsulate());
+
+		
+		std::string path=getFullPath();//to check for node number. added by Raj on 5/2/2019
+    	
+		if(path[8]=='0') //if node is 0 added by raj on 5/2
+		{
+			if(simTime()>callSugar)//calls the sendSugar function every 3 seconds of simTime(). aded by Raj on 5/2
+			{
+				trace()<<"callSugar is... "<<callSugar;
+				callSugar=callSugar+3;//For the next 3 seconds. Added by Raj on 5/2
+				sendSugar();
+			}
+		}
+
 		return;
 	}
 
@@ -534,9 +554,9 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 				                                            << " from: " << string(pkt->getSource())
                                                             << " lqi: " << lqi
                                                             << "RSSI:" << rssi
-                                                            << "Reliability: " << (rssi-lqi)/rssi;//added on 21/01/19 //Add RSSI
+                                                            << "Reliability: " << (rssi-lqi)/rssi;//added on 21/01/19 //Add RSSI by raj
 	//updates a route to the previous hop without a valid seq number
-    trace() << "AODV : RREP : Path Delay:::"<<pathDelay ;//added on 21/1/19
+    trace() << "AODV : RREP : Path Delay:::"<<pathDelay ;//added on 21/1/19 by raj
 	updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0);
 
 	//check if this node is the origin of the request
@@ -568,7 +588,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	    trace() << "AODV : RREQ : reach destination - origin: " << string(pkt->getSrcIP())
                                                         << " id: " << pkt->getRreqID();
 	    trace() << "AODV : RREP :"<< pDelay<<" pDelay =  "<< arrivalTime<<"(arrivalTime-prevTime)"<<prevTime <<" : sent (is the destination)";//added the pdelay here Raj
-        trace() << "AODV : RREP : Path Delay:::"<<pathDelay ;//added on 21/1/19
+        trace() << "AODV : RREP : Path Delay:::"<<pathDelay ;//added on 21/1/19 by raj 
 
         sendPktRREP(0, string(pkt->getSrcIP()), string(SELF_NETWORK_ADDRESS), currSN, timeout, false, pkt->getRreqID());
         return;
@@ -597,6 +617,8 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
     }
     //forward the rreq
 
+    int buffSize=(int)TXBuffer.size();//added by raj on 2/2 for testing buffer size.
+    trace()<<"inside function receivePktRREQ() checking for buffer size"<<buffSize;//added by raj on 2/2 for testing buffer size.
 	int hopcount = pkt->getHopCount() + 1;
 	int id = pkt->getRreqID();
 	string srcIP = pkt->getSrcIP();

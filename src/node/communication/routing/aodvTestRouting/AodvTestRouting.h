@@ -119,6 +119,8 @@ class AodvTestRouting: public VirtualRouting
 	int ttlIncrement;
 	int ttlThreshould;
 
+	int callSugar;
+
 	bool shortestDelay;
 
     double latencyMax;
