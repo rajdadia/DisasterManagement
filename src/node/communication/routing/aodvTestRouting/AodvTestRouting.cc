@@ -103,8 +103,7 @@ void AodvTestRouting::sendSugar()//creating fucntion to send sugar(RReQ) packets
     trace() << "starting implematation";
     std::string s = std::to_string(BROADCAST_MAC_ADDRESS);
     char const *dst = s.c_str();  
-    // const char* dst = tmp.c_str();string(BROADCAST_MAC_ADDRESS)
-    // trace() << typeid(str(BROADCAST_MAC_ADDRESS)).name() ;
+    // test
     sendPktRREQ(0, 1,string(SELF_NETWORK_ADDRESS) ,dst, currSN,0);
 }
 
