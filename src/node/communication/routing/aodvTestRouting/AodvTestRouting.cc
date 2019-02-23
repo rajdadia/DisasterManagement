@@ -543,7 +543,31 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
     SimTime prevTotal = pkt->getpathDelay(); //added by raj 21/1
     SimTime pathDelay = prevTotal + pDelay;  //added by raj 21/1
 
-    double reli = (rssi-lqi)/rssi;
+    double reli = (rssi-lqi)/rssi;//added by raj on 23/2/19
+    string pktType;
+
+    std::string path=getFullPath();
+    srand((int)path[8]);
+    int type = (rand() % 4);//added by raj on 23/2/19
+    switch(type){
+        case 0:
+        {
+            pktType = "Ordinary";
+        }
+        case 1: 
+        {
+            pktType = "Reliable";
+        }
+        case 2: 
+        {
+            pktType = "Delay";
+        }
+        case 3: 
+        {
+            pktType = "Critical";
+        }
+
+    }
 
     if(isBlacklisted(pkt->getSource()))
 	{
@@ -563,7 +587,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
                                                             << "Reliability: " << reli;//added on 21/01/19 //Add RSSI by raj
 	//updates a route to the previous hop without a valid seq number
     trace() << "AODV : RREP : Path Delay:::"<<pathDelay ;//added on 21/1/19 by raj
-	updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,pathDelay,reli,"Delay",1);//raj on 21/2/19
+	updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,pathDelay,reli,pktType,1);//raj on 21/2/19
 
 
 	//check if this node is the origin of the request
