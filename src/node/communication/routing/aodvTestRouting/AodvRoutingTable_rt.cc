@@ -58,7 +58,7 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
     Route* r = searchByDest(dstIP,type,prior);//raj on 31/1/19
     if(r) // a route for that dst exists already
     {       
-            if(r->flag!=VALID || r->dstSN < dstSN || r->dtype.compare("Delay")){
+            if(r->flag!=VALID || r->dstSN < dstSN || r->dtype.compare("Delay")){//added by raj on 22/2/19
                 if(pathDelay<r->pDelay){
                     r->dstSN = dstSN;
                     r->hopCount = hopCount;
@@ -70,7 +70,7 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
                 }
                 
             }
-            if(r->flag!=VALID || r->dstSN < dstSN || r->dtype.compare("Reliable")){
+            if(r->flag!=VALID || r->dstSN < dstSN || r->dtype.compare("Reliable")){//added by raj on 23/2/19
                 if(reli>r->reliability){
                     r->dstSN = dstSN;
                     r->hopCount = hopCount;
@@ -94,6 +94,8 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
                 if(precursor!=NULL)
                     r->precursor->merge(*precursor);*/
                 r->state = state;
+                r->reliability=reli;//added by raj on 23/2/19
+                r->pDelay = pathDelay;//added by raj on 23/2/19
             }
         else //the route is not valid anymore
         {
@@ -105,7 +107,7 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
     }
     else //no route for that dst exists already
     {
-        Route nr;
+        Route nr;//added by raj on 23/2/19
         nr.dstSN = dstSN;
         nr.hopCount = hopCount;
         nr.flag = flag;
@@ -115,7 +117,55 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
             nr.precursor->merge(*precursor);*/
         nr.state = state;
         nr.dstIP = dstIP;
-        nr.dtype = type;
+        nr.dtype = "Ordinary";
+        nr.priority = prior;
+        nr.pDelay = pathDelay;
+        nr.reliability = reli;
+        //route.lifetime = active_route_timeout
+        table->push_back(nr);
+
+        nr.dstSN = dstSN;
+        nr.hopCount = hopCount;
+        nr.flag = flag;
+        nr.nextHopAddr = nextHopAddr;
+        nr.precursor = new list<string>();
+        /*if(precursor!=NULL)
+            nr.precursor->merge(*precursor);*/
+        nr.state = state;
+        nr.dstIP = dstIP;
+        nr.dtype = "Delay";
+        nr.priority = prior;
+        nr.pDelay = pathDelay;
+        nr.reliability = reli;
+        //route.lifetime = active_route_timeout
+        table->push_back(nr);
+
+        nr.dstSN = dstSN;
+        nr.hopCount = hopCount;
+        nr.flag = flag;
+        nr.nextHopAddr = nextHopAddr;
+        nr.precursor = new list<string>();
+        /*if(precursor!=NULL)
+            nr.precursor->merge(*precursor);*/
+        nr.state = state;
+        nr.dstIP = dstIP;
+        nr.dtype = "Reliable";
+        nr.priority = prior;
+        nr.pDelay = pathDelay;
+        nr.reliability = reli;
+        //route.lifetime = active_route_timeout
+        table->push_back(nr);
+
+        nr.dstSN = dstSN;
+        nr.hopCount = hopCount;
+        nr.flag = flag;
+        nr.nextHopAddr = nextHopAddr;
+        nr.precursor = new list<string>();
+        /*if(precursor!=NULL)
+            nr.precursor->merge(*precursor);*/
+        nr.state = state;
+        nr.dstIP = dstIP;
+        nr.dtype = "Critical";
         nr.priority = prior;
         nr.pDelay = pathDelay;
         nr.reliability = reli;
