@@ -26,6 +26,8 @@
 #include <limits>
 #include "CastaliaModule.h"
 
+const SimTime string2simTime(const char* x);//added on 22/1/19
+const char * simTime2string(SimTime t);//added on 22/1/19
 
 enum RoutingFlag
 {
@@ -45,6 +47,10 @@ typedef struct
         int hopCount;
         std::string nextHopAddr;
         std::list<std::string>* precursor;
+        std::string dtype;//raj on 27/1/19
+        int priority;//raj on 27/1/19
+        double reliability;//raj on 21/2/19
+        SimTime pDelay;//raj on 21/2/19
 }Route;
 
 struct RouteTimer
@@ -73,9 +79,9 @@ public:
         AodvRoutingTable();
         ~AodvRoutingTable();
 
-        Route* searchByDest(std::string destination);
+        Route* searchByDest(std::string destination,string type,int prior);//raj on 31/1/19
         //if the route exists it will be updated, else a new route is inserted
-        void insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime);
+        void insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli,string type, int prior);
         void removeRoute(std::string destination);
 
         unsigned long getDstSN(std::string destination);
