@@ -934,7 +934,7 @@ void AodvTestRouting::sendPktRREPack(const char* neib)
 
 void AodvTestRouting::updateLifetimeRoute(string dstIP, double time)
 {
-    Route* r = rtable->searchByDest(dstIP,"Delay",1);
+    Route* r = rtable->searchByDest(dstIP,"Delay",1);//raj
     if(r && rtable->getFlag(dstIP)==VALID)
     {
         routeUpdateCount[dstIP]++;
