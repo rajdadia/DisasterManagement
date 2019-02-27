@@ -156,16 +156,16 @@ class AodvTestRouting: public VirtualRouting
 
 
 
-	void updateLifetimeRoute(std::string destination, double time);
-	void resetLifetimeRoute(const std::string dstIP);
-	double getLifetimeRoute(const std::string dstIP);
+	void updateLifetimeRoute(std::string destination, double time,string dtype,int priority)//changed by raj unsure
+	void resetLifetimeRoute(const std::string dstIP,string dtype,int priority)//changed by raj unsure
+	double getLifetimeRoute(const std::string dstIP,string dtype,int priority)//changed by raj unsure
 	void updateRreqTable(std::string destination, int id);
 	void updateRreqBroadcastedList(std::string destination, std::string source, int id);
 	bool checkRREQProcessed(std::string dst);
 	bool checkRREQBuffered(std::string orig, int idx);
 	//check if the RREQ as already been forwarded (section 6.5 RFC3650)
 	bool checkRREQBroadcasted(std::string orig, int idx);
-	void updateRoute(const std::string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string nextHopAddr,std::list<std::string>* precursor, double aTime, SimTime pathDelay, double reli, string type, int prior);
+	void updateRoute(const std::string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string nextHopAddr,std::list<std::string>* precursor, double aTime, SimTime pathDelay, double reli, int priority);
 
 	void setRrepAckTimer(const char* neib);
 	void setRreqBlacklistTimer(const char* neib);

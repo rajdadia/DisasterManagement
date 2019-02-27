@@ -172,7 +172,7 @@ void AodvTestRouting::timerFiredCallback(int index)
                 {
                     rreqID++;
                     trace() << "AODV : RREQ : rreq resent for destination : "<<nextExpiredRREQ;
-                    sendPktRREQ(0, rreqID, SELF_NETWORK_ADDRESS, nextExpiredRREQ,currSN, rtable->getDstSN(nextExpiredRREQ),simTime());
+                    sendPktRREQ(0, rreqID, SELF_NETWORK_ADDRESS, nextExpiredRREQ,currSN, rtable->getDstSN(nextExpiredRREQ,"Ordinary",1),simTime());//Changed by Raj. Unsure :(
                 }
                 else
                 {
@@ -193,7 +193,7 @@ void AodvTestRouting::timerFiredCallback(int index)
             {
                 //routeUpdateCount[r->destination]--;
                 //if(routeUpdateCount[r->destination]==0)
-                rtable->searchByDest(r->destination,"Delay",1)->flag=INVALID;
+                rtable->searchByDest(r->destination,r->dtype,r->priority)->flag=INVALID;//changed by raj to r->type and r->prior on 23/02/2019
                 trace() << "AODV : R : expired route to " << string(r->destination);
                 //rtable->removeRoute(r->dstIP);
                 collectOutput("Timers expired","route");
@@ -202,13 +202,14 @@ void AodvTestRouting::timerFiredCallback(int index)
 
             while(rtable->getTimersSize()!=0 && rtable->getNextExpiredRoute()->lifetime - simTime().dbl()<=0)
             {
-                  string s = rtable->getNextExpiredRoute()->destination;
+                    r=rtable->getNextExpiredRoute();//changed by raj  on 23/02/2019
+                  string s = r->destination;//changed by raj on 23/02/2019
                   if(!rtable->getNextExpiredRoute()->canceled)
                   {
                         //routeUpdateCount[s]--;
 
                         //if (routeUpdateCount[s]==0 && rtable->getFlag(s)==VALID)
-                        rtable->searchByDest(s,"Delay",1)->flag=INVALID;
+                        rtable->searchByDest(s,r->dtype,r->priority)->flag=INVALID;//changed by raj to r->type and r->prior on 23/02/2019
                   }
                   rtable->clearTimerExpired();
                   trace() << "AODV : R : expired route to " << s;
@@ -420,17 +421,18 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 			//toMacLayer(data, BROADCAST_MAC_ADDRESS);
 	}
 
+/*Insert the random datatype, dtype function here by raj*/
 
 	//a valid route exist
-	if(rtable->isRouteValid(string(destination)))
+	if(rtable->isRouteValid(string(destination),dtype,priority))//chaned by Raj on 23/02/2019
 	{
-			updateLifetimeRoute(string(destination), activeRouteTimeout);
+			updateLifetimeRoute(string(destination), activeRouteTimeout,dtype,priority);//added 2 argumnets by raj on 23/02/19
 			trace() << "AODV : B1 : DATA sent (route valid) - destination " << string(destination)
-			                                                <<" via " <<rtable->getNextHop(destination);
+			                                                <<" via " <<rtable->getNextHop(destination,dtype,priority);//added 2 argumnets by raj on 23/02/19
 
-			data->setDestination((rtable->getNextHop(destination)).c_str());
+			data->setDestination((rtable->getNextHop(destination,dtype,priority)).c_str());//added 2 argumnets by Raj 23/02/19
 			collectOutput("Pkt sent","DATA pkt (S)");
-			toMacLayer(data, resolveNetworkAddress((rtable->getNextHop(destination)).c_str()));
+			toMacLayer(data, resolveNetworkAddress((rtable->getNextHop(destination,dtype,priority)).c_str()));//added 2 argumnets by Raj 23/02/19
 			return;
 	}
 
@@ -439,7 +441,7 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 	{
 			currSN++;
 			rreqID++;
-			sendPktRREQ(0, rreqID, string(SELF_NETWORK_ADDRESS), string(destination), currSN, rtable->getDstSN(destination),simTime());
+			sendPktRREQ(0, rreqID, string(SELF_NETWORK_ADDRESS), string(destination), currSN, rtable->getDstSN(destination,dtype,priority),simTime());//added 2 argumnets by Raj 23/02/19
 			//buffer the packet
 
 	}
@@ -508,20 +510,20 @@ void AodvTestRouting::receivePktDATA(PacketDATA *pkt)
 
 	collectOutput("Pkt received","DATA pkt (F)");
 	//the packet is forwarded to the next hop (case where a route is known)
-	if(rtable->isRouteValid(finalDst))
+	if(rtable->isRouteValid(finalDst,pkt->dtype,pkt->priority))//changed by Raj on 23/02/19
 	{
 
-			updateLifetimeRoute(finalDst, activeRouteTimeout);
-			ndPacket->setDestination((rtable->getNextHop(finalDst)).c_str());
+			updateLifetimeRoute(finalDst, activeRouteTimeout);//to be changed by raj on 23/02/2019
+			ndPacket->setDestination((rtable->getNextHop(finalDst,pkt->dtype,pkt->priority)).c_str());//added 2 arguments by raj on 23/02
             trace() << "AODV : DATA : forwarded to destination " << string(finalDst)
-                                                            <<" via " <<rtable->getNextHop(finalDst);
+                                                            <<" via " <<rtable->getNextHop(finalDst,pkt->dtype,pkt->priority);//added 2 arguments by raj on 23/02/19
 			collectOutput("Pkt sent","DATA pkt (F)");
-			toMacLayer(ndPacket, resolveNetworkAddress((rtable->getNextHop(finalDst)).c_str()));
+			toMacLayer(ndPacket, resolveNetworkAddress((rtable->getNextHop(finalDst,pkt->dtype,pkt->priority)).c_str()));//added 2 arguments by raj on 23/02/19
 			return;
 	}
 
 	//a route exist but is not valid anymore
-	else if(rtable->searchByDest(finalDst,"Delay",1) && rtable->searchByDest(finalDst,"Delay",1)->flag==INVALID)
+	else if(rtable->searchByDest(finalDst,pkt->dtype,pkt->priority) && rtable->searchByDest(finalDst,pkt->dtype,pkt->priority)->flag==INVALID)//changed by raj on 23/02/19
 	{
 		trace() << "AODV : DATA : TX : rejected (no route anymore) - destination: " << finalDst;
 	     list<string>* affectedDest = new list<string>();
@@ -549,25 +551,25 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
     std::string path=getFullPath();
     srand((int)path[8]);
     int type = (rand() % 4);//added by raj on 23/2/19
-    switch(type){
-        case 0:
-        {
-            pktType = "Ordinary";
-        }
-        case 1: 
-        {
-            pktType = "Reliable";
-        }
-        case 2: 
-        {
-            pktType = "Delay";
-        }
-        case 3: 
-        {
-            pktType = "Critical";
-        }
+    // switch(type){
+    //     case 0:
+    //     {
+    //         pktType = "Ordinary";
+    //     }
+    //     case 1: 
+    //     {
+    //         pktType = "Reliable";
+    //     }                                            Remove from here add it for dataPKT
+    //     case 2: 
+    //     {
+    //         pktType = "Delay";
+    //     }
+    //     case 3: 
+    //     {
+    //         pktType = "Critical";
+    //     }
 
-    }
+    // }
 
     if(isBlacklisted(pkt->getSource()))
 	{
@@ -586,8 +588,8 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
                                                             << "RSSI:" << rssi
                                                             << "Reliability: " << reli;//added on 21/01/19 //Add RSSI by raj
 	//updates a route to the previous hop without a valid seq number
-    trace() << "AODV : RREP : Path Delay:::"<<pathDelay ;//added on 21/1/19 by raj
-	updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,pathDelay,reli,pktType,1);//raj on 21/2/19
+    trace() << "AODV : RREQ : Path Delay:::"<<pathDelay ;//added on 21/1/19 by raj
+	updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,pathDelay,reli,1);//raj on 21/2/19
 
 
 	//check if this node is the origin of the request
@@ -603,7 +605,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	}
 
 	//update route for the originator
-	updateRoute(string(pkt->getSrcIP()), pkt->getSrcSN(), true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,0,pathDelay,reli,"Delay",1);
+	updateRoute(string(pkt->getSrcIP()), pkt->getSrcSN(), true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,0,pathDelay,reli,1);//changed by raj on 23/02/2019
 
     
     if(string(pkt->getDstIP()).compare(SELF_NETWORK_ADDRESS)==0) //current node is the destination (RFC3561 chapter 6.6.1)
@@ -619,28 +621,29 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	    trace() << "AODV : RREQ : reach destination - origin: " << string(pkt->getSrcIP())
                                                         << " id: " << pkt->getRreqID();
 	    trace() << "AODV : RREP :"<< pDelay<<" pDelay =  "<< arrivalTime<<"(arrivalTime-prevTime)"<<prevTime <<" : sent (is the destination)";//added the pdelay here Raj
-        trace() << "AODV : RREP : Path Delay:::"<<pathDelay ;//added on 21/1/19 by raj 
+        trace() << "AODV : RREP : Path Delay : "<<pathDelay ;//added on 21/1/19 by raj 
 
         sendPktRREP(0, string(pkt->getSrcIP()), string(SELF_NETWORK_ADDRESS), currSN, timeout, false, pkt->getRreqID());
         return;
     }
 
-    if(rtable->isRouteValid(pkt->getDstIP()))//current node has an active route to the destination (RFC3561 chapter 6.6.2)
-    {
+    //current node has an active route to the destination (RFC3561 chapter 6.6.2)
+    if(rtable->isRouteValid(pkt->getDstIP(),"Ordinary",1))//this function is for route request hence check for any one data type. by raj
+    {//We are broadcasting so this function shall not be called. raj
 
-        Route *r = rtable->searchByDest(pkt->getDstIP(),"Delay",1);
+        Route *r = rtable->searchByDest(pkt->getDstIP(),"Ordinary",1);//never called by raj
         updateRreqBroadcastedList(pkt->getDstIP(), pkt->getSrcIP(), pkt->getRreqID());
 
         if(pkt->getDstSN() < r->dstSN && r->state)
         {
-            trace() << "AODV : RREQ : succes : find a valid route - origin: " << string(pkt->getSrcIP())
+            trace() << "AODV : RREQ : success : find a valid route - origin: " << string(pkt->getSrcIP())
                                                                                     << " id: " << pkt->getRreqID();
     	    trace() << "AODV : RREP : sent (knows the destination)";
             string srcIP = string(pkt->getSrcIP());
             string dstIP = string(pkt->getDstIP());
-            int hopcount = rtable->getHopCount(dstIP);
-            unsigned long dstSN = rtable->getDstSN(dstIP);
-            double time = getLifetimeRoute(dstIP)-simTime().dbl();
+            int hopcount = rtable->getHopCount(dstIP,"Ordinary",1);//never called by raj
+            unsigned long dstSN = rtable->getDstSN(dstIP,"Ordinary",1);//never called by raj
+            double time = getLifetimeRoute(dstIP,dtype,priority)-simTime().dbl();
             collectOutput("Pkt sent","RREP pkt (R)");
             sendPktRREP(hopcount,srcIP,dstIP,dstSN,time,false,pkt->getRreqID());
             return;
@@ -656,12 +659,12 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	string dstIP = pkt->getDstIP();
 	unsigned long srcSN = pkt->getSrcSN();
 	unsigned long dstSN;
-	if(pkt->getDstSN() >= rtable->getDstSN(dstIP))
+	if(pkt->getDstSN() >= rtable->getDstSN(dstIP,"Ordinary",1))//All dstnSN same. Changed by raj on 23/02/2019. Unsure :(
 		dstSN = pkt->getDstSN();
 	else
-		dstSN = rtable->getDstSN(dstIP);
+		dstSN = rtable->getDstSN(dstIP,"Ordinary"1);//All dstnSN same. Changed by raj on 23/02/2019. Unsure :(
 
-	sendPktRREQ(hopcount, id, srcIP, dstIP, srcSN, dstSN,pathDelay);//to be changed and pathDelay to be passed as a parameter.
+	sendPktRREQ(hopcount, id, srcIP, dstIP, srcSN, dstSN,pathDelay);//added pathDelay by Raj 23/02/2019.
 
 }
 
@@ -682,9 +685,9 @@ void AodvTestRouting::receivePktRREP(PacketRREP* pkt,int srcMacAddress, double r
     sendPktRREPack(pkt->getSource());
 
     //updates a route to the previous hop without a valid seq number
-    updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,simTime(),0,"Delay",1);
+    updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,simTime(),0,1);
     //update route for the destination
-    updateRoute(string(pkt->getDstIP()), pkt->getDstSN(),true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,pkt->getLifetime(),simTime(),0,"Delay",1);
+    updateRoute(string(pkt->getDstIP()), pkt->getDstSN(),true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,pkt->getLifetime(),simTime(),0,1);
 
     if(getTimer(AODV_HELLO_MESSAGE_REFRESH_TIMER).dbl()<=0)
         sendPktHELLO();
@@ -838,50 +841,50 @@ void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dst
 
 void AodvTestRouting::sendPktRREP(int hopCount, string rreqSrc, string rreqDst, unsigned long dstSN, double lifetime, bool forwarding, int idFromRREQ)
 {
-	//srcIP is the originator of the rreq --> the destination for the RREP
-	//dstIP is the final destination of the rreq --> the source for the RREP
-	if(!(rtable->isRouteValid(rreqSrc)))//le noeud n'a pas de route vers la destination (srcIP)
-	{
-		trace()<<"AODV : RREP : TX : rejected (no route)";
-		return;
-	}
-	PacketRREP *rrep = new PacketRREP("AODV routing RREP packet", NETWORK_LAYER_PACKET);
-	rrep->setFlagA(true);
-	rrep->setFlagR(false);
-	rrep->setPrefixSz(0);
-	rrep->setHopCount(hopCount);
-	rrep->setOriginIP(rreqSrc.c_str());
-	rrep->setDstIP(rreqDst.c_str());
-	rrep->setDstSN(dstSN);
-	rrep->setSource(SELF_NETWORK_ADDRESS);
-	rrep->setDestination((rtable->getNextHop(rreqSrc)).c_str());
-	rrep->setLifetime(lifetime);
-	rrep->setRreqID(idFromRREQ);
+	// //srcIP is the originator of the rreq --> the destination for the RREP
+	// //dstIP is the final destination of the rreq --> the source for the RREP
+	// if(!(rtable->isRouteValid(rreqSrc)))//le noeud n'a pas de route vers la destination (srcIP)
+	// {
+	// 	trace()<<"AODV : RREP : TX : rejected (no route)";
+	// 	return;
+	// }
+	// PacketRREP *rrep = new PacketRREP("AODV routing RREP packet", NETWORK_LAYER_PACKET);// commented cause no needed by raj
+	// rrep->setFlagA(true);
+	// rrep->setFlagR(false);
+	// rrep->setPrefixSz(0);
+	// rrep->setHopCount(hopCount);
+	// rrep->setOriginIP(rreqSrc.c_str());
+	// rrep->setDstIP(rreqDst.c_str());
+	// rrep->setDstSN(dstSN);
+	// rrep->setSource(SELF_NETWORK_ADDRESS);
+	// rrep->setDestination((rtable->getNextHop(rreqSrc)).c_str());
+	// rrep->setLifetime(lifetime);
+	// rrep->setRreqID(idFromRREQ);
 
-	if(string(rreqDst).compare(SELF_NETWORK_ADDRESS)!=0)
-	{
-		rtable->addPrecursor(rreqDst, string(rtable->getNextHop(rreqSrc)));
-	}
-	if(forwarding)
-		updateLifetimeRoute(rreqSrc, activeRouteTimeout);
-	toMacLayer(rrep, resolveNetworkAddress((rtable->getNextHop(rreqSrc)).c_str()));
+	// if(string(rreqDst).compare(SELF_NETWORK_ADDRESS)!=0)
+	// {
+	// 	rtable->addPrecursor(rreqDst, string(rtable->getNextHop(rreqSrc)));
+	// }
+	// if(forwarding)
+	// 	updateLifetimeRoute(rreqSrc, activeRouteTimeout);
+	// toMacLayer(rrep, resolveNetworkAddress((rtable->getNextHop(rreqSrc)).c_str()));
 
-	setRrepAckTimer((rtable->getNextHop(rreqSrc)).c_str());
+	// setRrepAckTimer((rtable->getNextHop(rreqSrc)).c_str());
 }
 
 void AodvTestRouting::sendPktHELLO()
 {
     //A node SHOULD only use hello messages if it is part of an active route
-    if(rtable->isPartRouteValid())
-    {
-        PacketHELLO* helloMsg = new PacketHELLO("AODV hello message packet", NETWORK_LAYER_PACKET);
-        helloMsg->setSource(SELF_NETWORK_ADDRESS);
-        helloMsg->setDestination(BROADCAST_NETWORK_ADDRESS);
-        trace() << "AODV : B1 : HELLO msg broadcasted";
-        collectOutput("Pkt sent","HELLO pkt");
-        toMacLayer(helloMsg, BROADCAST_MAC_ADDRESS);
-        setTimer(AODV_HELLO_MESSAGE_REFRESH_TIMER, helloInterval);
-    }
+    // if(rtable->isPartRouteValid())
+    // {
+    //     PacketHELLO* helloMsg = new PacketHELLO("AODV hello message packet", NETWORK_LAYER_PACKET);
+    //     helloMsg->setSource(SELF_NETWORK_ADDRESS);
+    //     helloMsg->setDestination(BROADCAST_NETWORK_ADDRESS);//commented cause not needed by raj.
+    //     trace() << "AODV : B1 : HELLO msg broadcasted";
+    //     collectOutput("Pkt sent","HELLO pkt");
+    //     toMacLayer(helloMsg, BROADCAST_MAC_ADDRESS);
+    //     setTimer(AODV_HELLO_MESSAGE_REFRESH_TIMER, helloInterval);
+    // }
 }
 
 void AodvTestRouting::sendPktRERR(list<string>* affDst, list<string>* affPre)
@@ -905,7 +908,7 @@ void AodvTestRouting::sendPktRERR(list<string>* affDst, list<string>* affPre)
 		for(int i=0;i<destCount;i++)
 		{
 			rerr->setUnreachableDstIP(i,affDst->front().c_str());
-			rerr->setUnreachableDstSN(i,rtable->getDstSN(affDst->front().c_str()));
+			rerr->setUnreachableDstSN(i,rtable->getDstSN(affDst->front().c_str(),"Ordinary",1));//changed by Raj
 			affDst->pop_front();
 		}
 		if(getTimer(AODV_RERR_RATE_LIMIT_TIMER).dbl() <= 0)
@@ -932,10 +935,10 @@ void AodvTestRouting::sendPktRREPack(const char* neib)
 	toMacLayer(rrepA, resolveNetworkAddress(neib));
 }
 
-void AodvTestRouting::updateLifetimeRoute(string dstIP, double time)
+void AodvTestRouting::updateLifetimeRoute(string dstIP, double time,string dtype,int priority)//changed by raj
 {
-    Route* r = rtable->searchByDest(dstIP,"Delay",1);
-    if(r && rtable->getFlag(dstIP)==VALID)
+    Route* r = rtable->searchByDest(dstIP,dtype,priority);//changed by raj
+    if(r && rtable->getFlag(dstIP,dtype,priority)==VALID)//changed by raj
     {
         routeUpdateCount[dstIP]++;
         RouteTimer newTimer;
@@ -943,18 +946,18 @@ void AodvTestRouting::updateLifetimeRoute(string dstIP, double time)
         newTimer.lifetime = simTime().dbl() + time;
         newTimer.canceled = false;
         trace() << "AODV : R : extended route lifetime to " << dstIP;
-        rtable->setLifetime(&newTimer);
+        rtable->setLifetime(&newTimer,dtype,priority);//changed by raj
     }
 }
 
-double AodvTestRouting::getLifetimeRoute(const string dstIP)
+double AodvTestRouting::getLifetimeRoute(const string dstIP,string dtype,int priority)//changed by raj unsure
 {
-	return rtable->getLifetime(dstIP);
+	return rtable->getLifetime(dstIP,dtype,priority);//changed by raj unsure
 }
 
-void AodvTestRouting::resetLifetimeRoute(const string dstIP)
+void AodvTestRouting::resetLifetimeRoute(const string dstIP,string dtype,int priority)//changed by raj unsure
 {
-    rtable->resetTimer(dstIP);
+    rtable->resetTimer(dstIP,dtype,priority);//changed by raj unsure
     routeUpdateCount[dstIP]=0;
 }
 
@@ -1097,41 +1100,64 @@ bool AodvTestRouting::checkRREQBuffered(string orig, int idx)
 	return false;
 }
 
-void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const string nextHopAddr, list<string>* precursor, double aTime, SimTime pathDelay, double reli,string type, int prior)
+void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const string nextHopAddr, list<string>* precursor, double aTime, SimTime pathDelay, double reli, int priority)
 {
-    //refer to RFC3561 chapter 6.2
-	double oldLifetime = 0;
-    if(rtable->isRouteValid(dstIP))
-    	double oldLifetime = getLifetimeRoute(dstIP);
+    int try1=0;string dtype;
+    while(try1<4)//added the loop by raj
+    {   
+        if(try1==0)
+        {
+            dtype="Ordinary";
+        }
+        else if(try1==1)
+        {
+            dtype="Reliable";
+        } 
+        else if (try1==2)
+        {
+            dtype="Delay";
+        }
+        else
+        {
+            dtype="Critical";
+        }
 
-    double addTime;
-    if(aTime==0)
-        addTime=activeRouteTimeout;
-    else
-        addTime=aTime;
+        //refer to RFC3561 chapter 6.2
+	   double oldLifetime = 0;
+        if(rtable->isRouteValid(dstIP,dtype,1))//add for loop here unsure
+         	double oldLifetime = getLifetimeRoute(dstIP,dtype,priority);//changed by raj
 
-    double lifetime = oldLifetime<=0 ? simTime().dbl() + addTime : oldLifetime + aTime;
+        double addTime;
+        if(aTime==0)
+            addTime=activeRouteTimeout;
+        else
+            addTime=aTime;
 
-    RouteTimer newTimer;
-    newTimer.destination = string(dstIP);
-    newTimer.lifetime = lifetime;
-    newTimer.canceled = false;
+        double lifetime = oldLifetime<=0 ? simTime().dbl() + addTime : oldLifetime + aTime;
 
-    const RouteTimer* r= rtable->getNextExpiredRoute();
-    if(r && lifetime < r->lifetime)
+        RouteTimer newTimer;
+        newTimer.destination = string(dstIP);
+        newTimer.lifetime = lifetime;
+        newTimer.canceled = false;
+
+        const RouteTimer* r= rtable->getNextExpiredRoute();
+        if(r && lifetime < r->lifetime)
             cancelTimer(AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER);
 
-    rtable->insertRoute(dstIP, dstSN, state, flag, hopCount, nextHopAddr, precursor, lifetime,pathDelay,reli,"Delay",1);//raj on 21/2/19
-    rtable->setLifetime(&newTimer);
+        rtable->insertRoute(dstIP, dstSN, state, flag, hopCount, nextHopAddr, precursor, lifetime,pathDelay,reli,dtype,priority);//raj on 21/2/19
+        rtable->setLifetime(&newTimer,drype,priority);//changed by raj
 
-    r = rtable->getNextExpiredRoute();
-    double newTime = r->lifetime;
+        r = rtable->getNextExpiredRoute();
+        double newTime = r->lifetime;
 
-    if(getTimer(AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER).dbl()<=0)
-    {
-        setTimer(AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER, newTime - simTime().dbl());
+        if(getTimer(AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER).dbl()<=0)
+        {
+            setTimer(AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER, newTime - simTime().dbl());
+        }
+        trace() << "AODV : R : new route created to " << dstIP<<" of dtype : "<< dtype;
+
+        try1++;
     }
-    trace() << "AODV : R : new route created to " << dstIP;
 }
 
 void AodvTestRouting::processBufferedDATA(string dstIP, bool drop)
@@ -1152,7 +1178,7 @@ void AodvTestRouting::processBufferedDATA(string dstIP, bool drop)
                     collectOutput("Pkt sent","DATA pkt (BS)");
                 else
                     collectOutput("Pkt sent","DATA pkt (BF)");
-                toMacLayer(currPkt, resolveNetworkAddress((rtable->getNextHop(dstIP)).c_str()));
+                toMacLayer(currPkt, resolveNetworkAddress((      ->getNextHop(dstIP)).c_str()));
             }
         }
         else

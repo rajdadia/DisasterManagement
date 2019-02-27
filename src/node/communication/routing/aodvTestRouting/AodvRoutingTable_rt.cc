@@ -53,9 +53,9 @@ Route* AodvRoutingTable::searchByDest(string destination,string type,int prior)/
     }
     return NULL;
 }
-void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli,string type,int prior)//raj on 31/1/19
+void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli,string dtype,int priority)//raj on 31/1/19
 {
-    Route* r = searchByDest(dstIP,type,prior);//raj on 31/1/19
+    Route* r = searchByDest(dstIP,dtype,priority);//raj on 31/1/19
     if(r) // a route for that dst exists already
     {       
             if(r->flag!=VALID || r->dstSN < dstSN || r->dtype.compare("Delay")){
@@ -115,8 +115,8 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
             nr.precursor->merge(*precursor);*/
         nr.state = state;
         nr.dstIP = dstIP;
-        nr.dtype = type;
-        nr.priority = prior;
+        nr.dtype = dtype;
+        nr.priority = priority;
         nr.pDelay = pathDelay;
         nr.reliability = reli;
         //route.lifetime = active_route_timeout
@@ -161,7 +161,7 @@ void AodvRoutingTable::setNextHop(string destination, string newNextHop)
 
 unsigned long AodvRoutingTable::getDstSN(string destination)
 {
-    Route* r = searchByDest(destination,"Delay",1);
+    Route* r = searchByDest(destination,"Ordinary",1);
     if(r)
     {
         return r->dstSN;
@@ -172,11 +172,11 @@ unsigned long AodvRoutingTable::getDstSN(string destination)
 
 void AodvRoutingTable::setDstSN(string destination, unsigned long newSN)
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination,"Ordinary",1);
     if(r)
     {
         if(r->dstSN < newSN)
-            r->dstSN = newSN;
+            r->dstSN = newSN;// for loop for all routes to be added by raj
     }
 }
 
@@ -383,7 +383,7 @@ void AodvRoutingTable::forwardLinkFailure(const char* node, const list<string>* 
     //we look for all the routes which have node has next-hop
     for(list<string>::const_iterator i=affectedDst->begin();i!=affectedDst->end();++i)
     {
-        Route *r = searchByDest(*i,"Delay",1);
+        Route *r = searchByDest(*i,"Delay",1);//for loop to be added
         if(r && (r->nextHopAddr.compare(string(node))) == 0 && r->flag==VALID)
         {
             r->flag=INVALID;
