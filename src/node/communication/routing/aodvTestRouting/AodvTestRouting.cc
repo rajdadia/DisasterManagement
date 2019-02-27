@@ -107,6 +107,7 @@ void AodvTestRouting::sendSugar()//creating fucntion to send sugar(RReQ) packets
     trace() << "starting implematation ";
     std::string s = std::to_string(BROADCAST_MAC_ADDRESS);
     char const *dst = s.c_str();  
+//<<<<<<< HEAD
 
 
     //std::string path=getFullPath();//to check for node number. added by Raj on 5/2/2019
@@ -116,6 +117,10 @@ void AodvTestRouting::sendSugar()//creating fucntion to send sugar(RReQ) packets
 
   
 
+// =======
+//     // test
+//     sendPktRREQ(0, 1,string(SELF_NETWORK_ADDRESS) ,dst, currSN,0);
+// >>>>>>> test
 }
 
 void AodvTestRouting::finish()
