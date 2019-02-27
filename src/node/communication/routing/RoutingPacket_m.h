@@ -50,6 +50,7 @@ class RoutingPacket : public ::cPacket
     opp_string source_var;
     opp_string destination_var;
     unsigned int sequenceNumber_var;
+    
 
   private:
     void copy(const RoutingPacket& other);
@@ -59,6 +60,8 @@ class RoutingPacket : public ::cPacket
     bool operator==(const RoutingPacket&);
 
   public:
+    string dtype;//added by raj 
+    int priority;//added by raj
     RoutingPacket(const char *name=NULL, int kind=0);
     RoutingPacket(const RoutingPacket& other);
     virtual ~RoutingPacket();

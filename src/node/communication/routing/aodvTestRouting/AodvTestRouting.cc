@@ -417,7 +417,33 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 			//toMacLayer(data, BROADCAST_MAC_ADDRESS);
 	}
 
-/*Insert the random datatype, dtype function here by raj*/
+    string pktType;
+
+    std::string path=getFullPath();
+    srand((int)path[8]);
+    int type = (rand() % 4);//added by raj on 23/2/19
+    switch(type){
+        case 0:
+        {
+            pktType = "Ordinary";
+        }
+        case 1: 
+        {
+            pktType = "Reliable";
+        }                                           //added  by raj to assign random values
+        case 2: 
+        {
+            pktType = "Delay";
+        }
+        case 3: 
+        {
+            pktType = "Critical";
+        }
+
+    }
+
+    data->dtype=pktType;
+    data->priority=1;
 
 	//a valid route exist
 	if(rtable->isRouteValid(string(destination),dtype,priority))//chaned by Raj on 23/02/2019
@@ -542,30 +568,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
     SimTime pathDelay = prevTotal + pDelay;  //added by raj 21/1
 
     double reli = (rssi-lqi)/rssi;//added by raj on 23/2/19
-    string pktType;
-
-    std::string path=getFullPath();
-    srand((int)path[8]);
-    int type = (rand() % 4);//added by raj on 23/2/19
-    // switch(type){
-    //     case 0:
-    //     {
-    //         pktType = "Ordinary";
-    //     }
-    //     case 1: 
-    //     {
-    //         pktType = "Reliable";
-    //     }                                            Remove from here add it for dataPKT
-    //     case 2: 
-    //     {
-    //         pktType = "Delay";
-    //     }
-    //     case 3: 
-    //     {
-    //         pktType = "Critical";
-    //     }
-
-    // }
+    
 
     if(isBlacklisted(pkt->getSource()))
 	{
