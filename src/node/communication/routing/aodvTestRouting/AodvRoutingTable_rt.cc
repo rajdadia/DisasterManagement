@@ -39,73 +39,88 @@ AodvRoutingTable::~AodvRoutingTable()
     delete table;
 }
 
-Route* AodvRoutingTable::searchByDest(string destination,string type,int prior)//raj on 31/1/19
+Route* AodvRoutingTable::searchByDest(string destination,string dtype,int priority)//added by raj on 23/2/19
 {
     if(destination=="")
            return NULL;
     for(list<Route>::iterator i=table->begin();i!=table->end();++i)
     {
         Route &r = *i;
-        if(r.dstIP.compare(destination)==0 && r.dtype.compare(type)==0 && r.priority == prior)//raj on 31/1/19
+        if(r.dstIP.compare(destination)==0 && r.dtype.compare(dtype)==0 && r.priority == priority)//added by raj on 23/2/19
         {
                 return &r;
         }
     }
     return NULL;
 }
-void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli,string dtype,int priority)//raj on 31/1/19
+
+void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli,int priority)//raj on 31/1/19
 {
-    Route* r = searchByDest(dstIP,dtype,priority);//raj on 31/1/19
-    if(r) // a route for that dst exists already
-    {       
-            if(r->flag!=VALID || r->dstSN < dstSN || r->dtype.compare("Delay")){
-                if(pathDelay<r->pDelay){
-                    r->dstSN = dstSN;
-                    r->hopCount = hopCount;
-                    r->flag = flag;
-                    r->nextHopAddr = nextHopAddr;
-                    r->state = state;
-                    r->reliability=reli;
-                    r->pDelay = pathDelay;
-                }
-                
-            }
-            if(r->flag!=VALID || r->dstSN < dstSN || r->dtype.compare("Reliable")){
-                if(reli>r->reliability){
-                    r->dstSN = dstSN;
-                    r->hopCount = hopCount;
-                    r->flag = flag;
-                    r->nextHopAddr = nextHopAddr;
-                    r->state = state;
-                    r->reliability=reli;
-                    r->pDelay = pathDelay;
-                }
-                
-            }
-            //the new route SN is higher or the same but with a lower hopcount
-            if(r->flag!=VALID || r->dstSN < dstSN || (r->dstSN == dstSN && r->hopCount > (hopCount + 1)))
+    Route* r1 = searchByDest(dstIP,"Delay",priority);//raj on 31/1/19
+    Route* r2 = searchByDest(dstIP,"Reliable",priority);//added by raj on 23/2/19
+    Route* r3 = searchByDest(dstIP,"Critical",priority);//added by raj on 23/2/19
+    Route* r4 = searchByDest(dstIP,"Ordinary",priority);//added by raj on 23/2/19
+
+    if(r1){
+        if((r1->flag!=VALID || r1->dstSN < dstSN ) && (pathDelay < r1->pDelay)){
+            r1->dstSN = dstSN;
+            r1->hopCount = hopCount;
+            r1->flag = flag;
+            r1->nextHopAddr = nextHopAddr;
+            r1->state = state;
+            r1->reliability=reli;
+            r1->pDelay = pathDelay;
+        }
+    }
+
+    if(r2){
+        if((r2->flag!=VALID || r2->dstSN < dstSN ) && (reli > r2->reliability)){
+            r2->dstSN = dstSN;
+            r2->hopCount = hopCount;
+            r2->flag = flag;
+            r2->nextHopAddr = nextHopAddr;
+            r2->state = state;
+            r2->reliability=reli;
+            r2->pDelay = pathDelay;
+        }
+    }
+
+    if(r3){
+        int newr = (0.8*pathDelay)+(0.2*reli);
+        int oldr = (0.8*pDelay)+(0.2*reliability);
+        if((r3->flag!=VALID || r3->dstSN < dstSN ) && (newr > oldr)){
+            r3->dstSN = dstSN;
+            r3->hopCount = hopCount;
+            r3->flag = flag;
+            r3->nextHopAddr = nextHopAddr;
+            r3->state = state;
+            r3->reliability=reli;
+            r3->pDelay = pathDelay;
+        }
+    }
+
+    if(r4){
+        if(r4->flag!=VALID || r4->dstSN < dstSN || (r4->dstSN == dstSN && r4->hopCount > (hopCount + 1)))
             {
-                r->dstSN = dstSN;
-                r->hopCount = hopCount;
-                r->flag = flag;
-                r->nextHopAddr = nextHopAddr;
+                r4->dstSN = dstSN;
+                r4->hopCount = hopCount;
+                r4->flag = flag;
+                r4->nextHopAddr = nextHopAddr;
                 /*if(r->precursor==NULL)
                     r->precursor=new list<string>();
                 if(precursor!=NULL)
                     r->precursor->merge(*precursor);*/
-                r->state = state;
+                r4->state = state;
+                r4->reliability=reli;//added by raj on 23/2/19
+                r4->pDelay = pathDelay;//added by raj on 23/2/19
             }
-        else //the route is not valid anymore
-        {
-            if(r->flag == BEING_REPAIRED)
-            {
-
-            }
-        }
     }
-    else //no route for that dst exists already
+
+    
+    
+    if(!(r1||r2||r3||r4)) //no route for that dst exists already
     {
-        Route nr;
+        Route nr;//added by raj on 23/2/19
         nr.dstSN = dstSN;
         nr.hopCount = hopCount;
         nr.flag = flag;
@@ -115,7 +130,55 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
             nr.precursor->merge(*precursor);*/
         nr.state = state;
         nr.dstIP = dstIP;
-        nr.dtype = dtype;
+        nr.dtype = "Ordinary";
+        nr.priority = priority;
+        nr.pDelay = pathDelay;
+        nr.reliability = reli;
+        //route.lifetime = active_route_timeout
+        table->push_back(nr);
+
+        nr.dstSN = dstSN;
+        nr.hopCount = hopCount;
+        nr.flag = flag;
+        nr.nextHopAddr = nextHopAddr;
+        nr.precursor = new list<string>();
+        /*if(precursor!=NULL)
+            nr.precursor->merge(*precursor);*/
+        nr.state = state;
+        nr.dstIP = dstIP;
+        nr.dtype = "Delay";
+        nr.priority = priority;
+        nr.pDelay = pathDelay;
+        nr.reliability = reli;
+        //route.lifetime = active_route_timeout
+        table->push_back(nr);
+
+        nr.dstSN = dstSN;
+        nr.hopCount = hopCount;
+        nr.flag = flag;
+        nr.nextHopAddr = nextHopAddr;
+        nr.precursor = new list<string>();
+        /*if(precursor!=NULL)
+            nr.precursor->merge(*precursor);*/
+        nr.state = state;
+        nr.dstIP = dstIP;
+        nr.dtype = "Reliable";
+        nr.priority = priority;
+        nr.pDelay = pathDelay;
+        nr.reliability = reli;
+        //route.lifetime = active_route_timeout
+        table->push_back(nr);
+
+        nr.dstSN = dstSN;
+        nr.hopCount = hopCount;
+        nr.flag = flag;
+        nr.nextHopAddr = nextHopAddr;
+        nr.precursor = new list<string>();
+        /*if(precursor!=NULL)
+            nr.precursor->merge(*precursor);*/
+        nr.state = state;
+        nr.dstIP = dstIP;
+        nr.dtype = "Critical";
         nr.priority = priority;
         nr.pDelay = pathDelay;
         nr.reliability = reli;
@@ -124,12 +187,12 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
     }
 }
 
-void AodvRoutingTable::removeRoute(string destination)
+void AodvRoutingTable::removeRoute(string destination, string dtype, int priority)//added by raj on 23/2/19
 {
     for(list<Route>::iterator i=table->begin();i!=table->end();)
     {
         Route &r = *i;
-        if(r.dstIP.compare(destination)==0)
+        if((r.dstIP.compare(destination)==0)&&(r.dtype.compare(dtype)==0)&&(r.priority == priority))
         {
             //delete &r;
             i=table->erase(i);
@@ -139,9 +202,9 @@ void AodvRoutingTable::removeRoute(string destination)
     }
 }
 
-string AodvRoutingTable::getNextHop(string destination)
+string AodvRoutingTable::getNextHop(string destination, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route* r = searchByDest(destination,"Delay",1);
+    Route* r = searchByDest(destination,dtype,priority);
     if(r)
     {
         return r->nextHopAddr;
@@ -150,18 +213,19 @@ string AodvRoutingTable::getNextHop(string destination)
         return "";
 }
 
-void AodvRoutingTable::setNextHop(string destination, string newNextHop)
+void AodvRoutingTable::setNextHop(string destination, string newNextHop, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination,dtype,priority);
     if(r)
     {
         r->nextHopAddr = newNextHop;
     }
 }
 
-unsigned long AodvRoutingTable::getDstSN(string destination)
+unsigned long AodvRoutingTable::getDstSN(string destination, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route* r = searchByDest(destination,"Ordinary",1);
+    Route* r = searchByDest(destination, dtype, priority);
+
     if(r)
     {
         return r->dstSN;
@@ -170,13 +234,35 @@ unsigned long AodvRoutingTable::getDstSN(string destination)
         return 0;
 }
 
-void AodvRoutingTable::setDstSN(string destination, unsigned long newSN)
+void AodvRoutingTable::setDstSN(string destination, unsigned long newSN)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Ordinary",1);
-    if(r)
+
+    Route *r1 = searchByDest(destination,"Delay",1);
+    if(r1)
     {
-        if(r->dstSN < newSN)
-            r->dstSN = newSN;// for loop for all routes to be added by raj
+        if(r1->dstSN < newSN)
+            r1->dstSN = newSN;
+    }
+
+    r1 = searchByDest(destination,"Reliable",1);
+    if(r1)
+    {
+        if(r1->dstSN < newSN)
+            r1->dstSN = newSN;
+    }
+
+    r1 = searchByDest(destination,"Critical",1);
+    if(r1)
+    {
+        if(r1->dstSN < newSN)
+            r1->dstSN = newSN;
+    }
+
+    r1 = searchByDest(destination,"Ordinary",1);
+    if(r1)
+    {
+        if(r1->dstSN < newSN)
+            r1->dstSN = newSN;
     }
 }
 
@@ -198,18 +284,18 @@ double AodvRoutingTable::getLifetime(string destination)
     return x;
 }
 
-void AodvRoutingTable::setLifetime(RouteTimer* timer)
+void AodvRoutingTable::setLifetime(RouteTimer* timer, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(timer->destination,"Delay",1);
+    Route *r = searchByDest(timer->destination, dtype, priority);
     if(r)
     {
         timers.push(*timer);
     }
 }
 
-RoutingFlag AodvRoutingTable::getFlag(string destination)
+RoutingFlag AodvRoutingTable::getFlag(string destination, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route* r = searchByDest(destination,"Delay",1);
+    Route* r = searchByDest(destination,dtype, priority);
     if(r)
     {
         return r->flag;
@@ -218,18 +304,18 @@ RoutingFlag AodvRoutingTable::getFlag(string destination)
         return UNKNOWN;
 }
 
-void AodvRoutingTable::setFlag(string destination, RoutingFlag newFlag)
+void AodvRoutingTable::setFlag(string destination, RoutingFlag newFlag, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination,dtype, priority);
     if(r)
     {
         r->flag = newFlag;
     }
 }
 
-int AodvRoutingTable::getHopCount(string destination)
+int AodvRoutingTable::getHopCount(string destination, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination, dtype, priority);
     if(r)
     {
         return r->hopCount;
@@ -238,18 +324,18 @@ int AodvRoutingTable::getHopCount(string destination)
         return 0;
 }
 
-void AodvRoutingTable::setHopCount(string destination, int newCount)
+void AodvRoutingTable::setHopCount(string destination, int newCount, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination, dtype, priority);
     if(r)
     {
         r->hopCount = newCount;
     }
 }
 
-bool AodvRoutingTable::getState(string destination)
+bool AodvRoutingTable::getState(string destination, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination, dtype, priority);
     if(r)
     {
         return r->state;
@@ -258,18 +344,18 @@ bool AodvRoutingTable::getState(string destination)
         return false;
 }
 
-void AodvRoutingTable::setState(string destination, bool valid)
+void AodvRoutingTable::setState(string destination, bool valid, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination,dtype,priority);
     if(r)
     {
         r->state = valid;
     }
 }
 
-bool AodvRoutingTable::isRouteValid(string destination)
+bool AodvRoutingTable::isRouteValid(string destination, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination,dtype,priority);
     if(r && r->flag==VALID)
             return true;
     else
@@ -322,9 +408,9 @@ const RouteTimer* AodvRoutingTable::getNextExpiredRoute()
    return &(timers.top());
 }
 
-const std::list<string>& AodvRoutingTable::getPrecursors(string destination)
+const std::list<string>& AodvRoutingTable::getPrecursors(string destination, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination,dtype, priority);
     if(r)
     {
         return *(r->precursor);
@@ -333,9 +419,9 @@ const std::list<string>& AodvRoutingTable::getPrecursors(string destination)
         return *(new list<string>());
 }
 
-void AodvRoutingTable::addPrecursor(string destination, string precursor)
+void AodvRoutingTable::addPrecursor(string destination, string precursor, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination,dtype,priority);
     if(r)
     {
         if(r->precursor==NULL)
@@ -351,9 +437,9 @@ void AodvRoutingTable::addPrecursor(string destination, string precursor)
     }
 }
 
-void AodvRoutingTable::deletePrecursor(string destination, string precursor)
+void AodvRoutingTable::deletePrecursor(string destination, string precursor, string dtype, int priority)//added by raj on 23/2/19
 {
-    Route *r = searchByDest(destination,"Delay",1);
+    Route *r = searchByDest(destination,dtype,priority);
     if(r)
     {
         r->precursor->remove(precursor);
@@ -378,12 +464,33 @@ void AodvRoutingTable::setLinkFailure(const char* node, list<string>* affectedDs
     affectedPre->unique();
 }
 
-void AodvRoutingTable::forwardLinkFailure(const char* node, const list<string>* affectedDst, list<string>* affectedPre)
+void AodvRoutingTable::forwardLinkFailure(const char* node, const list<string>* affectedDst, list<string>* affectedPre)//added by raj on 23/2/19
 {
     //we look for all the routes which have node has next-hop
     for(list<string>::const_iterator i=affectedDst->begin();i!=affectedDst->end();++i)
     {
         Route *r = searchByDest(*i,"Delay",1);//for loop to be added
+        if(r && (r->nextHopAddr.compare(string(node))) == 0 && r->flag==VALID)
+        {
+            r->flag=INVALID;
+            affectedPre->insert(affectedPre->begin(),r->precursor->begin(),r->precursor->end());
+        }
+
+        r = searchByDest(*i,"Reliable",1);
+        if(r && (r->nextHopAddr.compare(string(node))) == 0 && r->flag==VALID)
+        {
+            r->flag=INVALID;
+            affectedPre->insert(affectedPre->begin(),r->precursor->begin(),r->precursor->end());
+        }
+
+        r = searchByDest(*i,"Critical",1);
+        if(r && (r->nextHopAddr.compare(string(node))) == 0 && r->flag==VALID)
+        {
+            r->flag=INVALID;
+            affectedPre->insert(affectedPre->begin(),r->precursor->begin(),r->precursor->end());
+        }
+
+        r = searchByDest(*i,"Ordinary",1);
         if(r && (r->nextHopAddr.compare(string(node))) == 0 && r->flag==VALID)
         {
             r->flag=INVALID;

@@ -81,30 +81,30 @@ public:
 
         Route* searchByDest(std::string destination,string type,int prior);//raj on 31/1/19
         //if the route exists it will be updated, else a new route is inserted
-        void insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli,string type, int prior);
-        void removeRoute(std::string destination);
+        void insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli, int priority);//added by raj on 23/2/19
+        void removeRoute(std::string destination, string dtype, int priority);//added by raj on 23/2/19
 
-        unsigned long getDstSN(std::string destination);
+        unsigned long getDstSN(std::string destination, string dtype, int priority);//added by raj on 23/2/19
         //the method first checks that the newSN is larger than the current SN
-        void setDstSN(std::string destination, unsigned long newSN);
+        void setDstSN(std::string destination, unsigned long newSN);//added by raj on 23/2/19
 
         double getLifetime(std::string destination);
-        void setLifetime(RouteTimer* timer);
+        void setLifetime(RouteTimer* timer, string dtype, int priority);//added by raj on 23/2/19
 
-        std::string getNextHop(std::string destination);
-        void setNextHop(std::string destination, string newNextHop);
+        std::string getNextHop(std::string destination, string dtype, int priority);//added by raj on 23/2/19
+        void setNextHop(std::string destination, string newNextHop, string dtype, int priority);//added by raj on 23/2/19
 
-        RoutingFlag getFlag(std::string destination);
-        void setFlag(std::string destination, RoutingFlag newFlag);
+        RoutingFlag getFlag(std::string destination, string dtype, int priority);//added by raj on 23/2/19
+        void setFlag(std::string destination, RoutingFlag newFlag, string dtype, int priority);//added by raj on 23/2/19
 
-        int getHopCount(std::string destination);
-        void setHopCount(std::string destination, int newCount);
+        int getHopCount(std::string destination, string dtype, int priority);//added by raj on 23/2/19
+        void setHopCount(std::string destination, int newCount, string dtype, int priority);//added by raj on 23/2/19
 
         //return the validty of the DstSN
-        bool getState(std::string destination);
-        void setState(std::string destination, bool valid);
+        bool getState(std::string destination, string dtype, int priority);//added by raj on 23/2/19
+        void setState(std::string destination, bool valid, string dtype, int priority);//added by raj on 23/2/19
 
-        bool isRouteValid(std::string destination);
+        bool isRouteValid(std::string destination, string dtype, int priority);//added by raj on 23/2/19
         bool isPartRouteValid();
 
         const RouteTimer* getNextExpiredRoute();
@@ -112,14 +112,14 @@ public:
         int getTimersSize();
         void resetTimer(string dest);
 
-        const std::list<std::string>& getPrecursors(std::string destination);
-        void addPrecursor(std::string destination, std::string precursor);
-        void deletePrecursor(std::string destination, std::string precursor);
+        const std::list<std::string>& getPrecursors(std::string destination, string dtype, int priority);//added by raj on 23/2/19
+        void addPrecursor(std::string destination, std::string precursor, string dtype, int priority);//added by raj on 23/2/19
+        void deletePrecursor(std::string destination, std::string precursor, string dtype, int priority);//added by raj on 23/2/19
 
         //this method will update the affectedDst and affectedPre list
         void setLinkFailure(const char* node, std::list<std::string>* affectedDst, std::list<std::string>* affectedPre);
         //this method update the affectedPre list
-        void forwardLinkFailure(const char* node, const std::list<std::string>* affectedDst, std::list<std::string>* affectedPre);
+        void forwardLinkFailure(const char* node, const std::list<std::string>* affectedDst, std::list<std::string>* affectedPre);//added by raj on 23/2/19
 };
 
 #endif /* ROUTINGTABLE_H_ */

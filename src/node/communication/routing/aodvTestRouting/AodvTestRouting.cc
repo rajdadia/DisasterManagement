@@ -106,7 +106,7 @@ void AodvTestRouting::sendSugar()//creating fucntion to send sugar(RReQ) packets
     currSN++;
     trace() << "starting implematation ";
     std::string s = std::to_string(BROADCAST_MAC_ADDRESS);
-    char const *dst = s.c_str();  
+    char const *dst = s.c_str(); 
 
     //std::string path=getFullPath();//to check for node number. added by Raj on 5/2/2019
 
@@ -935,6 +935,7 @@ void AodvTestRouting::updateLifetimeRoute(string dstIP, double time,string dtype
 {
     Route* r = rtable->searchByDest(dstIP,dtype,priority);//changed by raj
     if(r && rtable->getFlag(dstIP,dtype,priority)==VALID)//changed by raj
+
     {
         routeUpdateCount[dstIP]++;
         RouteTimer newTimer;
