@@ -11,6 +11,7 @@
 #include <iostream>
 #include <sstream>
 #include "RoutingPacket_m.h"
+#include <string>
 
 USING_NAMESPACE
 

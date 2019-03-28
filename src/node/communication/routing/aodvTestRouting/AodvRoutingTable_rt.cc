@@ -86,8 +86,10 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
     }
 
     if(r3){
-        int newr = (0.8*pathDelay)+(0.2*reli);
-        int oldr = (0.8*pDelay)+(0.2*reliability);
+        double ms = pathDelay.dbl();
+        double oms = r3->pDelay.dbl();
+        int newr = (0.8*ms)+(0.2*reli);
+        int oldr = (0.8*oms)+(0.2*(r3->reliability));
         if((r3->flag!=VALID || r3->dstSN < dstSN ) && (newr > oldr)){
             r3->dstSN = dstSN;
             r3->hopCount = hopCount;
@@ -266,7 +268,7 @@ void AodvRoutingTable::setDstSN(string destination, unsigned long newSN)//added 
     }
 }
 
-double AodvRoutingTable::getLifetime(string destination)
+double AodvRoutingTable::getLifetime(string destination,string detype, int prior)//changed on 15/3/19 raj
 {
     RouteTimer* timer;
     double x=0;
@@ -275,7 +277,7 @@ double AodvRoutingTable::getLifetime(string destination)
         timer = (RouteTimer*)&(timers.top());
         for(unsigned int i = 0; i < timers.size(); i++)
         {
-				if(!timer[i].canceled && timer[i].destination.compare(destination)==0 && timer[i].lifetime>x)
+				if(!timer[i].canceled && timer[i].destination.compare(destination)==0 && timer[i].lifetime>x && timer[i].dtype.compare(detype)==0 && timer[i].priority == prior)//changed 15/3/19 raj
 				{
 					x = timer[i].lifetime;
 				}
@@ -368,7 +370,7 @@ bool AodvRoutingTable::isPartRouteValid()
     for(list<Route>::iterator i=table->begin();i!=table->end();++i)
     {
         Route &r = *i;
-        if(isRouteValid(r.dstIP) && r.precursor->size()!=0)
+        if(isRouteValid(r.dstIP,r.dtype,r.priority) && r.precursor->size()!=0)
         {
                 return true;
         }
@@ -380,7 +382,7 @@ void AodvRoutingTable::clearTimerExpired()
 {
    timers.pop();
 }
-void AodvRoutingTable::resetTimer(string dest)
+void AodvRoutingTable::resetTimer(string dest, string detype,int prior)
 {
     RouteTimer* timer;
     if(!timers.empty())
@@ -388,7 +390,7 @@ void AodvRoutingTable::resetTimer(string dest)
         timer = (RouteTimer*)&(timers.top());
         for(unsigned int i = 0; i < timers.size(); i++)
         {
-            if(timer[i].destination.compare(dest)==0)
+            if(timer[i].destination.compare(dest)==0 && timer[i].dtype.compare(detype)==0 && timer[i].priority==0)
             {
                 timer[i].canceled = true;
                 return;

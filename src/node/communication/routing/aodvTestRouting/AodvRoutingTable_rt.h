@@ -58,6 +58,8 @@ struct RouteTimer
     double lifetime;
     string destination;
     bool canceled;
+    string dtype;
+    int priority;
 };
 
 struct RouteTimerCompare
@@ -88,7 +90,7 @@ public:
         //the method first checks that the newSN is larger than the current SN
         void setDstSN(std::string destination, unsigned long newSN);//added by raj on 23/2/19
 
-        double getLifetime(std::string destination);
+        double getLifetime(std::string destination, std::string detype , int prior );
         void setLifetime(RouteTimer* timer, string dtype, int priority);//added by raj on 23/2/19
 
         std::string getNextHop(std::string destination, string dtype, int priority);//added by raj on 23/2/19
@@ -110,7 +112,7 @@ public:
         const RouteTimer* getNextExpiredRoute();
         void clearTimerExpired();
         int getTimersSize();
-        void resetTimer(string dest);
+        void resetTimer(string dest,string detype,int prior);
 
         const std::list<std::string>& getPrecursors(std::string destination, string dtype, int priority);//added by raj on 23/2/19
         void addPrecursor(std::string destination, std::string precursor, string dtype, int priority);//added by raj on 23/2/19

@@ -6,6 +6,7 @@
 #define _ROUTINGPACKET_M_H_
 
 #include <omnetpp.h>
+#include <string>
 
 // nedtool version check
 #define MSGC_VERSION 0x0406
@@ -60,7 +61,7 @@ class RoutingPacket : public ::cPacket
     bool operator==(const RoutingPacket&);
 
   public:
-    string dtype;//added by raj 
+    std::string dtype;//added by raj 
     int priority;//added by raj
     RoutingPacket(const char *name=NULL, int kind=0);
     RoutingPacket(const RoutingPacket& other);

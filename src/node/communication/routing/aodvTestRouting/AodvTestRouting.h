@@ -156,9 +156,9 @@ class AodvTestRouting: public VirtualRouting
 
 
 
-	void updateLifetimeRoute(std::string destination, double time,string dtype,int priority)//changed by raj unsure
-	void resetLifetimeRoute(const std::string dstIP,string dtype,int priority)//changed by raj unsure
-	double getLifetimeRoute(const std::string dstIP,string dtype,int priority)//changed by raj unsure
+	void updateLifetimeRoute(std::string destination, double time,string dtype,int priority);//changed by raj unsure
+	void resetLifetimeRoute(const std::string dstIP,string dtype,int priority);//changed by raj unsure
+	double getLifetimeRoute(const std::string dstIP,string dtype,int priority);//changed by raj unsure
 	void updateRreqTable(std::string destination, int id);
 	void updateRreqBroadcastedList(std::string destination, std::string source, int id);
 	bool checkRREQProcessed(std::string dst);

@@ -237,7 +237,7 @@ void AodvTestRouting::timerFiredCallback(int index)
         }
             break;
 
-        case AODV_HELLO_MESSAGE_EXPIRE_TIMER:
+        /*case AODV_HELLO_MESSAGE_EXPIRE_TIMER:
         {
             trace() << "AODV : T : AODV_HELLO_MESSAGE_EXPIRE_TIMER expired";
             string neib = helloTimer.top().destination;
@@ -271,7 +271,7 @@ void AodvTestRouting::timerFiredCallback(int index)
             if(!helloTimer.empty())
                 setTimer(AODV_HELLO_MESSAGE_EXPIRE_TIMER, helloTimer.top().lifetime - simTime().dbl());
         }
-            break;
+            break;*/
 
         case AODV_RERR_RATE_LIMIT_TIMER:
         {
@@ -444,17 +444,18 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 
     data->dtype=pktType;
     data->priority=1;
+    int priority = data->priority;//raj on 15/3/19
 
 	//a valid route exist
-	if(rtable->isRouteValid(string(destination),dtype,priority))//chaned by Raj on 23/02/2019
+	if(rtable->isRouteValid(string(destination),pktType,priority))//chaned by Raj on 23/02/2019
 	{
-			updateLifetimeRoute(string(destination), activeRouteTimeout,dtype,priority);//added 2 argumnets by raj on 23/02/19
+			updateLifetimeRoute(string(destination), activeRouteTimeout,pktType,priority);//added 2 argumnets by raj on 23/02/19
 			trace() << "AODV : B1 : DATA sent (route valid) - destination " << string(destination)
-			                                                <<" via " <<rtable->getNextHop(destination,dtype,priority);//added 2 argumnets by raj on 23/02/19
+			                                                <<" via " <<rtable->getNextHop(destination,pktType,priority);//added 2 argumnets by raj on 23/02/19
 
-			data->setDestination((rtable->getNextHop(destination,dtype,priority)).c_str());//added 2 argumnets by Raj 23/02/19
+			data->setDestination((rtable->getNextHop(destination,pktType,priority)).c_str());//added 2 argumnets by Raj 23/02/19
 			collectOutput("Pkt sent","DATA pkt (S)");
-			toMacLayer(data, resolveNetworkAddress((rtable->getNextHop(destination,dtype,priority)).c_str()));//added 2 argumnets by Raj 23/02/19
+			toMacLayer(data, resolveNetworkAddress((rtable->getNextHop(destination,pktType,priority)).c_str()));//added 2 argumnets by Raj 23/02/19
 			return;
 	}
 
@@ -463,7 +464,7 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 	{
 			currSN++;
 			rreqID++;
-			sendPktRREQ(0, rreqID, string(SELF_NETWORK_ADDRESS), string(destination), currSN, rtable->getDstSN(destination,dtype,priority),simTime());//added 2 argumnets by Raj 23/02/19
+			sendPktRREQ(0, rreqID, string(SELF_NETWORK_ADDRESS), string(destination), currSN, rtable->getDstSN(destination,pktType,priority),simTime());//added 2 argumnets by Raj 23/02/19
 			//buffer the packet
 
 	}
@@ -535,7 +536,7 @@ void AodvTestRouting::receivePktDATA(PacketDATA *pkt)
 	if(rtable->isRouteValid(finalDst,pkt->dtype,pkt->priority))//changed by Raj on 23/02/19
 	{
 
-			updateLifetimeRoute(finalDst, activeRouteTimeout);//to be changed by raj on 23/02/2019
+			updateLifetimeRoute(finalDst, activeRouteTimeout,pkt->dtype,pkt->priority);//to be changed by raj on 23/02/2019
 			ndPacket->setDestination((rtable->getNextHop(finalDst,pkt->dtype,pkt->priority)).c_str());//added 2 arguments by raj on 23/02
             trace() << "AODV : DATA : forwarded to destination " << string(finalDst)
                                                             <<" via " <<rtable->getNextHop(finalDst,pkt->dtype,pkt->priority);//added 2 arguments by raj on 23/02/19
@@ -642,7 +643,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
             string dstIP = string(pkt->getDstIP());
             int hopcount = rtable->getHopCount(dstIP,"Ordinary",1);//never called by raj
             unsigned long dstSN = rtable->getDstSN(dstIP,"Ordinary",1);//never called by raj
-            double time = getLifetimeRoute(dstIP,dtype,priority)-simTime().dbl();
+            double time = getLifetimeRoute(dstIP,r->dtype,r->priority)-simTime().dbl();
             collectOutput("Pkt sent","RREP pkt (R)");
             sendPktRREP(hopcount,srcIP,dstIP,dstSN,time,false,pkt->getRreqID());
             return;
@@ -661,7 +662,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	if(pkt->getDstSN() >= rtable->getDstSN(dstIP,"Ordinary",1))//All dstnSN same. Changed by raj on 23/02/2019. Unsure :(
 		dstSN = pkt->getDstSN();
 	else
-		dstSN = rtable->getDstSN(dstIP,"Ordinary"1);//All dstnSN same. Changed by raj on 23/02/2019. Unsure :(
+		dstSN = rtable->getDstSN(dstIP,"Ordinary",1);//All dstnSN same. Changed by raj on 23/02/2019. Unsure :(
 
 	sendPktRREQ(hopcount, id, srcIP, dstIP, srcSN, dstSN,pathDelay);//added pathDelay by Raj 23/02/2019.
 
@@ -1144,7 +1145,7 @@ void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool st
         if(r && lifetime < r->lifetime)
             cancelTimer(AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER);
 
-        rtable->insertRoute(dstIP, dstSN, state, flag, hopCount, nextHopAddr, precursor, lifetime,pathDelay,reli,dtype,priority);//raj on 21/2/19
+        rtable->insertRoute(dstIP, dstSN, state, flag, hopCount, nextHopAddr, precursor, lifetime,pathDelay,reli,priority);//raj on 21/2/19
         rtable->setLifetime(&newTimer,dtype,priority);//changed by raj
 
         r = rtable->getNextExpiredRoute();
@@ -1169,16 +1170,16 @@ void AodvTestRouting::processBufferedDATA(string dstIP, bool drop)
         currPkt = dynamic_cast <PacketDATA*>(TXBuffer.front());
         if(currPkt && string(dstIP).compare(currPkt->getDestinationAodv())==0)
         {
-            if(!drop && rtable->isRouteValid(dstIP))
+            if(!drop && rtable->isRouteValid(dstIP,currPkt->dtype,currPkt->priority))
             {
-                currPkt->setDestination(rtable->getNextHop(dstIP,currPkt->dtype,currPkt->priority).c_str())//changed by raj
+                currPkt->setDestination(rtable->getNextHop(dstIP,currPkt->dtype,currPkt->priority).c_str());//changed by raj
                 trace() << "AODV : DATA : TX (out of buffer) - destination " << string(dstIP)
                         <<" via " <<rtable->getNextHop(dstIP,currPkt->dtype,currPkt->priority);//changed by raj
                 if(string(currPkt->getSource()).compare(SELF_NETWORK_ADDRESS)==0)
                     collectOutput("Pkt sent","DATA pkt (BS)");
                 else
                     collectOutput("Pkt sent","DATA pkt (BF)");
-                toMacLayer(currPkt, resolveNetworkAddress((      ->getNextHop(dstIP)).c_str()));r
+                toMacLayer(currPkt, resolveNetworkAddress((rtable->getNextHop(dstIP,currPkt->dtype,currPkt->priority)).c_str()));//changed 15/3/19 raj
             }
         }
         else
@@ -1186,7 +1187,7 @@ void AodvTestRouting::processBufferedDATA(string dstIP, bool drop)
             bufferTemp.push(TXBuffer.front());
         }
         TXBuffer.pop();
-        updateLifetimeRoute(string(dstIP), activeRouteTimeout);
+        updateLifetimeRoute(string(dstIP), activeRouteTimeout,currPkt->dtype,currPkt->priority);
     }
     while (!bufferTemp.empty()) {
         TXBuffer.push(bufferTemp.front());

@@ -11,6 +11,7 @@
  ****************************************************************************/
 
 #include "VirtualMac.h"
+#include <string>
 
 void VirtualMac::initialize()
 {

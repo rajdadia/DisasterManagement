@@ -18,6 +18,7 @@
 #include <queue>
 #include <vector>
 #include <omnetpp.h>
+#include <string>
 
 #include "RoutingPacket_m.h"
 #include "MacPacket_m.h"
