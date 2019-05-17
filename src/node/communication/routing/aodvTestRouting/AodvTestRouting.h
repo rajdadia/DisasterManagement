@@ -165,7 +165,7 @@ class AodvTestRouting: public VirtualRouting
 	bool checkRREQBuffered(std::string orig, int idx);
 	//check if the RREQ as already been forwarded (section 6.5 RFC3650)
 	bool checkRREQBroadcasted(std::string orig, int idx);
-	void updateRoute(const std::string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string nextHopAddr,std::list<std::string>* precursor, double aTime, SimTime pathDelay, double reli, int priority);
+	void updateRoute(const std::string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string nextHopAddr,std::list<std::string>* precursor, double aTime, SimTime pathDelay, double reli);//raj on 29/3/19
 
 	void setRrepAckTimer(const char* neib);
 	void setRreqBlacklistTimer(const char* neib);

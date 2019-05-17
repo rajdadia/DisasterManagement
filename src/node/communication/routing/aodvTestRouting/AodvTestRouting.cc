@@ -56,7 +56,7 @@ void AodvTestRouting::startup()
 	ttlThreshould = par("ttlThreshould");
 	shortestDelay = par("shortestDelay");
 	atmode = par("atmode");
-	callSugar = 3;//added by Raj on 5/2
+	callSugar = 3;//added by Raj on 5/2/// Timer for broadcasting message
 
 	rreqExpTime = netTraversalTime;
 	rreqExpTimeB = pathDiscoveryTime;
@@ -589,7 +589,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
                                                             << "Reliability: " << reli;//added on 21/01/19 //Add RSSI by raj
 	//updates a route to the previous hop without a valid seq number
     trace() << "AODV : RREQ : Path Delay:::"<<pathDelay ;//added on 21/1/19 by raj
-	updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,pathDelay,reli,1);//raj on 21/2/19
+	updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,pathDelay,reli);//raj on 29/3/19
 
 
 	//check if this node is the origin of the request
@@ -605,7 +605,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	}
 
 	//update route for the originator
-	updateRoute(string(pkt->getSrcIP()), pkt->getSrcSN(), true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,0,pathDelay,reli,1);//changed by raj on 23/02/2019
+	updateRoute(string(pkt->getSrcIP()), pkt->getSrcSN(), true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,0,pathDelay,reli);//changed by raj on 29/03/2019
 
     
     if(string(pkt->getDstIP()).compare(SELF_NETWORK_ADDRESS)==0) //current node is the destination (RFC3561 chapter 6.6.1)
@@ -685,9 +685,9 @@ void AodvTestRouting::receivePktRREP(PacketRREP* pkt,int srcMacAddress, double r
     sendPktRREPack(pkt->getSource());
 
     //updates a route to the previous hop without a valid seq number
-    updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,simTime(),0,1);
+    updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,simTime(),0);
     //update route for the destination
-    updateRoute(string(pkt->getDstIP()), pkt->getDstSN(),true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,pkt->getLifetime(),simTime(),0,1);
+    updateRoute(string(pkt->getDstIP()), pkt->getDstSN(),true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,pkt->getLifetime(),simTime(),0);
 
     if(getTimer(AODV_HELLO_MESSAGE_REFRESH_TIMER).dbl()<=0)
         sendPktHELLO();
@@ -1101,31 +1101,57 @@ bool AodvTestRouting::checkRREQBuffered(string orig, int idx)
 	return false;
 }
 
-void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const string nextHopAddr, list<string>* precursor, double aTime, SimTime pathDelay, double reli, int priority)
+void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const string nextHopAddr, list<string>* precursor, double aTime, SimTime pathDelay, double reli)//raj on 29/3/19
 {
-    int try1=0;string dtype;
-    while(try1<4)//added the loop by raj
+    int try1=0,try2=0;
+    string dtype;
+    int priority;
+    while(try1<8)//added the loop by raj
     {   
-        if(try1==0)
+        if(try1<2)
         {
+            if (try2==0){
+                priority = 1;
+            }
+            else if(try2==1){
+                priority = 2;
+            }
             dtype="Ordinary";
         }
-        else if(try1==1)
+        else if(try1>1 && try1<4)
         {
             dtype="Reliable";
+            if (try2==2){
+                priority = 1;
+            }
+            else if(try2 == 3){
+                priority = 2;
+            }
         } 
-        else if (try1==2)
+        else if (try1>3 && try1<6)
         {
             dtype="Delay";
+            if(try2==4){
+                priority = 1;
+            }
+            else if(try2==5){
+                priority = 2;
+            }
         }
         else
         {
             dtype="Critical";
-        }
+            if(try2==6){
+                priority = 1;
+            }
+            else if(try2==7){
+                priority = 2;
+            }
+        }//raj coding ends here
 
         //refer to RFC3561 chapter 6.2
 	   double oldLifetime = 0;
-        if(rtable->isRouteValid(dstIP,dtype,1))//add for loop here unsure
+        if(rtable->isRouteValid(dstIP,dtype,priority))//add for loop here unsure
          	double oldLifetime = getLifetimeRoute(dstIP,dtype,priority);//changed by raj
 
         double addTime;
@@ -1145,7 +1171,7 @@ void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool st
         if(r && lifetime < r->lifetime)
             cancelTimer(AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER);
 
-        rtable->insertRoute(dstIP, dstSN, state, flag, hopCount, nextHopAddr, precursor, lifetime,pathDelay,reli,priority);//raj on 21/2/19
+        rtable->insertRoute(dstIP, dstSN, state, flag, hopCount, nextHopAddr, precursor, lifetime,pathDelay,reli,dtype,priority);//raj on 21/2/19
         rtable->setLifetime(&newTimer,dtype,priority);//changed by raj
 
         r = rtable->getNextExpiredRoute();
@@ -1158,6 +1184,7 @@ void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool st
         trace() << "AODV : R : new route created to " << dstIP<<" of dtype : "<< dtype;
 
         try1++;
+        try2++;
     }
 }
 
