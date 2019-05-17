@@ -29,6 +29,7 @@ class ThroughputTest: public VirtualApplication {
 
 	float packet_spacing;
 	int dataSN;
+	int Pkt_Rcvd_Cnt;   // added by diana
 
  protected:
 	void startup();

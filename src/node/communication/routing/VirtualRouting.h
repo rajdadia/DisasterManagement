@@ -38,6 +38,10 @@ class VirtualRouting: public CastaliaModule, public TimerService {
 	int netDataFrameOverhead;	//in bytes
 	int netBufferSize;			//in # of messages
 	unsigned int currentSequenceNumber;
+	int pktDelay = 0;
+	int pktOrdinary = 0;
+	int pktReliability = 0;
+	int pktCritical = 0;//tanuj 18/5/19
 
 	/*--- Custom class parameters ---*/
 	double radioDataRate;

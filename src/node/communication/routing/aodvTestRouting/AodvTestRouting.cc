@@ -91,26 +91,27 @@ void AodvTestRouting::startup()
     respTimeTotal = 0;
     rrepRxCount=0;
 
-
-
     latencyMax = hasPar("latencyHistogramMax") ? par("latencyHistogramMax") : 0;
     latencyMin = hasPar("latencyHistogramMin") ? par("latencyHistogramMin") : 0;
     latencyBuckets = hasPar("latencyHistogramBuckets") ? par("latencyHistogramBuckets") : 0;
     if (latencyMax > 0 && latencyBuckets > 0)
         declareHistogram("RREQ response time, in s", latencyMin, latencyMax, latencyBuckets);
 
+    resMgrModule = check_and_cast <ResourceManager*>(getParentModule()->getParentModule()->getSubmodule("ResourceManager"));  // Diana 2/5/19  *****
+    trace()<<" Node' spent energy is "<<resMgrModule->getSpentEnergy() ;   
 }
 
 void AodvTestRouting::sendSugar()//creating fucntion to send sugar(RReQ) packets by Raj.
 {
     currSN++;
+
     trace() << "starting implematation ";
     std::string s = std::to_string(BROADCAST_MAC_ADDRESS);
     char const *dst = s.c_str(); 
 
     //std::string path=getFullPath();//to check for node number. added by Raj on 5/2/2019
 
-    sendPktRREQ(0,(callSugar-3) ,string(SELF_NETWORK_ADDRESS) ,dst, currSN,0,SimTime());		
+    sendPktRREQ(0,(callSugar-3) ,string(SELF_NETWORK_ADDRESS) ,dst, currSN,0,SimTime(), 0);		
 
 }
 
@@ -130,6 +131,8 @@ void AodvTestRouting::finish()
         rerrBuffer.pop();
         cancelAndDelete(rerrpkt);
     }
+
+    trace()<<" Total consumed energy is:"<<resMgrModule->getSpentEnergy();
 }
 
 void AodvTestRouting::timerFiredCallback(int index)
@@ -168,7 +171,7 @@ void AodvTestRouting::timerFiredCallback(int index)
                 {
                     rreqID++;
                     trace() << "AODV : RREQ : rreq resent for destination : "<<nextExpiredRREQ;
-                    sendPktRREQ(0, rreqID, SELF_NETWORK_ADDRESS, nextExpiredRREQ,currSN, rtable->getDstSN(nextExpiredRREQ,"Ordinary",1),simTime());//Changed by Raj. Unsure :(
+                    sendPktRREQ(0, rreqID, SELF_NETWORK_ADDRESS, nextExpiredRREQ,currSN, rtable->getDstSN(nextExpiredRREQ,"Ordinary",1),simTime(), 0);//Changed by Raj. Unsure :(
                 }
                 else
                 {
@@ -404,12 +407,13 @@ void AodvTestRouting::fromMacLayer(cPacket * pkt, int srcMacAddress, double rssi
 //application layer can only send data packets
 void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destination)
 {
+    Recvd_Pkt_Count++; 
 	PacketDATA *data = new PacketDATA("AODV routing data packet", NETWORK_LAYER_PACKET);
 	data->setSource(SELF_NETWORK_ADDRESS);
 	data->setDestinationAodv(destination);
 	data->setDestination(destination);
-	encapsulatePacket(data, pkt);
-	trace() << "AODV : A : DATA received from application layer - destination " << string(destination);
+// encapsulatePacket(data, pkt);
+	trace() << "AODV : A : DATA received from application layer - destination " << string(destination)<< " Pkt No: "<<pkt << " TXBuffer: "<< Recvd_Pkt_Count;
 	if(string(destination).compare(BROADCAST_NETWORK_ADDRESS)==0)
 	{
 	        return;
@@ -445,6 +449,7 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
     data->dtype=pktType;
     data->priority=1;
     int priority = data->priority;//raj on 15/3/19
+    encapsulatePacket(data, pkt);
 
 	//a valid route exist
 	if(rtable->isRouteValid(string(destination),pktType,priority))//chaned by Raj on 23/02/2019
@@ -461,10 +466,11 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 
 	//if a rreq is not processed
 	else if(!(AodvTestRouting::checkRREQProcessed(string(destination))))
-	{
-			currSN++;
+	{    
+			trace()<<" Inside fromAllpicatioLayer(): if a rreq is not processed ";
+            currSN++;
 			rreqID++;
-			sendPktRREQ(0, rreqID, string(SELF_NETWORK_ADDRESS), string(destination), currSN, rtable->getDstSN(destination,pktType,priority),simTime());//added 2 argumnets by Raj 23/02/19
+			sendPktRREQ(0, rreqID, string(SELF_NETWORK_ADDRESS), string(destination), currSN, rtable->getDstSN(destination,pktType,priority),simTime(), 0);//added 2 argumnets by Raj 23/02/19
 			//buffer the packet
 
 	}
@@ -474,14 +480,13 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 		trace() << "AODV : B1 : RREQ already processed - for destination " << string(destination);
     trace() << "AODV : B2 : DATA buffered - destination " << string(destination);
     bufferPacket(data);
-
-
-
 }
 
 
 void AodvTestRouting::receivePktDATA(PacketDATA *pkt)
 {
+    Recvd_Pkt_Count++;  
+    trace()<<"@ Recv Data Pkt, TXBuffer is : " << Recvd_Pkt_Count << " Pkt_SEQ_No: "<< pkt->getSequenceNumber()<< " Src is "<< string(pkt->getSource()) ; 
 	string finalDst = string(pkt->getDestinationAodv());
 
 	//packet to be broadcasted
@@ -504,14 +509,14 @@ void AodvTestRouting::receivePktDATA(PacketDATA *pkt)
 
 	trace() << "AODV : DATA : RX : from: " << string(pkt->getSource())
 				                                << " destination: " << string(pkt->getDestinationAodv());
-
+    trace() << "AODV : DATA : sent to application - origin: " << string(pkt->getSource()) << " Pkt type isdfgdfg: " << pkt->priority;                                    
 	PacketDATA* ndPacket = pkt->dup();
 
 	//the final destination is this node
 	if(finalDst.compare(SELF_NETWORK_ADDRESS)==0)
 	{
 	    collectOutput("Pkt received","DATA pkt (D)");
-	    trace() << "AODV : DATA : sent to application - origin: " << string(pkt->getSource());
+	    trace() << "AODV : DATA : sent to application - origin: " << string(pkt->getSource()) << " Pkt type is: " << pkt->dtype;
 
 		toApplicationLayer(pkt->decapsulate());
 
@@ -555,11 +560,113 @@ void AodvTestRouting::receivePktDATA(PacketDATA *pkt)
 	     affectedPrecursor->push_front(ndPacket->getSource());
 	     sendPktRERR(affectedDest, affectedPrecursor);
 	}
-	trace() << "AODV : DATA : buffered for destination " << finalDst;
+	trace() << "AODV : DATA : buffered for destination " << finalDst << " Buffer size is "<< TXBuffer.size() ;  // added by diana buffer test, this is only called by intermediate nodes 
+    
+    //*************** Added by diana about node load computation
+     
+     trace()<<"  @ Recv Data Pkt , Laod Compute, TXBuffer.size() && Interval_Start_Pkt_Count_Val " << TXBuffer.size() <<" && "<< Interval_Start_Pkt_Count_Val;
+     /*
+    // Need to comment this block,  only for testing purpose, diana ******************
+    int temp = load_Comp_Timer *  increment_Val ; 
+    int past_Load =0; 
+    int curr_Load_Val ;
+    int temp_val1=0;
+    SimTime arrivalTime1 = simTime() ;  //trace()<<" Before Compute Node Load : "<< arrivalTime<<"  "<<  temp ;
+    
+    if (arrivalTime1>temp)
+    {
+        if (  arrivalTime1 - temp < 0.5  )
+        {  
+            curr_Load_Val = TXBuffer.size() - Interval_Start_Pkt_Count_Val; 
+            trace()<<"@ Recv Data Pkt-Load compute, TXBuffer is : " << TXBuffer.size() ; 
+            Interval_Start_Pkt_Count_Val = TXBuffer.size() ;      
+            increment_Val++; 
+            interval_count++; 
+            if (interval_count == Intervals_Val)  
+                interval_count = 0; 
+            load_Array_Val[interval_count] = curr_Load_Val; // interval_count : current interval load is pointed by interval_count index 
+            
+            for (int i=0; i<interval_count; i++)    // compute load over past intervals,  n_Intervals-1 values
+                past_Load = past_Load + load_Array_Val[i]; 
+            for (int i=interval_count+1 ; i<= Intervals_Val-1; i++)
+                past_Load = past_Load + load_Array_Val[i]; 
+
+            for (int i=0 ; i<= Intervals_Val-1; i++)
+                if (load_Array_Val[i] != 0) 
+                    temp_val1++;                 
+            if (temp_val1 != 0 && temp_val1 != 1 ) 
+                past_Load = past_Load / (temp_val1-1) ; 
+                 
+                    
+        }
+    }
+     trace()<<" @ Recv Data Pkt,  Compute Node Load at simulation time : "<< arrivalTime1<<" Current load is :"<<  curr_Load_Val<< " past_Load is :  "<< past_Load <<" Temp val "<< temp_val1 ;    
+           
+    //*************
+    */
     bufferPacket(ndPacket);
 }
 
-void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double rssi, double lqi)
+void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dstIP, unsigned long srcSN, unsigned long dstSN, SimTime pathDelay, double path_Load)
+{
+    PacketRREQ* rreq = new PacketRREQ("AODV routing RREQ packet", NETWORK_LAYER_PACKET);
+    rreq->setFlagD(false);
+    rreq->setFlagG(false);
+    rreq->setFlagJ(false);
+    rreq->setFlagR(false);
+    rreq->setFlagU(false);
+    rreq->setHopCount(hopCount);
+    rreq->setRreqID(id);
+    //RREQ dst
+    rreq->setDstIP(dstIP.c_str());
+    rreq->setDstSN(dstSN);
+    //RREQ src
+    rreq->setSrcIP(srcIP.c_str());
+    rreq->setSrcSN(srcSN);
+    rreq->setSource(SELF_NETWORK_ADDRESS);
+    rreq->setDestination(dstIP.c_str());
+    SimTime pDelay = simTime();//added this line for pdelay by Raj on 19/10/18
+    rreq->setpropDelay(pDelay);//added this line for pdelay by Raj on 19/10/18
+    rreq->setpathDelay(pathDelay);//added by raj on 21/1.
+    rreq->setpathLoad(path_Load);
+    
+   
+    if (id == 36  || id == 39 )   
+          trace()<<" @ Send_RREQ, @ 123123 , RREQ Id :"<< id<< "Path Laod "<<path_Load ; 
+    
+   // trace()<< " @ Send RREQ SRCIP is  "<< string(srcIP) <<"  Dst IP:" << string(dstIP) <<" Dest SN: "<< dstSN << " Src SN: "<< srcSN << " Laod is: "<<path_Load ; 
+
+    //trace()<<"pDelay = "<<pDelay;//raj
+    //trace()<<"pathDelay = "<<pathDelay;//raj
+    if (getTimer(AODV_RREQ_RATE_LIMIT_TIMER).dbl() <= 0)
+    {
+        //rreqRetryCount[dstIP]++;
+        updateRreqBroadcastedList(dstIP, srcIP, id);
+
+        if(srcIP.compare(SELF_NETWORK_ADDRESS)==0)
+        {
+                updateRreqTable(dstIP,id);
+                collectOutput("Pkt sent","RREQ pkt (S)");
+                //two next lines used because map need a string
+                trace() << "AODV : RREQ : generated for destination " << string(dstIP);
+        }
+        rreqRetryCount[dstIP]++;//a RREQ has been sent
+        // A node SHOULD NOT originate more than RREQ_RATELIMIT RREQ messages per second
+        setTimer(AODV_RREQ_RATE_LIMIT_TIMER, (double)1/rreqRatelimit);
+        collectOutput("Pkt sent","RREQ pkt (F)");
+        trace() << "@ Send_RREQ : forwarded to destination " << string(dstIP);
+        toMacLayer(rreq, BROADCAST_MAC_ADDRESS);
+    }
+    else
+    {
+        trace() << "@ Send_RREQ: buffered for destination " << dstIP;
+        rreqBuffer.push(rreq);
+    }
+
+}
+
+// node_Load added by diana 
+void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double rssi, double lqi) 
 {
 	SimTime prevTime = pkt->getpropDelay();//added the following statements Raj 
     SimTime arrivalTime = simTime() ;//added the following statements Raj
@@ -568,19 +675,77 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
     SimTime prevTotal = pkt->getpathDelay(); //added by raj 21/1
     SimTime pathDelay = prevTotal + pDelay;  //added by raj 21/1
 
-    double reli = (rssi-lqi)/rssi;//added by raj on 23/2/19
+    reli = (rssi-lqi)/rssi;//added by raj on 23/2/19
+
+    //*************** Added by diana , node load computation
     
+   // int temp = load_Comp_Timer *  increment_Val ; 
+    int past_Load =0; 
+    int curr_Load_Val ;
+    int temp_val1=0;
+    int path_Load = 0;  
+    SimTime arrivalTime1 = simTime() ;  //trace()<<" Before Compute Node Load : "<< arrivalTime<<"  "<<  temp ;
+    double node_Load1 ; 
+  
+        if ( ( arrivalTime1 - Prev_Time_Interval) > 1  )
+       {   
+            Prev_Time_Interval = arrivalTime1; 
+            curr_Load_Val = Recvd_Pkt_Count - Interval_Start_Pkt_Count_Val; 
+            trace()<<" @ REcv RREQ, Laod Compute, Recvd_Pkt_Count() && Interval_Start_Pkt_Count_Val " << Recvd_Pkt_Count <<" && "<< Interval_Start_Pkt_Count_Val;
+            Interval_Start_Pkt_Count_Val = Recvd_Pkt_Count ;      
+           // increment_Val++; 
+            interval_count++; 
+            if (interval_count == Intervals_Val)  
+                interval_count = 0; 
+            load_Array_Val[interval_count] = curr_Load_Val; // interval_count : current interval load is pointed by interval_count index 
+            
+            for (int i=0; i<interval_count; i++)    // compute load over past intervals,  n_Intervals-1 values
+                past_Load = past_Load + load_Array_Val[i]; 
+            for (int i=interval_count+1 ; i<= Intervals_Val-1; i++)
+                past_Load = past_Load + load_Array_Val[i]; 
+
+            for (int i=0 ; i<= Intervals_Val-1; i++)
+            {   trace()<< "@Recv_RREQ, load_Array_Val[ "<<i<<" ] is " << load_Array_Val[i] <<" ";  // print all these values for testing .......
+                if (load_Array_Val[i] != 0) 
+                    temp_val1++; 
+            }                
+            if (temp_val1 >1) 
+                past_Load = past_Load / (temp_val1-1) ; 
+                    
+            node_Load1 = (0.5*curr_Load_Val) + (0.5*past_Load) ;    
+            // trace() << " @ Rev_RREQ() dest IP " << string(pkt->getDstIP()) <<" HopCount: "<< pkt->getHopCount() ;
+            
+            if (pkt->getpathLoad() < node_Load1 ) 
+                    path_Load = node_Load1; 
+            else 
+                path_Load = pkt->getpathLoad()  ;  
+
+           // trace()<<" @ Rev_RREQ(), Current load is :"<<  curr_Load_Val<< " past_Load is :  "<< past_Load <<" node load "<< node_Load1 << " path Load is: "<< pkt->getpathLoad() ;
+           
+       }
+    
+    //*************
+
+     // Added by diana for tetsting 
+    string val ="4" ;  // val.compare(SELF_NETWORK_ADDRESS)==0   
+    if (pkt->getRreqID() == 36 || pkt->getRreqID() == 39 )   // If node is 4 then start sending load value as 234.
+      {   // path_Load = 123123; 
+       //   trace()<<" @Recv_RREQ , Path delay @ 123123 is: "<< pkt->getpathDelay() <<" Pt Laod recv & computed is : "<<pkt->getpathLoad() <<" &  "<< path_Load<<" RREQ ID "<<pkt->getRreqID();
+            trace()<<" @Recv_RREQ , @ 123123 is: "<< " Pt Load recv & computed is : "<<pkt->getpathLoad() <<" &  "<< path_Load<<" node laod: "<< node_Load1 <<" RREQ ID "<<pkt->getRreqID();
+      }
+
+
 
     if(isBlacklisted(pkt->getSource()))
 	{
-	    trace() << "AODV : RREQ : discarded (blacklist) - origin: " << string(pkt->getSrcIP())
+	    trace() << "@Recv_RREQ,  discarded (blacklist) - origin: " << string(pkt->getSrcIP())
 	                                                       << " id: " << pkt->getRreqID()
 	                                                       << " from" << string(pkt->getSource());
 	    return;
 	}
 
 
-	trace() << "AODV : RREQ : RX : origin: " << string(pkt->getSrcIP())
+	trace() << "@Recv_RREQ,  RX : origin: " << string(pkt->getSrcIP())
 				                                            << " id: " << pkt->getRreqID()
 				                                            << " destination: " << string(pkt->getDstIP())
 				                                            << " from: " << string(pkt->getSource())
@@ -588,8 +753,8 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
                                                             << "RSSI:" << rssi
                                                             << "Reliability: " << reli;//added on 21/01/19 //Add RSSI by raj
 	//updates a route to the previous hop without a valid seq number
-    trace() << "AODV : RREQ : Path Delay:::"<<pathDelay ;//added on 21/1/19 by raj
-	updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,pathDelay,reli,1);//raj on 21/2/19
+   // trace() << "@Recv_RREQ,  : Path Delay: "<<pathDelay << " Buffer size is: "<<TXBuffer.size()<< "Path Load: "<<path_Load;//added on 21/1/19 by raj  Diana - Added Buffer 
+	updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,pathDelay,reli, path_Load);//raj on 29/3/19
 
 
 	//check if this node is the origin of the request
@@ -599,29 +764,29 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	//check if this node has already processed or buffered this rreq, if yes drop packet
 	if(checkRREQBroadcasted(pkt->getSrcIP(), pkt->getRreqID()) || checkRREQBuffered(pkt->getSrcIP(), pkt->getRreqID()))
 	{
-	    trace() << "AODV : RREQ : discarded (already broadcasted) - origin: " << string(pkt->getSrcIP())
+	    trace() << "@Recv_RREQ,  discarded (already broadcasted) - origin: " << string(pkt->getSrcIP())
                                                         << " id: " << pkt->getRreqID();
 	    return;
 	}
 
 	//update route for the originator
-	updateRoute(string(pkt->getSrcIP()), pkt->getSrcSN(), true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,0,pathDelay,reli,1);//changed by raj on 23/02/2019
+	updateRoute(string(pkt->getSrcIP()), pkt->getSrcSN(), true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,0,pathDelay,reli, path_Load);//diana changed by raj on 29/03/2019
 
     
     if(string(pkt->getDstIP()).compare(SELF_NETWORK_ADDRESS)==0) //current node is the destination (RFC3561 chapter 6.6.1)
     {
         if(pkt->getDstSN()==currSN)
             currSN++;
-        trace() << "AODV : RREQ : RX : final dst - origin: " << string(pkt->getSrcIP())
+        trace() << "@Recv_RREQ,  RX : final dst - origin: " << string(pkt->getSrcIP())
                                                                 << " id: " << pkt->getRreqID();
         updateRreqBroadcastedList(pkt->getDstIP(), pkt->getSrcIP(), pkt->getRreqID());
         int timeout = 2*activeRouteTimeout;//MY_ROUTE_TIMOUT = 2 * ACTIVE_ROUTE_TIMEOUT
 
         collectOutput("Pkt sent","RREP pkt (S)");
-	    trace() << "AODV : RREQ : reach destination - origin: " << string(pkt->getSrcIP())
+	    trace() << "@Recv_RREQ, : reach destination - origin: " << string(pkt->getSrcIP())
                                                         << " id: " << pkt->getRreqID();
-	    trace() << "AODV : RREP :"<< pDelay<<" pDelay =  "<< arrivalTime<<"(arrivalTime-prevTime)"<<prevTime <<" : sent (is the destination)";//added the pdelay here Raj
-        trace() << "AODV : RREP : Path Delay : "<<pathDelay ;//added on 21/1/19 by raj 
+	    trace() << "@Recv_RREQ,  RREP :"<< pDelay<<" pDelay =  "<< arrivalTime<<"(arrivalTime-prevTime)"<<prevTime <<" : sent (is the destination)";//added the pdelay here Raj
+        trace() << "@Recv_RREQ, : Path Delay : "<<pathDelay << " Path Load is : "<< path_Load;//added on 21/1/19 by raj 
 
         sendPktRREP(0, string(pkt->getSrcIP()), string(SELF_NETWORK_ADDRESS), currSN, timeout, false, pkt->getRreqID());
         return;
@@ -636,9 +801,9 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 
         if(pkt->getDstSN() < r->dstSN && r->state)
         {
-            trace() << "AODV : RREQ : success : find a valid route - origin: " << string(pkt->getSrcIP())
+            trace() << "@Recv_RREQ,: success : find a valid route - origin: " << string(pkt->getSrcIP())
                                                                                     << " id: " << pkt->getRreqID();
-    	    trace() << "AODV : RREP : sent (knows the destination)";
+    	    trace() << "@Recv_RREQ,, AODV : RREP : sent (knows the destination)";
             string srcIP = string(pkt->getSrcIP());
             string dstIP = string(pkt->getDstIP());
             int hopcount = rtable->getHopCount(dstIP,"Ordinary",1);//never called by raj
@@ -652,7 +817,7 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
     //forward the rreq
 
     int buffSize=(int)TXBuffer.size();//added by raj on 2/2 for testing buffer size.
-    trace()<<"inside function receivePktRREQ() checking for buffer size"<<buffSize;//added by raj on 2/2 for testing buffer size.
+    trace()<<"@Recv_RREQ, checking for buffer size"<<buffSize;//added by raj on 2/2 for testing buffer size.
 	int hopcount = pkt->getHopCount() + 1;
 	int id = pkt->getRreqID();
 	string srcIP = pkt->getSrcIP();
@@ -664,12 +829,15 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
 	else
 		dstSN = rtable->getDstSN(dstIP,"Ordinary",1);//All dstnSN same. Changed by raj on 23/02/2019. Unsure :(
 
-	sendPktRREQ(hopcount, id, srcIP, dstIP, srcSN, dstSN,pathDelay);//added pathDelay by Raj 23/02/2019.
+	sendPktRREQ(hopcount, id, srcIP, dstIP, srcSN, dstSN,pathDelay, path_Load);//added pathDelay by Raj 23/02/2019., diana 
+
+    
 
 }
 
 void AodvTestRouting::receivePktRREP(PacketRREP* pkt,int srcMacAddress, double rssi, double lqi)
 {
+    trace()<< "Inside AodvTestRouting::receivePktRREP() ";
     if(string(pkt->getDestination()).compare(SELF_NETWORK_ADDRESS)!=0)
     {
         /*trace() << "AODV : A2 : RREP received has been discarded - from: " << string(pkt->getSource())
@@ -685,9 +853,9 @@ void AodvTestRouting::receivePktRREP(PacketRREP* pkt,int srcMacAddress, double r
     sendPktRREPack(pkt->getSource());
 
     //updates a route to the previous hop without a valid seq number
-    updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,simTime(),0,1);
+    updateRoute(string(pkt->getSource()), 0, false, VALID, 1, string(pkt->getSource()),NULL,0,simTime(),0, 0);
     //update route for the destination
-    updateRoute(string(pkt->getDstIP()), pkt->getDstSN(),true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,pkt->getLifetime(),simTime(),0,1);
+    updateRoute(string(pkt->getDstIP()), pkt->getDstSN(),true, VALID, pkt->getHopCount() + 1, string(pkt->getSource()),NULL,pkt->getLifetime(),simTime(),0, 0);
 
     if(getTimer(AODV_HELLO_MESSAGE_REFRESH_TIMER).dbl()<=0)
         sendPktHELLO();
@@ -788,56 +956,7 @@ void AodvTestRouting::receivePktHELLO(PacketHELLO* pkt)
     }
 }
 
-void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dstIP, unsigned long srcSN, unsigned long dstSN, SimTime pathDelay)
-{
-	PacketRREQ* rreq = new PacketRREQ("AODV routing RREQ packet", NETWORK_LAYER_PACKET);
-	rreq->setFlagD(false);
-	rreq->setFlagG(false);
-	rreq->setFlagJ(false);
-	rreq->setFlagR(false);
-	rreq->setFlagU(false);
-	rreq->setHopCount(hopCount);
-	rreq->setRreqID(id);
-	//RREQ dst
-	rreq->setDstIP(dstIP.c_str());
-	rreq->setDstSN(dstSN);
-	//RREQ src
-	rreq->setSrcIP(srcIP.c_str());
-	rreq->setSrcSN(srcSN);
-	rreq->setSource(SELF_NETWORK_ADDRESS);
-	rreq->setDestination(dstIP.c_str());
-    SimTime pDelay = simTime();//added this line for pdelay by Raj on 19/10/18
-    rreq->setpropDelay(pDelay);//added this line for pdelay by Raj on 19/10/18
 
-    rreq->setpathDelay(pathDelay);//added by raj on 21/1.
-    //trace()<<"pDelay = "<<pDelay;//raj
-    //trace()<<"pathDelay = "<<pathDelay;//raj
-	if (getTimer(AODV_RREQ_RATE_LIMIT_TIMER).dbl() <= 0)
-	{
-		//rreqRetryCount[dstIP]++;
-		updateRreqBroadcastedList(dstIP, srcIP, id);
-
-		if(srcIP.compare(SELF_NETWORK_ADDRESS)==0)
-		{
-	            updateRreqTable(dstIP,id);
-	            collectOutput("Pkt sent","RREQ pkt (S)");
-	            //two next lines used because map need a string
-	            trace() << "AODV : RREQ : generated for destination " << string(dstIP);
-		}
-		rreqRetryCount[dstIP]++;//a RREQ has been sent
-		// A node SHOULD NOT originate more than RREQ_RATELIMIT RREQ messages per second
-		setTimer(AODV_RREQ_RATE_LIMIT_TIMER, (double)1/rreqRatelimit);
-		collectOutput("Pkt sent","RREQ pkt (F)");
-        trace() << "AODV : RREQ : forwarded to destination " << string(dstIP);
-		toMacLayer(rreq, BROADCAST_MAC_ADDRESS);
-	}
-	else
-	{
-	    trace() << "AODV : RREQ : buffered for destination " << dstIP;
-		rreqBuffer.push(rreq);
-	}
-
-}
 
 void AodvTestRouting::sendPktRREP(int hopCount, string rreqSrc, string rreqDst, unsigned long dstSN, double lifetime, bool forwarding, int idFromRREQ)
 {
@@ -1101,31 +1220,57 @@ bool AodvTestRouting::checkRREQBuffered(string orig, int idx)
 	return false;
 }
 
-void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const string nextHopAddr, list<string>* precursor, double aTime, SimTime pathDelay, double reli, int priority)
+void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const string nextHopAddr, list<string>* precursor, double aTime, SimTime pathDelay, double reli, double node_Load)//raj on 29/3/19
 {
-    int try1=0;string dtype;
-    while(try1<4)//added the loop by raj
+    int try1=0,try2=0;
+    string dtype;
+    int priority;
+    while(try1<8)//added the loop by raj
     {   
-        if(try1==0)
+        if(try1<2)
         {
+            if (try2==0){
+                priority = 1;
+            }
+            else if(try2==1){
+                priority = 2;
+            }
             dtype="Ordinary";
         }
-        else if(try1==1)
+        else if(try1>1 && try1<4)
         {
             dtype="Reliable";
+            if (try2==2){
+                priority = 1;
+            }
+            else if(try2 == 3){
+                priority = 2;
+            }
         } 
-        else if (try1==2)
+        else if (try1>3 && try1<6)
         {
             dtype="Delay";
+            if(try2==4){
+                priority = 1;
+            }
+            else if(try2==5){
+                priority = 2;
+            }
         }
         else
         {
             dtype="Critical";
+            if(try2==6){
+                priority = 1;
+            }
+            else if(try2==7){
+                priority = 2;
+            }
         }
 
         //refer to RFC3561 chapter 6.2
 	   double oldLifetime = 0;
-        if(rtable->isRouteValid(dstIP,dtype,1))//add for loop here unsure
+        if(rtable->isRouteValid(dstIP,dtype,priority))//add for loop here unsure
          	double oldLifetime = getLifetimeRoute(dstIP,dtype,priority);//changed by raj
 
         double addTime;
@@ -1143,9 +1288,9 @@ void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool st
 
         const RouteTimer* r= rtable->getNextExpiredRoute();
         if(r && lifetime < r->lifetime)
-            cancelTimer(AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER);
+            cancelTimer(AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER);  
 
-        rtable->insertRoute(dstIP, dstSN, state, flag, hopCount, nextHopAddr, precursor, lifetime,pathDelay,reli,priority);//raj on 21/2/19
+        rtable->insertRoute(dstIP, dstSN, state, flag, hopCount, nextHopAddr, precursor, lifetime,pathDelay,reli,dtype,priority,node_Load );//raj on 21/2/19, load parameter is added by diana 
         rtable->setLifetime(&newTimer,dtype,priority);//changed by raj
 
         r = rtable->getNextExpiredRoute();
@@ -1155,16 +1300,20 @@ void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool st
         {
             setTimer(AODV_ROUTING_TABLE_ENTRY_EXPIRATION_TIMER, newTime - simTime().dbl());
         }
-        trace() << "AODV : R : new route created to " << dstIP<<" of dtype : "<< dtype;
+       // trace() << "AODV : R : new route created to " << dstIP<<" of dtype : "<< dtype<<" Next hop is :" << nextHopAddr << " hopcount is: "<< hopCount  ;
 
         try1++;
+        try2++;
     }
+    trace() << "AODV : R : new route created to " << dstIP<<" of dtype : "<< dtype<<" Next hop is :" << nextHopAddr << " hopcount is: "<< hopCount  ;
+
 }
 
 void AodvTestRouting::processBufferedDATA(string dstIP, bool drop)
 {
     queue< cPacket* > bufferTemp;
     PacketDATA* currPkt;
+    trace()<<" Inside AodvTestRouting::processBufferedDATA " ; 
     while (!TXBuffer.empty())
     {
         currPkt = dynamic_cast <PacketDATA*>(TXBuffer.front());
@@ -1179,6 +1328,7 @@ void AodvTestRouting::processBufferedDATA(string dstIP, bool drop)
                     collectOutput("Pkt sent","DATA pkt (BS)");
                 else
                     collectOutput("Pkt sent","DATA pkt (BF)");
+
                 toMacLayer(currPkt, resolveNetworkAddress((rtable->getNextHop(dstIP,currPkt->dtype,currPkt->priority)).c_str()));//changed 15/3/19 raj
             }
         }
@@ -1187,6 +1337,7 @@ void AodvTestRouting::processBufferedDATA(string dstIP, bool drop)
             bufferTemp.push(TXBuffer.front());
         }
         TXBuffer.pop();
+        trace()<< " After Buffer pop() "; 
         updateLifetimeRoute(string(dstIP), activeRouteTimeout,currPkt->dtype,currPkt->priority);
     }
     while (!bufferTemp.empty()) {

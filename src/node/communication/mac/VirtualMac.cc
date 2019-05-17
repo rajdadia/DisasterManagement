@@ -166,7 +166,7 @@ void VirtualMac::finish()
 
 void VirtualMac::toNetworkLayer(cMessage * macMsg)
 {
-	trace() << "Delivering [" << macMsg->getName() << "] to Network layer";
+	trace() << "Delivering [" << macMsg->getName() << "] to Network layer Testing by Diana ";
 	send(macMsg, "toNetworkModule");
 }
 

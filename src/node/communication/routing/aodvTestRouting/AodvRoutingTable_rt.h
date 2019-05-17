@@ -51,6 +51,7 @@ typedef struct
         int priority;//raj on 27/1/19
         double reliability;//raj on 21/2/19
         SimTime pDelay;//raj on 21/2/19
+        double path_Load; // diana 
 }Route;
 
 struct RouteTimer
@@ -83,7 +84,7 @@ public:
 
         Route* searchByDest(std::string destination,string type,int prior);//raj on 31/1/19
         //if the route exists it will be updated, else a new route is inserted
-        void insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli, int priority);//added by raj on 23/2/19
+        void insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli, string dtype, int priority, double load_Val );//added by raj on 29/3/19, load-diana 
         void removeRoute(std::string destination, string dtype, int priority);//added by raj on 23/2/19
 
         unsigned long getDstSN(std::string destination, string dtype, int priority);//added by raj on 23/2/19

@@ -51,6 +51,7 @@ void VirtualRouting::toMacLayer(cMessage * msg)
 // A function to send packets to MAC, requires a destination address
 void VirtualRouting::toMacLayer(cPacket * pkt, int destination)
 {
+	//trace() << pkt->dtype;
 	RoutingPacket *netPacket = check_and_cast <RoutingPacket*>(pkt);
 	netPacket->getNetMacInfoExchange().nextHop = destination;
 	send(netPacket, "toMacModule");
@@ -216,6 +217,7 @@ void VirtualRouting::finish()
 {
 	CastaliaModule::finish();
 	cPacket *pkt;
+	trace() << "inside VR:Fin()  " ; 
 	// clear the buffer from all remaining packets
 	while (!TXBuffer.empty()) {
 		pkt = TXBuffer.front();
@@ -227,6 +229,7 @@ void VirtualRouting::finish()
 int VirtualRouting::bufferPacket(cPacket * rcvFrame)
 {
 	if ((int)TXBuffer.size() >= netBufferSize) {
+		trace() << "Buffer Overflow " << TXBuffer.size() << "/" << netBufferSize;
 		collectOutput("Buffer overflow");
 		cancelAndDelete(rcvFrame);
 		return 0;

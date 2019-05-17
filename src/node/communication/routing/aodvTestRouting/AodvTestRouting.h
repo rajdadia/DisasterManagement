@@ -26,6 +26,7 @@
 #include "AodvTestRoutingDataPacket_m.h"
 #include "AodvRoutingTable_rt.h"
 #include "AodvRREQTable.h"
+#include "ResourceManager.h"
 #include <list>
 #include <map>
 #include <queue>
@@ -99,7 +100,26 @@ class AodvTestRouting: public VirtualRouting
 	AodvRREQTable* rreqTable;// the RREQ table
 	priority_queue <RouteTimer,vector<rreqBroadcastedTimer>,compareRreqBroadcastedTimer > rreqBroadTable;// list of rreq broadcasted
 
+// Added by Diana  16 APR 2019  ************* 
+	int load_Comp_Timer = 2;  //this variable value is 2 ,  when load computation block is called from the ReceivePktData ,   
+	int increment_Val=0;
+	int Intervals_Val = 3; 
+	int interval_count = 0; 
+	int load_Array_Val[3];   // no. of values should be equal to Intervals_Val value. 
+	int Interval_Start_Pkt_Count_Val =0; 
+	int Recvd_Pkt_Count = 0; 
+	SimTime Prev_Time_Interval = 0;
+	//added by tanuj 17/5/19
+	
+	double pri_r_rig;//primary_route_rigidity
+	double sec_r_rig;//secondary_route_rigidity
+	double path_cost;
+	double pri_r_ratio;//Primary_Route_Dis_Ratio_Pck_type
+	double sec_r_ratio;//Secondary_Route_Dis_Ratio_Pck_type
+	double reli;
 
+
+// *******************
 	double activeRouteTimeout; //in s
 	int allowedHelloLoss;
 	double helloInterval; //in s
@@ -165,7 +185,7 @@ class AodvTestRouting: public VirtualRouting
 	bool checkRREQBuffered(std::string orig, int idx);
 	//check if the RREQ as already been forwarded (section 6.5 RFC3650)
 	bool checkRREQBroadcasted(std::string orig, int idx);
-	void updateRoute(const std::string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string nextHopAddr,std::list<std::string>* precursor, double aTime, SimTime pathDelay, double reli, int priority);
+	void updateRoute(const std::string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string nextHopAddr,std::list<std::string>* precursor, double aTime, SimTime pathDelay, double reli, double node_Load);//raj on 29/3/19 diana added only load parameter 
 
 	void setRrepAckTimer(const char* neib);
 	void setRreqBlacklistTimer(const char* neib);
@@ -181,13 +201,13 @@ class AodvTestRouting: public VirtualRouting
 	void fromMacLayer(cPacket *, int, double, double);
 	void timerFiredCallback(int index);
 	void receivePktDATA(PacketDATA* pkt);
-	void receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double rssi, double lqi);
+	void receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double rssi, double lqi);  // load added by diana 
 	void receivePktRREP(PacketRREP* pkt,int srcMacAddress, double rssi, double lqi);
 	void receivePktRERR(PacketRERR* pkt,int srcMacAddress, double rssi, double lqi);
 	void receivePktHELLO(PacketHELLO* pkt);
 
-	//rreqSrc and rreqDst  are the value for all the AODV protocol : originator + finalDST
-	void sendPktRREQ(int hopCount, int rreqID, std::string srcIP, std::string dstIP, unsigned long srcSN, unsigned long dstSN, SimTime pathDelay);
+	//rreqSrc and rreqDst  are the value for all the AODV protocol : originator + finalDST, node_Load is added by diana 
+	void sendPktRREQ(int hopCount, int rreqID, std::string srcIP, std::string dstIP, unsigned long srcSN, unsigned long dstSN, SimTime pathDelay, double node_Load);
 	void sendPktRREP(int hopCount, std::string rreqSrc, std::string rreqDst, unsigned long dstSN, double lifetime, bool forwarding, int rreqID);
 	void sendPktHELLO();
 	//affDst : list of broken dst - affPre : list of affected precursors
@@ -199,6 +219,7 @@ class AodvTestRouting: public VirtualRouting
 	bool isBlacklisted(const char* neib);
 	void setBlacklistTimer(const char* neib);
 	void sendSugar();//created a new fucntion to handle SUGAR by raj 6/11/18.
+	ResourceManager *resMgrModule;   // diana 
 };
 
 #endif
