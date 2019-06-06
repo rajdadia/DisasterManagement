@@ -18,6 +18,8 @@
  */
 
 #include "AodvRoutingTable_rt.h"
+#include <iostream>
+
 
 using namespace std;
 
@@ -39,13 +41,39 @@ AodvRoutingTable::~AodvRoutingTable()
     delete table;
 }
 
-Route* AodvRoutingTable::searchByDest(string destination,string dtype,int priority)//added by raj on 23/2/19
+string AodvRoutingTable::getRouteFromTable(int j)  //Added by diana only for testing since trace() was not working in this file
+{
+     int k=-1;
+     string val1="V";        
+    for(list<Route>::iterator i=table->begin();i!=table->end();++i)
+    {    
+        Route &r = *i;
+        k++;
+        if (k==j)
+            {   
+                std::string str = std::to_string(r.priority);
+                std::string str1 = std::to_string(r.hopCount);
+                
+                val1= r.dstIP+":"+r.dtype+":"+ str +":"+str1;            
+                
+                return val1;
+            }
+
+          
+    }
+    return val1;
+}
+
+Route* AodvRoutingTable::searchByDest(string destination,string dtype,int priority) //added by raj on 23/2/19
 {
     if(destination=="")
            return NULL;
+    
+          
     for(list<Route>::iterator i=table->begin();i!=table->end();++i)
-    {
+    {    
         Route &r = *i;
+       // std::trace()<<"@tingTable::searchByDest: r.dstIP, r.dtype, r.priority, destination, dtype, priority "<<r.dstIP<<" "<<r.dtype<<" "<<r.priority<<" "<<destination<<" "<<dtype<<" "<<priority; 
         if(r.dstIP.compare(destination)==0 && r.dtype.compare(dtype)==0 && r.priority == priority)//added by raj on 23/2/19
         {
                 return &r;
@@ -54,73 +82,257 @@ Route* AodvRoutingTable::searchByDest(string destination,string dtype,int priori
     return NULL;
 }
 
-void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli,int priority)//raj on 31/1/19
+void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string& nextHopAddr,std::list<std::string>* precursor, double lifetime, SimTime pathDelay, double reli,string dtype,int priority, double path_Load)//raj on 29/3/19, load-diana 
 {
-    Route* r1 = searchByDest(dstIP,"Delay",priority);//raj on 31/1/19
-    Route* r2 = searchByDest(dstIP,"Reliable",priority);//added by raj on 23/2/19
-    Route* r3 = searchByDest(dstIP,"Critical",priority);//added by raj on 23/2/19
-    Route* r4 = searchByDest(dstIP,"Ordinary",priority);//added by raj on 23/2/19
+    Route* r = searchByDest(dstIP,dtype,priority);//raj on 31/1/19
+    // Route* r2 = searchByDest(dstIP,"Reliable",priority);//added by raj on 23/2/19
+    // Route* r3 = searchByDest(dstIP,"Critical",priority);//added by raj on 23/2/19
+    // Route* r4 = searchByDest(dstIP,"Ordinary",priority);//added by raj on 23/2/19
 
-    if(r1){
-        if((r1->flag!=VALID || r1->dstSN < dstSN ) && (pathDelay < r1->pDelay)){
-            r1->dstSN = dstSN;
-            r1->hopCount = hopCount;
-            r1->flag = flag;
-            r1->nextHopAddr = nextHopAddr;
-            r1->state = state;
-            r1->reliability=reli;
-            r1->pDelay = pathDelay;
-        }
-    }
+    if(r){
+        if(dtype.compare("Delay")==0){
+            if (priority==1){
+                Route* r1 = searchByDest(dstIP,dtype,1);
+                Route* r2 = searchByDest(dstIP,dtype,2);
+                if((r1->flag!=VALID || r1->dstSN < dstSN ) && (pathDelay < r1->pDelay)){
 
-    if(r2){
-        if((r2->flag!=VALID || r2->dstSN < dstSN ) && (reli > r2->reliability)){
-            r2->dstSN = dstSN;
-            r2->hopCount = hopCount;
-            r2->flag = flag;
-            r2->nextHopAddr = nextHopAddr;
-            r2->state = state;
-            r2->reliability=reli;
-            r2->pDelay = pathDelay;
-        }
-    }
+                    r2->dstSN = r1->dstSN;
+                    r2->hopCount = r1->hopCount;
+                    r2->flag = r1->flag;
+                    r2->nextHopAddr = r1->nextHopAddr;
+                    r2->state = r1->state;
+                    r2->reliability=r1->reliability;
+                    r2->pDelay = r1->pDelay;
+                    r2->path_Load =  r1->path_Load;
+                    
 
-    if(r3){
-        double ms = pathDelay.dbl();
-        double oms = r3->pDelay.dbl();
-        int newr = (0.8*ms)+(0.2*reli);
-        int oldr = (0.8*oms)+(0.2*(r3->reliability));
-        if((r3->flag!=VALID || r3->dstSN < dstSN ) && (newr > oldr)){
-            r3->dstSN = dstSN;
-            r3->hopCount = hopCount;
-            r3->flag = flag;
-            r3->nextHopAddr = nextHopAddr;
-            r3->state = state;
-            r3->reliability=reli;
-            r3->pDelay = pathDelay;
-        }
-    }
+                    r1->dstSN = dstSN;
+                    r1->hopCount = hopCount;
+                    r1->flag = flag;
+                    r1->nextHopAddr = nextHopAddr;
+                    r1->state = state;
+                    r1->reliability=reli;
+                    r1->pDelay = pathDelay;
+                    r1->path_Load = path_Load; 
 
-    if(r4){
-        if(r4->flag!=VALID || r4->dstSN < dstSN || (r4->dstSN == dstSN && r4->hopCount > (hopCount + 1)))
-            {
-                r4->dstSN = dstSN;
-                r4->hopCount = hopCount;
-                r4->flag = flag;
-                r4->nextHopAddr = nextHopAddr;
-                /*if(r->precursor==NULL)
-                    r->precursor=new list<string>();
-                if(precursor!=NULL)
-                    r->precursor->merge(*precursor);*/
-                r4->state = state;
-                r4->reliability=reli;//added by raj on 23/2/19
-                r4->pDelay = pathDelay;//added by raj on 23/2/19
+
+                }
+                else if((r2->flag!=VALID || r2->dstSN < dstSN ) && (pathDelay < r2->pDelay)){
+                    r2->dstSN = dstSN;
+                    r2->hopCount = hopCount;
+                    r2->flag = flag;
+                    r2->nextHopAddr = nextHopAddr;
+                    r2->state = state;
+                    r2->reliability=reli;
+                    r2->pDelay = pathDelay;
+                    r2->path_Load = path_Load; 
+                }
             }
+            else if(priority==2){
+                Route* r2 = searchByDest(dstIP,dtype,2);
+                if((r2->flag!=VALID || r2->dstSN < dstSN ) && (pathDelay < r2->pDelay)){
+                    r2->dstSN = dstSN;
+                    r2->hopCount = hopCount;
+                    r2->flag = flag;
+                    r2->nextHopAddr = nextHopAddr;
+                    r2->state = state;
+                    r2->reliability=reli;
+                    r2->pDelay = pathDelay;
+                    r2->path_Load = path_Load; 
+                }
+            }
+            
+        }
+        
+
+        if(dtype.compare("Reliable")==0){
+            if(priority==1){
+                Route* r1 = searchByDest(dstIP,dtype,1);
+                Route* r2 = searchByDest(dstIP,dtype,2);
+                if((r1->flag!=VALID || r1->dstSN < dstSN ) && (reli > r1->reliability)){
+
+                    r2->dstSN = r1->dstSN;
+                    r2->hopCount = r1->hopCount;
+                    r2->flag = r1->flag;
+                    r2->nextHopAddr = r1->nextHopAddr;
+                    r2->state = r1->state;
+                    r2->reliability=r1->reliability;
+                    r2->pDelay = r1->pDelay;
+                    r2->path_Load = r1->path_Load; 
+
+                    r1->dstSN = dstSN;
+                    r1->hopCount = hopCount;
+                    r1->flag = flag;
+                    r1->nextHopAddr = nextHopAddr;
+                    r1->state = state;
+                    r1->reliability=reli;
+                    r1->pDelay = pathDelay;
+                    r1->path_Load = path_Load; 
+
+                }
+                else if((r2->flag!=VALID || r2->dstSN < dstSN ) && (reli > r2->reliability)){
+                    r2->dstSN = dstSN;
+                    r2->hopCount = hopCount;
+                    r2->flag = flag;
+                    r2->nextHopAddr = nextHopAddr;
+                    r2->state = state;
+                    r2->reliability=reli;
+                    r2->pDelay = pathDelay;
+                    r2->path_Load = path_Load; 
+                }
+
+            }
+            else if(priority==2){
+                Route* r2 = searchByDest(dstIP,dtype,2);
+                if((r2->flag!=VALID || r2->dstSN < dstSN ) && (reli > r2->reliability)){
+                    r2->dstSN = dstSN;
+                    r2->hopCount = hopCount;
+                    r2->flag = flag;
+                    r2->nextHopAddr = nextHopAddr;
+                    r2->state = state;
+                    r2->reliability=reli;
+                    r2->pDelay = pathDelay;
+                    r2->path_Load = path_Load; 
+                }
+            }
+            
+        }
+
+        if(dtype.compare("Critical")==0){
+            double ms = pathDelay.dbl();
+            //double oms = r3->pDelay.dbl();
+            int newr = (0.8*ms)+(0.2*reli);
+            //int oldr = (0.8*oms)+(0.2*(r3->reliability));
+            double oms1,oms2;
+            int oldr1,oldr2;
+
+            if(priority==1){
+
+                Route* r1 = searchByDest(dstIP,dtype,1);
+                oms1 = r1->pDelay.dbl();
+                oldr1 = (0.8*oms1)+(0.2*(r1->reliability));
+
+                Route* r2 = searchByDest(dstIP,dtype,2);
+                oms2 = r2->pDelay.dbl();
+                oldr2 = (0.8*oms2)+(0.2*(r2->reliability));
+
+                if((r1->flag!=VALID || r1->dstSN < dstSN ) && (newr > oldr1)){
+
+                    r2->dstSN = r1->dstSN;
+                    r2->hopCount = r1->hopCount;
+                    r2->flag = r1->flag;
+                    r2->nextHopAddr = r1->nextHopAddr;
+                    r2->state = r1->state;
+                    r2->reliability=r1->reliability;
+                    r2->pDelay = r1->pDelay;
+                    r2->path_Load = r1->path_Load; 
+
+                    r1->dstSN = dstSN;
+                    r1->hopCount = hopCount;
+                    r1->flag = flag;
+                    r1->nextHopAddr = nextHopAddr;
+                    r1->state = state;
+                    r1->reliability=reli;
+                    r1->pDelay = pathDelay;
+                    r1->path_Load = path_Load; 
+
+                }
+                else if((r2->flag!=VALID || r2->dstSN < dstSN ) && (newr > oldr2)){
+                    r2->dstSN = dstSN;
+                    r2->hopCount = hopCount;
+                    r2->flag = flag;
+                    r2->nextHopAddr = nextHopAddr;
+                    r2->state = state;
+                    r2->reliability=reli;
+                    r2->pDelay = pathDelay;
+                    r2->path_Load = path_Load; 
+                }
+
+            }
+            else if(priority==2){
+                Route* r2 = searchByDest(dstIP,dtype,2);
+                if((r2->flag!=VALID || r2->dstSN < dstSN ) && (newr > oldr2)){
+                    r2->dstSN = dstSN;
+                    r2->hopCount = hopCount;
+                    r2->flag = flag;
+                    r2->nextHopAddr = nextHopAddr;
+                    r2->state = state;
+                    r2->reliability=reli;
+                    r2->pDelay = pathDelay;
+                    r2->path_Load = path_Load; 
+                }
+            }
+
+        }
+
+        if(dtype.compare("Ordinary")==0){
+
+            if (priority==1){
+                Route* r1 = searchByDest(dstIP,dtype,1);
+                Route* r2 = searchByDest(dstIP,dtype,2);
+                if(r1->flag!=VALID || r1->dstSN < dstSN || (r1->dstSN == dstSN && r1->hopCount > (hopCount + 1))){
+
+                    r2->dstSN = r1->dstSN;
+                    r2->hopCount = r1->hopCount;
+                    r2->flag = r1->flag;
+                    r2->nextHopAddr = r1->nextHopAddr;
+                    r2->state = r1->state;
+                    r2->reliability=r1->reliability;
+                    r2->pDelay = r1->pDelay;
+                    r2->path_Load = r1->path_Load; 
+
+                    r1->dstSN = dstSN;
+                    r1->hopCount = hopCount;
+                    r1->flag = flag;
+                    r1->nextHopAddr = nextHopAddr;
+                    r1->state = state;
+                    r1->reliability=reli;
+                    r1->pDelay = pathDelay;
+                    r1->path_Load = path_Load; 
+
+                }
+                else if(r2->flag!=VALID || r2->dstSN < dstSN || (r2->dstSN == dstSN && r2->hopCount > (hopCount + 1))){
+                    r2->dstSN = dstSN;
+                    r2->hopCount = hopCount;
+                    r2->flag = flag;
+                    r2->nextHopAddr = nextHopAddr;
+                    r2->state = state;
+                    r2->reliability=reli;
+                    r2->pDelay = pathDelay;
+                    r2->path_Load = path_Load; 
+                }
+            }
+            else if(priority==2){
+                Route* r2 = searchByDest(dstIP,dtype,2);
+                if(r2->flag!=VALID || r2->dstSN < dstSN || (r2->dstSN == dstSN && r2->hopCount > (hopCount + 1))){
+                    r2->dstSN = dstSN;
+                    r2->hopCount = hopCount;
+                    r2->flag = flag;
+                    r2->nextHopAddr = nextHopAddr;
+                    r2->state = state;
+                    r2->reliability=reli;
+                    r2->pDelay = pathDelay;
+                    r2->path_Load = path_Load; 
+                }
+            }
+            // if(r1->flag!=VALID || r1->dstSN < dstSN || (r1->dstSN == dstSN && r1->hopCount > (hopCount + 1))){
+            //         r4->dstSN = dstSN;
+            //         r4->hopCount = hopCount;
+            //         r4->flag = flag;
+            //         r4->nextHopAddr = nextHopAddr;
+            //         if(r->precursor==NULL)
+            //             r->precursor=new list<string>();
+            //         if(precursor!=NULL)
+            //             r->precursor->merge(*precursor);
+            //         r4->state = state;
+            //         r4->reliability=reli;//added by raj on 23/2/19
+            //         r4->pDelay = pathDelay;//added by raj on 23/2/19
+            // }
+        }
     }
 
-    
-    
-    if(!(r1||r2||r3||r4)) //no route for that dst exists already
+
+    if(!r) //no route for that dst exists already
     {
         Route nr;//added by raj on 23/2/19
         nr.dstSN = dstSN;
@@ -136,6 +348,7 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
         nr.priority = priority;
         nr.pDelay = pathDelay;
         nr.reliability = reli;
+        nr.path_Load = path_Load; 
         //route.lifetime = active_route_timeout
         table->push_back(nr);
 
@@ -152,6 +365,7 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
         nr.priority = priority;
         nr.pDelay = pathDelay;
         nr.reliability = reli;
+        nr.path_Load = path_Load; 
         //route.lifetime = active_route_timeout
         table->push_back(nr);
 
@@ -168,6 +382,7 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
         nr.priority = priority;
         nr.pDelay = pathDelay;
         nr.reliability = reli;
+        nr.path_Load = path_Load; 
         //route.lifetime = active_route_timeout
         table->push_back(nr);
 
@@ -184,6 +399,7 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
         nr.priority = priority;
         nr.pDelay = pathDelay;
         nr.reliability = reli;
+        nr.path_Load = path_Load; 
         //route.lifetime = active_route_timeout
         table->push_back(nr);
     }

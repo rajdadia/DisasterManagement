@@ -63,6 +63,7 @@ class RoutingPacket : public ::cPacket
   public:
     std::string dtype;//added by raj 
     int priority;//added by raj
+    std::string priorityTypeVal;
     RoutingPacket(const char *name=NULL, int kind=0);
     RoutingPacket(const RoutingPacket& other);
     virtual ~RoutingPacket();

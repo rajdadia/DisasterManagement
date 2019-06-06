@@ -1,0 +1,16 @@
+Castalia| what:General (1)
+Castalia| when:2019-06-01 11:40
+Castalia| label:General
+Assigned runID=General-0-20190601-11:40:42-22048
+Setting up network `SN'...
+Initializing...
+
+Running simulation...
+** Event #1   T=0   Elapsed: 0.000s (0m 00s)  0% completed   ev/sec=0
+** Event #323   T=0.037602234902   Elapsed: 0.004s (0m 00s)  0% completed   ev/sec=0
+
+<!> Error in module (AodvTestRouting) SN.node[2].Communication.Routing (id=32) at event #323, t=0.037602234902: std::out_of_range: basic_string::substr: __pos (which is 2) > this->size() (which is 0).
+
+undisposed object: (PacketDATA) SN.node[2].Communication.Routing.AODV routing data packet -- check module destructor
+
+End.

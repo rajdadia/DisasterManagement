@@ -1,0 +1,17 @@
+
+0               SN.node[0].Communication.Routing         AODV : T : Testing purposes  
+0               SN.node[0].Application                   Only for node 0, starting application layer.
+0               SN.node[1].Communication.Routing         AODV : T : Testing purposes  
+0               SN.node[1].Application                   Starting application layer for every node except 0
+0               SN.node[2].Communication.Routing         AODV : T : Testing purposes  
+0               SN.node[2].Application                   Starting application layer for every node except 0
+0               SN.node[3].Communication.Routing         AODV : T : Testing purposes  
+0               SN.node[3].Application                   Starting application layer for every node except 0
+0               SN.node[4].Communication.Routing         AODV : T : Testing purposes  
+0               SN.node[4].Application                   Starting application layer for every node except 0
+0               SN.node[0].Communication.Routing         sugar
+0               SN.node[0].Communication.Routing         starting implematation 
+0               SN.node[0].Communication.Routing         AODV : RREQ : generated for destination -1
+0               SN.node[0].Communication.Routing         AODV : RREQ : forwarded to destination -1
+0.000628007677  SN.node[1].Communication.Routing         Received [AODV routing RREQ packet] from MAC layer
+0.000628007677  SN.node[1].Communication.Routing         AODV : RREQ : RX : origin: 0 id: 0 destination: -1 from: 

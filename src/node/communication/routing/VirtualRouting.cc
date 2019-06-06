@@ -11,6 +11,8 @@
  ****************************************************************************/
 
 #include "VirtualRouting.h"
+#include "AodvTestRoutingDataPacket_m.h"   // added by diana 
+
 void VirtualRouting::initialize()
 {
 	maxNetFrameSize = par("maxNetFrameSize");
@@ -140,7 +142,7 @@ void VirtualRouting::handleMessage(cMessage * msg)
 		case NETWORK_LAYER_PACKET:
 		{
 			RoutingPacket *netPacket = check_and_cast <RoutingPacket*>(msg);
-			trace() << "Received [" << netPacket->getName() << "] from MAC layer";
+			trace() << "Received [" << netPacket->getName() << "] from MAC layer SRC is : "<< netPacket->getSource();
 			NetMacInfoExchange_type info = netPacket->getNetMacInfoExchange();
 
 			/* Control is now passed to a specific routing protocol by calling fromMacLayer()
@@ -216,9 +218,13 @@ void VirtualRouting::finish()
 {
 	CastaliaModule::finish();
 	cPacket *pkt;
+
+	trace() << "inside VR:Fin()  " ; 
 	// clear the buffer from all remaining packets
 	while (!TXBuffer.empty()) {
 		pkt = TXBuffer.front();
+		PacketDATA *data = dynamic_cast <PacketDATA*>(pkt);
+		trace()<<"@outing::fini, TXBuffer.pop() is called Src-pkt id " <<string(data->getSource())<<":"<<data->getSequenceNumber() ;  // Dest-NextHop " <<string(pkt->getSource())<<"-"<< string(finalDst)<<" via " <<rtable->getNextHop(finalDst,pkt->dtype,pkt->priority)<<" hop_count:"<<rtable->getHopCount(finalDst,pkt->dtype,pkt->priority)<<":Pkt-Id: "<<pkt->getSequenceNumber();//added 2 arguments by raj on 23/02/19 
 		TXBuffer.pop();
 		cancelAndDelete(pkt);
 	}
@@ -227,6 +233,7 @@ void VirtualRouting::finish()
 int VirtualRouting::bufferPacket(cPacket * rcvFrame)
 {
 	if ((int)TXBuffer.size() >= netBufferSize) {
+		trace() << "Buffer Overflow " << TXBuffer.size() << "/" << netBufferSize;
 		collectOutput("Buffer overflow");
 		cancelAndDelete(rcvFrame);
 		return 0;

@@ -59,6 +59,7 @@ class PacketRREQ : public ::RoutingPacket
     double lifetime_var;
     SimTime propDelay;//added a new parameter by Raj 19/10/18
     SimTime pathDelay;//added on 22/1/19
+    double path_Load; // added by diana 
 
   private:
     void copy(const PacketRREQ& other);
@@ -105,6 +106,9 @@ class PacketRREQ : public ::RoutingPacket
     virtual void setpropDelay(SimTime x);// added by Raj 19/10/18
     virtual SimTime getpathDelay() const;//added on 22/1/19
     virtual void setpathDelay(SimTime x);//added on 22/1/19
+    virtual double getpathLoad() const;//added on 18/4/19 diana 
+    virtual void setpathLoad(double x);//added on 18/4/19 diana 
+
 };
 
 inline void doPacking(cCommBuffer *b, PacketRREQ& obj) {obj.parsimPack(b);}

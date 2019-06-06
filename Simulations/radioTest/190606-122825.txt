@@ -1,0 +1,404 @@
+Castalia| what:General (1)
+Castalia| when:2019-06-06 12:28
+Castalia| label:General
+Castalia|	module:SN.node[0].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79993 
+Castalia|	module:SN.node[0].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			237 Failed with NO interference
+Castalia|			115 Failed with interference
+Castalia|			642 Failed, below sensitivity
+Castalia|			61 Received despite interference
+Castalia|			949 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			34 TX pkts
+Castalia|	module:SN.node[0].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			34 Received from App
+Castalia|			148 filtered, other dest
+Castalia|			862 received data pkts
+Castalia|			34 sent data pkts
+Castalia|	module:SN.node[0].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			639 DATA pkt (D)
+Castalia|			223 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			34 RREQ pkt (F)
+Castalia|			34 RREQ pkt (S)
+Castalia|		simple output name:Timers expired
+Castalia|			2 rreq
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[0].Application
+Castalia|		 index:1 simple output name:Packets received per node
+Castalia|			70 
+Castalia|		 index:2 simple output name:Packets received per node
+Castalia|			78 
+Castalia|		 index:3 simple output name:Packets received per node
+Castalia|			74 
+Castalia|		 index:4 simple output name:Packets received per node
+Castalia|			78 
+Castalia|		 index:5 simple output name:Packets received per node
+Castalia|			76 
+Castalia|		 index:6 simple output name:Packets received per node
+Castalia|			56 
+Castalia|		 index:7 simple output name:Packets received per node
+Castalia|			17 
+Castalia|		 index:8 simple output name:Packets received per node
+Castalia|			58 
+Castalia|		 index:9 simple output name:Packets received per node
+Castalia|			42 
+Castalia|		 index:10 simple output name:Packets received per node
+Castalia|			40 
+Castalia|		 index:11 simple output name:Packets received per node
+Castalia|			35 
+Castalia|		 index:12 simple output name:Packets received per node
+Castalia|			15 
+Castalia|		histogram name:Application level latency, in ms
+Castalia|		histogram_min:0 histogram_max:200
+Castalia|		histogram_values 169 177 151 97 31 10 4 0 0 0 0
+Castalia|	module:SN.node[1].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79851 
+Castalia|	module:SN.node[1].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			552 Failed with NO interference
+Castalia|			79 Failed with interference
+Castalia|			650 Failed, below sensitivity
+Castalia|			34 Failed, non RX state
+Castalia|			47 Received despite interference
+Castalia|			541 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			135 TX pkts
+Castalia|	module:SN.node[1].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			135 Received from App
+Castalia|			371 filtered, other dest
+Castalia|			217 received data pkts
+Castalia|			135 sent data pkts
+Castalia|	module:SN.node[1].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			24 DATA pkt (F)
+Castalia|			193 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			22 DATA pkt (F)
+Castalia|			80 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[2].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79714 
+Castalia|	module:SN.node[2].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			332 Failed with NO interference
+Castalia|			292 Failed with interference
+Castalia|			8 Failed, non RX state
+Castalia|			29 Received despite interference
+Castalia|			1143 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			234 TX pkts
+Castalia|	module:SN.node[2].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			234 Received from App
+Castalia|			731 filtered, other dest
+Castalia|			441 received data pkts
+Castalia|			234 sent data pkts
+Castalia|	module:SN.node[2].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			124 DATA pkt (F)
+Castalia|			317 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			120 DATA pkt (F)
+Castalia|			81 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[3].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79612 
+Castalia|	module:SN.node[3].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			272 Failed with NO interference
+Castalia|			210 Failed with interference
+Castalia|			245 Failed, below sensitivity
+Castalia|			9 Failed, non RX state
+Castalia|			34 Received despite interference
+Castalia|			961 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			308 TX pkts
+Castalia|	module:SN.node[3].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			308 Received from App
+Castalia|			551 filtered, other dest
+Castalia|			444 received data pkts
+Castalia|			308 sent data pkts
+Castalia|	module:SN.node[3].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			196 DATA pkt (F)
+Castalia|			248 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			191 DATA pkt (F)
+Castalia|			84 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[4].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79854 
+Castalia|	module:SN.node[4].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			242 Failed with NO interference
+Castalia|			308 Failed with interference
+Castalia|			5 Failed, non RX state
+Castalia|			19 Received despite interference
+Castalia|			1331 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			133 TX pkts
+Castalia|	module:SN.node[4].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			133 Received from App
+Castalia|			997 filtered, other dest
+Castalia|			353 received data pkts
+Castalia|			133 sent data pkts
+Castalia|	module:SN.node[4].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			23 DATA pkt (F)
+Castalia|			330 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			19 DATA pkt (F)
+Castalia|			81 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[5].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79844 
+Castalia|	module:SN.node[5].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			262 Failed with NO interference
+Castalia|			289 Failed with interference
+Castalia|			4 Failed, non RX state
+Castalia|			39 Received despite interference
+Castalia|			1304 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			140 TX pkts
+Castalia|	module:SN.node[5].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			140 Received from App
+Castalia|			992 filtered, other dest
+Castalia|			351 received data pkts
+Castalia|			140 sent data pkts
+Castalia|	module:SN.node[5].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			26 DATA pkt (F)
+Castalia|			325 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			26 DATA pkt (F)
+Castalia|			81 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[6].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79864 
+Castalia|	module:SN.node[6].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			316 Failed with NO interference
+Castalia|			157 Failed with interference
+Castalia|			113 Failed, below sensitivity
+Castalia|			20 Failed, non RX state
+Castalia|			82 Received despite interference
+Castalia|			1224 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			126 TX pkts
+Castalia|	module:SN.node[6].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			127 Received from App
+Castalia|			1015 filtered, other dest
+Castalia|			291 received data pkts
+Castalia|			126 sent data pkts
+Castalia|	module:SN.node[6].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			9 DATA pkt (F)
+Castalia|			282 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			9 DATA pkt (F)
+Castalia|			85 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[7].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79875 
+Castalia|	module:SN.node[7].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			504 Failed with NO interference
+Castalia|			46 Failed with interference
+Castalia|			735 Failed, below sensitivity
+Castalia|			62 Failed, non RX state
+Castalia|			50 Received despite interference
+Castalia|			524 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			118 TX pkts
+Castalia|	module:SN.node[7].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			119 Received from App
+Castalia|			375 filtered, other dest
+Castalia|			199 received data pkts
+Castalia|			118 sent data pkts
+Castalia|	module:SN.node[7].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			1 DATA pkt (F)
+Castalia|			198 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			1 DATA pkt (F)
+Castalia|			85 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[8].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79804 
+Castalia|	module:SN.node[8].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			108 Failed with NO interference
+Castalia|			162 Failed with interference
+Castalia|			134 Failed, below sensitivity
+Castalia|			10 Failed, non RX state
+Castalia|			102 Received despite interference
+Castalia|			1353 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			169 TX pkts
+Castalia|	module:SN.node[8].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			170 Received from App
+Castalia|			1102 filtered, other dest
+Castalia|			353 received data pkts
+Castalia|			169 sent data pkts
+Castalia|	module:SN.node[8].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			54 DATA pkt (F)
+Castalia|			299 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			53 DATA pkt (F)
+Castalia|			84 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[9].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79733 
+Castalia|	module:SN.node[9].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			188 Failed with NO interference
+Castalia|			77 Failed with interference
+Castalia|			247 Failed, below sensitivity
+Castalia|			44 Failed, non RX state
+Castalia|			54 Received despite interference
+Castalia|			1208 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			220 TX pkts
+Castalia|	module:SN.node[9].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			220 Received from App
+Castalia|			896 filtered, other dest
+Castalia|			366 received data pkts
+Castalia|			220 sent data pkts
+Castalia|	module:SN.node[9].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			107 DATA pkt (F)
+Castalia|			259 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			107 DATA pkt (F)
+Castalia|			80 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[10].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79861 
+Castalia|	module:SN.node[10].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			820 Failed with NO interference
+Castalia|			65 Failed with interference
+Castalia|			261 Failed, below sensitivity
+Castalia|			38 Failed, non RX state
+Castalia|			74 Received despite interference
+Castalia|			652 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			128 TX pkts
+Castalia|	module:SN.node[10].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			128 Received from App
+Castalia|			512 filtered, other dest
+Castalia|			214 received data pkts
+Castalia|			128 sent data pkts
+Castalia|	module:SN.node[10].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			14 DATA pkt (F)
+Castalia|			200 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			14 DATA pkt (F)
+Castalia|			81 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[11].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79808 
+Castalia|	module:SN.node[11].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			696 Failed with NO interference
+Castalia|			176 Failed with interference
+Castalia|			167 Failed, below sensitivity
+Castalia|			25 Failed, non RX state
+Castalia|			60 Received despite interference
+Castalia|			748 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			166 TX pkts
+Castalia|	module:SN.node[11].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			166 Received from App
+Castalia|			504 filtered, other dest
+Castalia|			304 received data pkts
+Castalia|			166 sent data pkts
+Castalia|	module:SN.node[11].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			51 DATA pkt (F)
+Castalia|			253 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			48 DATA pkt (F)
+Castalia|			85 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted
+Castalia|	module:SN.node[12].ResourceManager
+Castalia|		simple output name:Consumed Energy
+Castalia|			6.79861 
+Castalia|	module:SN.node[12].Communication.Radio
+Castalia|		simple output name:RX pkt breakdown
+Castalia|			797 Failed with NO interference
+Castalia|			294 Failed with interference
+Castalia|			339 Failed, below sensitivity
+Castalia|			9 Failed, non RX state
+Castalia|			11 Received despite interference
+Castalia|			461 Received with NO interference
+Castalia|		simple output name:TXed pkts
+Castalia|			128 TX pkts
+Castalia|	module:SN.node[12].Communication.MAC
+Castalia|		simple output name:TunableMAC packet breakdown
+Castalia|			128 Received from App
+Castalia|			254 filtered, other dest
+Castalia|			218 received data pkts
+Castalia|			128 sent data pkts
+Castalia|	module:SN.node[12].Communication.Routing
+Castalia|		simple output name:Pkt received
+Castalia|			15 DATA pkt (F)
+Castalia|			203 RREQ pkt
+Castalia|		simple output name:Pkt sent
+Castalia|			14 DATA pkt (F)
+Castalia|			81 DATA pkt (S)
+Castalia|			33 RREQ pkt (F)
+Castalia|		simple output name:Timers expired
+Castalia|			10 rreq broadcasted

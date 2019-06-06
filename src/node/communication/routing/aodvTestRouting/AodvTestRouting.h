@@ -26,6 +26,7 @@
 #include "AodvTestRoutingDataPacket_m.h"
 #include "AodvRoutingTable_rt.h"
 #include "AodvRREQTable.h"
+#include "ResourceManager.h"
 #include <list>
 #include <map>
 #include <queue>
@@ -67,6 +68,15 @@ struct aodvTimer
     double lifetime;
 };
 
+struct packetValues   // added by diana, but no use 
+{	int nodeId;
+	string dtype;
+	int priority;
+	long int pktId;
+};
+
+struct packetValues pktVal[10]; // here size must be equal to number of nodes in the topology
+
 struct rreqBroadcastedTimer
 {
     int id;
@@ -99,7 +109,29 @@ class AodvTestRouting: public VirtualRouting
 	AodvRREQTable* rreqTable;// the RREQ table
 	priority_queue <RouteTimer,vector<rreqBroadcastedTimer>,compareRreqBroadcastedTimer > rreqBroadTable;// list of rreq broadcasted
 
+// Added by Diana  16 APR 2019  ************* 
+	int load_Comp_Timer = 2;  //this variable value is 2 ,  when load computation block is called from the ReceivePktData ,   
+	int increment_Val=0;
+	int Intervals_Val = 5; 
+	int interval_count = 0; 
+	int load_Array_Val[5];   // no. of values should be equal to Intervals_Val value. 
+	int load_Critical_Array_Val[5]; // To store past five intervals critical packet count
+	int Interval_Start_Pkt_Count_Val =0; 
+	int Interval_Start_Critical_Pkt_Count_Val = 0; 
+	int Recvd_Pkt_Count = 0; 
+	int Recvd_Critical_Pkt_Count = 0;
+	SimTime Prev_Time_Interval = 0; 
+	SimTime Prev_Time_Interval_1 = 0 ; 
+	SimTime Prev_Time_Interval_for_Dropping = 0 ;  
+	bool dropping_Flag= false;
+	double node_Load1 = 0 ; 
+    double node_Critical_Load1 = 0;
+	int path_Load = 0;  
+	double drop_Ratio = 0; 
+	int no_of_Pkts_to_Drop = 0; 
+	int no_of_pkts_Dropped = 0; 
 
+// *******************
 	double activeRouteTimeout; //in s
 	int allowedHelloLoss;
 	double helloInterval; //in s
@@ -165,7 +197,7 @@ class AodvTestRouting: public VirtualRouting
 	bool checkRREQBuffered(std::string orig, int idx);
 	//check if the RREQ as already been forwarded (section 6.5 RFC3650)
 	bool checkRREQBroadcasted(std::string orig, int idx);
-	void updateRoute(const std::string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string nextHopAddr,std::list<std::string>* precursor, double aTime, SimTime pathDelay, double reli, int priority);
+	void updateRoute(const std::string dstIP,unsigned long dstSN,bool state,RoutingFlag flag,int hopCount,const std::string nextHopAddr,std::list<std::string>* precursor, double aTime, SimTime pathDelay, double reli, double node_Load);//raj on 29/3/19 diana added only load parameter 
 
 	void setRrepAckTimer(const char* neib);
 	void setRreqBlacklistTimer(const char* neib);
@@ -181,13 +213,13 @@ class AodvTestRouting: public VirtualRouting
 	void fromMacLayer(cPacket *, int, double, double);
 	void timerFiredCallback(int index);
 	void receivePktDATA(PacketDATA* pkt);
-	void receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double rssi, double lqi);
+	void receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double rssi, double lqi);  // load added by diana 
 	void receivePktRREP(PacketRREP* pkt,int srcMacAddress, double rssi, double lqi);
 	void receivePktRERR(PacketRERR* pkt,int srcMacAddress, double rssi, double lqi);
 	void receivePktHELLO(PacketHELLO* pkt);
 
-	//rreqSrc and rreqDst  are the value for all the AODV protocol : originator + finalDST
-	void sendPktRREQ(int hopCount, int rreqID, std::string srcIP, std::string dstIP, unsigned long srcSN, unsigned long dstSN, SimTime pathDelay);
+	//rreqSrc and rreqDst  are the value for all the AODV protocol : originator + finalDST, node_Load is added by diana 
+	void sendPktRREQ(int hopCount, int rreqID, std::string srcIP, std::string dstIP, unsigned long srcSN, unsigned long dstSN, SimTime pathDelay, double node_Load);
 	void sendPktRREP(int hopCount, std::string rreqSrc, std::string rreqDst, unsigned long dstSN, double lifetime, bool forwarding, int rreqID);
 	void sendPktHELLO();
 	//affDst : list of broken dst - affPre : list of affected precursors
@@ -199,6 +231,9 @@ class AodvTestRouting: public VirtualRouting
 	bool isBlacklisted(const char* neib);
 	void setBlacklistTimer(const char* neib);
 	void sendSugar();//created a new fucntion to handle SUGAR by raj 6/11/18.
+	void computeLoad(); // Added by diana which computes node and path load periodically. this function is called periodically from fromAppliLayer()
+	void periodicComputation(); // Added by diana which is executed once in a RREQ recev action. 
+	ResourceManager *resMgrModule;   // diana added on May 2nd 2019
 };
 
 #endif

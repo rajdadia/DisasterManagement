@@ -201,9 +201,12 @@ void VirtualApplication::toNetworkLayer(cPacket * pkt, const char *dst)
 	if (size == 0)
 		size = constantDataPayload;
 	if (packetHeaderOverhead > 0) size += packetHeaderOverhead;
-	trace() << "Sending [" << appPkt->getName() << "] of size " <<
-		size << " bytes to communication layer";
+	trace() << "Sending [" << appPkt->getName() << "] of size " << 	size << " bytes to communication layer from source "<< selfAddress;
 	appPkt->setByteLength(size);
-	send(appPkt, "toCommunicationModule");
+	//if (selfAddress.compare("4") == 0)   // If condition only for testing 
+	//{	
+		send(appPkt, "toCommunicationModule");
+		//trace()<<"Sending only from selfAddress: "<< selfAddress; 
+	//}
 }
 

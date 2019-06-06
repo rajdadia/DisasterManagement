@@ -1,0 +1,9 @@
+Castalia| what:General (1)
+Castalia| when:2019-03-29 11:50
+Castalia| label:General
+Assigned runID=General-0-20190329-11:50:42-13176
+Setting up network `SN'...
+Initializing...
+
+Running simulation...
+** Event #1   T=0   Elapsed: 0.000s (0m 00s)  0% completed   ev/sec=0

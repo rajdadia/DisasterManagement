@@ -23,6 +23,8 @@ void ThroughputTest::startup()
 
 	packet_spacing = packet_rate > 0 ? 1 / float (packet_rate) : -1;
 	dataSN = 0;
+	Pkt_Rcvd_Cnt = 0; 
+
 
 	if (packet_spacing > 0 && recipientAddress.compare(SELF_NETWORK_ADDRESS) != 0)
 	{	
@@ -44,7 +46,8 @@ void ThroughputTest::fromNetworkLayer(ApplicationPacket * rcvPacket,
 	int sequenceNumber = rcvPacket->getSequenceNumber();
 	
 	if (recipientAddress.compare(SELF_NETWORK_ADDRESS) == 0) {
-		trace() << "Received packet #" << sequenceNumber << " from node " << source; 
+		Pkt_Rcvd_Cnt = Pkt_Rcvd_Cnt + 1;    // added by diana on 9th Apr 2019
+		trace() << "Received packet #" << sequenceNumber << " from node " << source<< " Total pkt count is: "<< Pkt_Rcvd_Cnt ; 
 		collectOutput("Packets received per node", atoi(source));
 	// Packet has to be forwarded to the next hop recipient
 	} else {
@@ -57,10 +60,10 @@ void ThroughputTest::fromNetworkLayer(ApplicationPacket * rcvPacket,
 }
 
 void ThroughputTest::timerFiredCallback(int index)
-{
+{  
 	switch (index) {
 		case SEND_PACKET:{
-			trace() << "Sending packet #" << dataSN;
+			trace() << "Sending packet #" << dataSN ; 
 			toNetworkLayer(createGenericDataPacket(0, dataSN), par("nextRecipient"));
 			dataSN++;
 			setTimer(SEND_PACKET, packet_spacing);

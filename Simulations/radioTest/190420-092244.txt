@@ -1,0 +1,11 @@
+Castalia| what:General (1)
+Castalia| when:2019-04-20 09:22
+OMNeT++ Discrete Event Simulation  (C) 1992-2014 Andras Varga, OpenSim Ltd.
+Version: 4.6, build: 141202-f785492, edition: Academic Public License -- NOT FOR COMMERCIAL USE
+See the license for distribution terms and warranty disclaimer
+Setting up Cmdenv...
+
+<!> Error: Error loading NED sources from `D:\OMNET\Castalia-3.2\Dis\Castalia\src': NED error in file `BridgeTest.ned': declared package `node.application.bridgeTest' does not match expected package `node - Copy.application.bridgeTest'.
+
+
+End.
