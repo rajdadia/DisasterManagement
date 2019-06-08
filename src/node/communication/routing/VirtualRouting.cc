@@ -204,7 +204,9 @@ void VirtualRouting::handleMessage(cMessage * msg)
 
 // handleMacControlMessage needs to either process and DELETE the message OR forward it
 void VirtualRouting::handleMacControlMessage(cMessage * msg)
-{
+{	
+	
+	trace()<<"@alRouting::handleMacControlMessage  "; // <<string(data->getSource())<<":"<<data->getSequenceNumber() ;
 	toApplicationLayer(msg);
 }
 

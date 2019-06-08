@@ -6,6 +6,7 @@
 #define _APPLICATIONPACKET_M_H_
 
 #include <omnetpp.h>
+#include <string>
 
 // nedtool version check
 #define MSGC_VERSION 0x0406
@@ -51,6 +52,7 @@ class ApplicationPacket : public ::cPacket
     opp_string applicationID_var;
     unsigned int sequenceNumber_var;
     double data_var;
+    //int pkt_Type; 
 
   private:
     void copy(const ApplicationPacket& other);
@@ -78,6 +80,9 @@ class ApplicationPacket : public ::cPacket
     virtual void setSequenceNumber(unsigned int sequenceNumber);
     virtual double getData() const;
     virtual void setData(double data);
+  //  virtual int getType() const;  // added by diana on 7th June 2019. 
+  // virtual void setType(int pkt_type);
+
 };
 
 inline void doPacking(cCommBuffer *b, ApplicationPacket& obj) {obj.parsimPack(b);}

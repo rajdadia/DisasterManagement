@@ -379,6 +379,17 @@ void ApplicationPacket::setData(double data)
 {
     this->data_var = data;
 }
+/*
+int ApplicationPacket::getType() const   // added by diana 
+{
+    return pkt_Type;
+}
+
+void ApplicationPacket::setType(int data)
+{
+    this->pkt_Type = data;
+}*/
+
 
 class ApplicationPacketDescriptor : public cClassDescriptor
 {
@@ -532,7 +543,7 @@ std::string ApplicationPacketDescriptor::getFieldAsString(void *object, int fiel
         case 0: {std::stringstream out; out << pp->getAppNetInfoExchange(); return out.str();}
         case 1: return oppstring2string(pp->getApplicationID());
         case 2: return ulong2string(pp->getSequenceNumber());
-        case 3: return double2string(pp->getData());
+        case 3: return double2string(pp->getData());   // need to call getType() 
         default: return "";
     }
 }
@@ -546,10 +557,15 @@ bool ApplicationPacketDescriptor::setFieldAsString(void *object, int field, int 
         field -= basedesc->getFieldCount(object);
     }
     ApplicationPacket *pp = (ApplicationPacket *)object; (void)pp;
+
     switch (field) {
         case 1: pp->setApplicationID((value)); return true;
         case 2: pp->setSequenceNumber(string2ulong(value)); return true;
-        case 3: pp->setData(string2double(value)); return true;
+        case 3: {
+                    pp->setData(string2double(value)); 
+                    return true;
+                }
+
         default: return false;
     }
 }

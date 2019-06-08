@@ -22,6 +22,7 @@
 #include <csimulation.h>
 #include <CastaliaModule.h>
 #include <ResourceManager.h>
+#include "ApplicationPacket_m.h"   // added by diana 
 #include <ctime>
 #include <ratio>
 #include <chrono>
@@ -367,11 +368,12 @@ void AodvTestRouting::fromMacLayer(cPacket * pkt, int srcMacAddress, double rssi
                // IMPORTANT NEED tO look into it, since type and priority are getting invalid after 2 hops.. 
                 // added by diana since, packets' priority and type are changed...
                // trace()<<"testing about execution control data->dtype.compare(" ") is :"<<data->dtype.compare(" ")<<":"  ; 
-                if ( ( data->priority != 1 || data->priority != 2 ) ||  data->dtype.compare(" ")  )
+                if ( ( data->priority != 1 || data->priority != 2 ) ||  data->dtype.compare(" ")  )  // then type is reassigned here. 
                 {  // ***************** IMPO: whole bloack needs to be changed later
-                   int v= rand();
+                   
+                    long v= data->getSequenceNumber() ;
                     int type = (v % 4);//added by raj on 23/2/19
-                  //  trace()<<"@fromAppli: rand is & type "<<v<<"  "<<type;
+                    
                     switch(type){
                         case 0:
                         {   //trace()<<"@fromApplicationL: testing_Ordinary";
@@ -395,7 +397,7 @@ void AodvTestRouting::fromMacLayer(cPacket * pkt, int srcMacAddress, double rssi
                         }
 
                     }
-
+                    trace()<<"@fromAppli: dta type reassign type, "<<data->dtype;
                     data->priority=1;   // need to be random based on selected SECONDARY or PRIMARY paths. 
                     // ********************************
 
@@ -459,6 +461,7 @@ void AodvTestRouting::fromMacLayer(cPacket * pkt, int srcMacAddress, double rssi
 //application layer can only send data packets
 void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destination)
 {
+    node_Pkt_Count++;    
     Recvd_Pkt_Count++;  // Receiving from it's application layer 
 	PacketDATA *data = new PacketDATA("AODV routing data packet", NETWORK_LAYER_PACKET);
 	data->setSource(SELF_NETWORK_ADDRESS);
@@ -469,8 +472,8 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 
 
    // processBufferedDATA(destination,false); // Called by diana for testing 
-    
-//	trace() << "AODV :fromApp: Recvd_Pkt_Count() " << string(destination)<< " Pkt No: "<<pkt << " TXBufferal: "<< Recvd_Pkt_Count;
+  //  trace()<<" pkt type is "<<pkt->getType();
+// 	trace() << "AODV :fromApp: Recvd_Pkt_Count() " << string(destination)<< " Pkt No: "<<pkt << " TXBufferal: "<< Recvd_Pkt_Count;
 	if(string(destination).compare(BROADCAST_NETWORK_ADDRESS)==0)
 	{
 	        return;
@@ -483,7 +486,7 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
     std::string path=getFullPath();
    // srand((int)path[8]);
     // srand(0);
-    int v= rand();
+    long v= node_Pkt_Count ;
     int type = (v % 4);//added by raj on 23/2/19
   //  trace()<<"@fromAppli: rand is & type "<<v<<"  "<<type;
     switch(type){
@@ -514,7 +517,7 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
     data->priority=1;   // NEED to CHANGE this priority to rand value this is for PRIMARY and SECONDARY paths. IMPORTANT
     int priority = data->priority;//raj on 15/3/19
 
-  //  trace()<<"data->priority & data->dtype"<<data->priority<<":"<<data->dtype<<":";
+   
     string s = to_string(data->priority); 
      char char_array[15], char_array1[20];
     strcpy(char_array, s.c_str());
@@ -541,8 +544,11 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
    // pktVal[val].priority = data->priority ;
    // pktVal[val].pktId = data->getSequenceNumber() ;  
 
-   
-    encapsulatePacket(data, pkt);
+  // trace()<<"BEF @ng::fromAppli data->priority & data->dtype"<<data->priority<<":"<<data->dtype<<": Pkt No: "<<data->getSequenceNumber()<<"Recvd_Pkt_Count:"<<Recvd_Pkt_Count ;
+
+    encapsulatePacket(data, pkt);  // after encapsulating packet gets pkt id... 
+
+    trace()<<" AFT @ng::fromAppli data->priority & data->dtype"<<data->priority<<":"<<data->dtype<<": Pkt No: "<<data->getSequenceNumber()<<"node_Pkt_Count:"<<node_Pkt_Count;
 
     // Added by diana on 21/5/2019
     // Keeps track of number of critical packets.
@@ -563,14 +569,14 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
           // trace()<<"@fromApplicati data->dtype & dropping_Flag "<<data->dtype<<" "<<dropping_Flag ; 
             if (data->dtype.compare("Critical")!=0 && dropping_Flag )  //  if block is added by diana, to handle packet drops. 
             {   no_of_pkts_Dropped++;    // Means packet is dropped, so toMacLayer() is not called
-             //   trace()<<"no_of_pkts_Dropped & no_of_Pkts_to_Drop "<< no_of_pkts_Dropped <<"  "<< no_of_Pkts_to_Drop ;
+                trace()<<"no_of_pkts_Dropped & no_of_Pkts_to_Drop "<< no_of_pkts_Dropped <<"  "<< no_of_Pkts_to_Drop <<" Pkt No: "<<data->getSequenceNumber();
                 if (no_of_pkts_Dropped >= no_of_Pkts_to_Drop)
                 {
                     dropping_Flag = false;
                     Prev_Time_Interval_for_Dropping = arrivalTime1;
                     no_of_pkts_Dropped = 0; // reinitailised for next dropping iteration
                 }
-                return;
+                return; // if return is commented then BM module is not applied. 
             }               
 
 			updateLifetimeRoute(string(destination), activeRouteTimeout,pktType,priority);//added 2 argumnets by raj on 23/02/19
