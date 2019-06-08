@@ -201,7 +201,7 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
         if(dtype.compare("Critical")==0){
             double ms = pathDelay.dbl();
             //double oms = r3->pDelay.dbl();
-            int newr = (0.8*ms)+(0.2*reli);
+            int newr = (0.8*ms)+(0.2*reli);   
             //int oldr = (0.8*oms)+(0.2*(r3->reliability));
             double oms1,oms2;
             int oldr1,oldr2;
@@ -270,8 +270,8 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
             if (priority==1){
                 Route* r1 = searchByDest(dstIP,dtype,1);
                 Route* r2 = searchByDest(dstIP,dtype,2);
-                if(r1->flag!=VALID || r1->dstSN < dstSN || (r1->dstSN == dstSN && r1->hopCount > (hopCount + 1))){
-
+               // if(r1->flag!=VALID || r1->dstSN < dstSN || (r1->dstSN == dstSN && r1->hopCount > (hopCount + 1))){  added by raj
+                if(r1->flag!=VALID || r1->dstSN < dstSN || (r1->dstSN == dstSN &&  r1->path_Load > path_Load )){    // added by diana on 8th June 2019
                     r2->dstSN = r1->dstSN;
                     r2->hopCount = r1->hopCount;
                     r2->flag = r1->flag;
@@ -291,7 +291,7 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
                     r1->path_Load = path_Load; 
 
                 }
-                else if(r2->flag!=VALID || r2->dstSN < dstSN || (r2->dstSN == dstSN && r2->hopCount > (hopCount + 1))){
+                else if(r2->flag!=VALID || r2->dstSN < dstSN || (r2->dstSN == dstSN && r2->path_Load > path_Load )){
                     r2->dstSN = dstSN;
                     r2->hopCount = hopCount;
                     r2->flag = flag;
@@ -304,7 +304,7 @@ void AodvRoutingTable::insertRoute(const std::string& dstIP,unsigned long dstSN,
             }
             else if(priority==2){
                 Route* r2 = searchByDest(dstIP,dtype,2);
-                if(r2->flag!=VALID || r2->dstSN < dstSN || (r2->dstSN == dstSN && r2->hopCount > (hopCount + 1))){
+                if(r2->flag!=VALID || r2->dstSN < dstSN || (r2->dstSN == dstSN && r2->path_Load > path_Load )){
                     r2->dstSN = dstSN;
                     r2->hopCount = hopCount;
                     r2->flag = flag;

@@ -120,7 +120,8 @@ class AodvTestRouting: public VirtualRouting
 	int Interval_Start_Critical_Pkt_Count_Val = 0; 
 	int node_Pkt_Count = -1; // to keep track of no. of packets only from application layer.
 	int Recvd_Pkt_Count = 0; // to keep track of no. of packets received (from application layer and mac layer (pkt to forward) ) at an each node 
-	int Recvd_Critical_Pkt_Count = 0;
+	int Recvd_Critical_Pkt_Count = 0;  // to keep track of no. of critical packets received (from application layer and mac layer (pkt to forward) ) at an each node 
+	int node_Critical_Pkt_Count = 0; // to keep track of no. of critical packets only from application layer.
 	SimTime Prev_Time_Interval = 0; 
 	SimTime Prev_Time_Interval_1 = 0 ; 
 	SimTime Prev_Time_Interval_for_Dropping = 0 ;  
@@ -234,6 +235,7 @@ class AodvTestRouting: public VirtualRouting
 	void sendSugar();//created a new fucntion to handle SUGAR by raj 6/11/18.
 	void computeLoad(); // Added by diana which computes node and path load periodically. this function is called periodically from fromAppliLayer()
 	void periodicComputation(); // Added by diana which is executed once in a RREQ recev action. 
+	void scheduling();
 	ResourceManager *resMgrModule;   // diana added on May 2nd 2019
 };
 

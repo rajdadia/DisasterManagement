@@ -135,7 +135,7 @@ void AodvTestRouting::finish()
         cancelAndDelete(rerrpkt);
     }
 
-    trace()<<" Total consumed energy is:"<<resMgrModule->getSpentEnergy();
+    trace()<<" Total consumed energy is:"<<resMgrModule->getSpentEnergy()<<" Totoal no. of generated critical pkts: "<< node_Critical_Pkt_Count;
 }
 
 void AodvTestRouting::timerFiredCallback(int index)
@@ -360,6 +360,8 @@ void AodvTestRouting::fromMacLayer(cPacket * pkt, int srcMacAddress, double rssi
 	switch(packetType)
 	{
 			case AODV_DATA:
+
+                                 
                 int val;
                 //trace()<<" pkt type and priority before converting into data packet type is:"<<pkt->dtype<<":"<<pkt->priority<<":"; 
                 trace() << "AODV : A1 : DATA received - from: " << string(data->getSource())
@@ -399,19 +401,21 @@ void AodvTestRouting::fromMacLayer(cPacket * pkt, int srcMacAddress, double rssi
                     }
                     trace()<<"@fromAppli: dta type reassign type, "<<data->dtype;
                     data->priority=1;   // need to be random based on selected SECONDARY or PRIMARY paths. 
-                    // ********************************
-
-                    /*trace()<<"inside if data->dtype & data->priority:1"<<data->dtype<<":"<<data->priority<<":";
-                    val = data->priorityTypeVal[0] - '0' ; 
-                    trace()<<"inside if data->dtype & data->priority:2 val "<<val;
-                    data->dtype = (data->priorityTypeVal).substr(2);
-                    trace()<<"inside if data->dtype & data->priority:3 "<<data->dtype<<":"<<data->priority<<":";
-                    data->priority = val ; */
                     
                  } 
 
-			   // trace() << "AODV : A1 : DATA received - from: " << string(data->getSource())
-			               // <<" PktID :"<<data->getSequenceNumber()<<" Typ:"<<data->dtype<<" pri:"<< data->priority<<" val:"<<val;
+                    /* ********************************
+                    To keep track of total no. of received critical pkt counts. Added by diana on 8th June 2019. */
+                  
+                    if (SELF_NETWORK_ADDRESS == 0 && data->dtype.compare("Critical")==0)
+                        Recvd_Critical_Pkt_Count++;  // To compute total no. of received critical pkt counts from all nodes  
+                    trace() << "@from MAc layer DATA received - from: " << string(data->getSource())
+                           <<" PktID :"<<data->getSequenceNumber()<<" Typ:"<<data->dtype<<" Recvd_Critical_Pkt_Count:"<< Recvd_Critical_Pkt_Count ; 
+                               
+                    // *********************************
+                    
+
+			   
 				receivePktDATA(data);
 				break;
 
@@ -461,7 +465,8 @@ void AodvTestRouting::fromMacLayer(cPacket * pkt, int srcMacAddress, double rssi
 //application layer can only send data packets
 void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destination)
 {
-    node_Pkt_Count++;    
+    node_Pkt_Count++;  // this is to keep track of packet sequence no. Used to generate the pkt type and reassign the packet type when ever type becomes "" at the intermediate nodes.  
+    
     Recvd_Pkt_Count++;  // Receiving from it's application layer 
 	PacketDATA *data = new PacketDATA("AODV routing data packet", NETWORK_LAYER_PACKET);
 	data->setSource(SELF_NETWORK_ADDRESS);
@@ -553,8 +558,10 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
     // Added by diana on 21/5/2019
     // Keeps track of number of critical packets.
     if (data->dtype.compare("Critical")==0)
-        Recvd_Critical_Pkt_Count++;
-
+    {  
+         Recvd_Critical_Pkt_Count++;
+         node_Critical_Pkt_Count++; // To compute percent of critical pkts being received from it's application layer .     
+    }    
 
     // trace()<<"@fromApplicationL: data->dtype: "<< data->dtype<<" Recvd_Critical_Pkt_Count:"<<Recvd_Critical_Pkt_Count;   
      computeLoad();  // function defined by diana 
@@ -702,6 +709,8 @@ void AodvTestRouting::receivePktDATA(PacketDATA *pkt)
          
    
     bufferPacket(ndPacket);
+
+    scheduling(); 
 }
 
 void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dstIP, unsigned long srcSN, unsigned long dstSN, SimTime pathDelay, double path_Load)
@@ -1452,6 +1461,68 @@ void AodvTestRouting::updateRoute(const string dstIP,unsigned long dstSN,bool st
 
 }
 
+void AodvTestRouting::scheduling()   // added by diana 
+{   
+    queue< cPacket* > bufferTemp;
+    PacketDATA* currPkt; 
+    string dstIP ;
+    int type_Count = 0; // used to travers through all 4 types of packets in a prioirty order
+    string pkt_Type ="Critical";
+
+    while(type_Count != 4)
+    {    
+        while (!TXBuffer.empty())
+        {   
+            
+            currPkt = dynamic_cast <PacketDATA*>(TXBuffer.front());
+            
+
+            if(currPkt && currPkt->dtype.compare(pkt_Type)==0  )  // if it is critical
+            { 
+                dstIP =  currPkt->getDestinationAodv() ;
+               // trace()<<"@processBuffered, rtable->isRouteValid(dstIP,currPkt->dtype,currPkt->priority): "<<rtable->isRouteValid(dstIP,currPkt->dtype,currPkt->priority);
+                if( rtable->isRouteValid(dstIP,currPkt->dtype,currPkt->priority))
+                {
+                    currPkt->setDestination(rtable->getNextHop(dstIP,currPkt->dtype,currPkt->priority).c_str());//changed by raj
+                    trace() << "AODV : DATA : TX (out of buffer) - destination " << string(dstIP)
+                            <<" via " <<rtable->getNextHop(dstIP,currPkt->dtype,currPkt->priority);//changed by raj
+                    if(string(currPkt->getSource()).compare(SELF_NETWORK_ADDRESS)==0)
+                        collectOutput("Pkt sent","DATA pkt (BS)");
+                    else
+                        collectOutput("Pkt sent","DATA pkt (BF)");
+
+                    toMacLayer(currPkt, resolveNetworkAddress((rtable->getNextHop(dstIP,currPkt->dtype,currPkt->priority)).c_str()));//changed 15/3/19 raj
+                }
+            }
+            else
+            {
+                bufferTemp.push(TXBuffer.front());
+            }
+
+            TXBuffer.pop();
+           // trace()<< " @ocessBufferedata, TXBuffer.pop() is called "<<" currPkt, string(dstIP), currPkt->getDestinationAodv() currPkt->dtype, currPkt->priority "<<currPkt<<"  "<<string(dstIP)<<"  "<<currPkt->getDestinationAodv()<<":"<<currPkt->dtype<<":"<<currPkt->priority<<":" ;
+            updateLifetimeRoute(string(dstIP), activeRouteTimeout,currPkt->dtype,currPkt->priority);
+        }
+
+        while (!bufferTemp.empty()) {   // reload rest of the packets
+            TXBuffer.push(bufferTemp.front());
+            trace()<< " @Scheduling , TXBuffer.push() is called ";
+            bufferTemp.pop();
+        }
+
+        type_Count++;   
+
+        if (type_Count == 1)
+            pkt_Type= "Delay"; 
+        else if(type_Count == 2)
+            pkt_Type= "Reliable"; 
+        else if(type_Count == 3)
+            pkt_Type= "Ordinary";     
+            
+    } // outer while loop 
+    
+}
+
 void AodvTestRouting::processBufferedDATA(string dstIP, bool drop)
 {
     queue< cPacket* > bufferTemp;
@@ -1459,11 +1530,16 @@ void AodvTestRouting::processBufferedDATA(string dstIP, bool drop)
     string val;
     trace()<<" Inside AodvTestRouting::processBufferedDATA " ; 
     
+    scheduling(); // called 
+
+
     trace()<<"@ting::processBufferedD,  TXBuffer. not empty():"<<TXBuffer.empty();  // for testing, returns routing table's each row 
     for (int j=0; val.compare("V") != 0 ;j++)
     {   val = rtable->getRouteFromTable(j);
         trace()<<"@processBufferedData, val is:"<<val; 
     }
+    
+    
          
     while (!TXBuffer.empty())
     {   

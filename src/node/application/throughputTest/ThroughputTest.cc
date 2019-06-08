@@ -47,7 +47,8 @@ void ThroughputTest::fromNetworkLayer(ApplicationPacket * rcvPacket,
 	
 	if (recipientAddress.compare(SELF_NETWORK_ADDRESS) == 0) {
 		Pkt_Rcvd_Cnt = Pkt_Rcvd_Cnt + 1;    // added by diana on 9th Apr 2019
-		trace() << "Received packet #" << sequenceNumber << " from node " << source<< " Total pkt count is: "<< Pkt_Rcvd_Cnt ; 
+		
+		trace() << "Received packet #" << sequenceNumber << " from node " << source<< " Total pkt count is: "<< Pkt_Rcvd_Cnt ; //<<" Total Criti pkt count: "<<Recvd_Critical_Pkt_Count; 
 		collectOutput("Packets received per node", atoi(source));
 	// Packet has to be forwarded to the next hop recipient
 	} else {
