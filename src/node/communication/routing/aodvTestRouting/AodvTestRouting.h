@@ -128,10 +128,20 @@ class AodvTestRouting: public VirtualRouting
 	bool dropping_Flag= false;
 	double node_Load1 = 0 ; 
     double node_Critical_Load1 = 0;
+    double node_Delay_Load1 = 0;
+    double node_Reliability_Load1 = 0;
+    double node_Ordinary_Load1 = 0;
+    double pkt_Type_Load[4]; 
+
+    bool distr_Flag[4];
+    int distr_Count[4][3];  
+
 	int path_Load = 0;  
 	double drop_Ratio = 0; 
 	int no_of_Pkts_to_Drop = 0; 
 	int no_of_pkts_Dropped = 0; 
+	int path_Ratio_Value[4][2] ; // to keep tarck of no. of pkt distribution ratio to each path. 
+	int max_Buffer_Size = 2000; 
 
 // *******************
 	double activeRouteTimeout; //in s
@@ -234,8 +244,9 @@ class AodvTestRouting: public VirtualRouting
 	void setBlacklistTimer(const char* neib);
 	void sendSugar();//created a new fucntion to handle SUGAR by raj 6/11/18.
 	void computeLoad(); // Added by diana which computes node and path load periodically. this function is called periodically from fromAppliLayer()
-	void periodicComputation(); // Added by diana which is executed once in a RREQ recev action. 
-	void scheduling();
+	void computeDropRatio(); // Added by diana which is executed once in a RREQ recev action. 
+	void scheduling();  // added by diana
+	void computePathRatio();  // added by diana on 10th June 2019
 	ResourceManager *resMgrModule;   // diana added on May 2nd 2019
 };
 

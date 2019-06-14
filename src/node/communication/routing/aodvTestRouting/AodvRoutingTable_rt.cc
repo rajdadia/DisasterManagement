@@ -44,21 +44,24 @@ AodvRoutingTable::~AodvRoutingTable()
 string AodvRoutingTable::getRouteFromTable(int j)  //Added by diana only for testing since trace() was not working in this file
 {
      int k=-1;
-     string val1="V";        
+     string val1="V";    
+         
     for(list<Route>::iterator i=table->begin();i!=table->end();++i)
     {    
         Route &r = *i;
         k++;
         if (k==j)
             {   
-                std::string str = std::to_string(r.priority);
+                std::string pri = std::to_string(r.priority);   // int
                 std::string str1 = std::to_string(r.hopCount);
+                std::string p_rel=std::to_string(r.reliability);   // double
+                std::string p_delay=SIMTIME_STR(r.pDelay);   //SimTime
+                std::string p_load=std::to_string(r.path_Load);    // double
                 
-                val1= r.dstIP+":"+r.dtype+":"+ str +":"+str1;            
+                val1= r.dtype+":"+ pri +":"+p_rel+":"+p_delay+":"+p_load;            
                 
                 return val1;
             }
-
           
     }
     return val1;

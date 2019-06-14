@@ -359,10 +359,8 @@ void AodvTestRouting::fromMacLayer(cPacket * pkt, int srcMacAddress, double rssi
 
 	switch(packetType)
 	{
-			case AODV_DATA:
-
-                                 
-                int val;
+			case AODV_DATA:                                 
+                int val , k;
                 //trace()<<" pkt type and priority before converting into data packet type is:"<<pkt->dtype<<":"<<pkt->priority<<":"; 
                 trace() << "AODV : A1 : DATA received - from: " << string(data->getSource())
                              << " destination: " << string(data->getDestinationAodv())<<" PktID :"<<data->getSequenceNumber()<<" Typ:"<<data->dtype<<" pri:"<< data->priority<<" data->priorityTypeVal:"<<data->priorityTypeVal;
@@ -380,37 +378,71 @@ void AodvTestRouting::fromMacLayer(cPacket * pkt, int srcMacAddress, double rssi
                         case 0:
                         {   //trace()<<"@fromApplicationL: testing_Ordinary";
                             data->dtype = "Ordinary";
+                            k=3;
                             break;
                         }
                         case 1: 
                         {   //trace()<<"@fromApplicationL: testing_Reliable";
                             data->dtype = "Reliable";
+                            k=2;
                             break;
                         }                                           //added  by raj to assign random values
                         case 2: 
                         {   //trace()<<"@fromApplicationL: testing_Delay";
                             data->dtype = "Delay";
+                            k=1;
                             break;
                         }
                         case 3: 
                         {  // trace()<<"@fromApplicationL: testing_Critical";
                             data->dtype = "Critical";
+                            k=0;
                             break;
                         }
 
                     }
                     trace()<<"@fromAppli: dta type reassign type, "<<data->dtype;
-                    data->priority=1;   // need to be random based on selected SECONDARY or PRIMARY paths. 
+                   
                     
                  } 
 
+                   if (distr_Flag[k]== true)   // primary path 
+                    {
+                        data->priority = 1;
+                        distr_Count[k][1]++;
+                        path_Ratio_Value[k][0]--;
+
+                        if ( (distr_Count[k][1] == distr_Count[k][0] ) || path_Ratio_Value[k][0] ==0 )
+                        {    distr_Flag[k] = false; 
+                             distr_Count[k][1]=0;
+                        }
+
+                    }
+                    else if (distr_Flag[k]== false)   // secondary path
+                    {
+                        data->priority = 2;
+                        distr_Count[k][2]++;
+                        path_Ratio_Value[k][1]--;
+
+                        if ( (distr_Count[k][2] == distr_Count[k][0]) || path_Ratio_Value[k][1] ==0 )  
+                        {   distr_Flag[k] = true; 
+                            distr_Count[k][2]=0;
+                        }
+                    }
+
+                  
                     /* ********************************
                     To keep track of total no. of received critical pkt counts. Added by diana on 8th June 2019. */
                   
-                    if (SELF_NETWORK_ADDRESS == 0 && data->dtype.compare("Critical")==0)
-                        Recvd_Critical_Pkt_Count++;  // To compute total no. of received critical pkt counts from all nodes  
+                    //if (SELF_NETWORK_ADDRESS == 0 && data->dtype.compare("Critical")==0)
+                    //    Recvd_Critical_Pkt_Count++;  // To compute total no. of received critical pkt counts from all nodes , this is done alraedy in receivePktData()
+
                     trace() << "@from MAc layer DATA received - from: " << string(data->getSource())
-                           <<" PktID :"<<data->getSequenceNumber()<<" Typ:"<<data->dtype<<" Recvd_Critical_Pkt_Count:"<< Recvd_Critical_Pkt_Count ; 
+                           <<" PktID :"<<data->getSequenceNumber()<<" Typ:"<<data->dtype<<" Recvd_Critical_Pkt_Count:"<< Recvd_Critical_Pkt_Count<<"data->priority:"<<data->priority << "distr_Count[k][1]:"<<distr_Count[k][1]<<"distr_Count[k][2]:"<<distr_Count[k][2]; 
+
+                         
+                  //  trace() << "@from MAc layer DATA received - from: " << string(data->getSource())
+                    //       <<" PktID :"<<data->getSequenceNumber()<<" Typ:"<<data->dtype<<" Recvd_Critical_Pkt_Count:"<< Recvd_Critical_Pkt_Count ; 
                                
                     // *********************************
                     
@@ -487,7 +519,7 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
 	}
 
     string pktType;
-
+    int k=0;
     std::string path=getFullPath();
    // srand((int)path[8]);
     // srand(0);
@@ -498,30 +530,58 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
         case 0:
         {   //trace()<<"@fromApplicationL: testing_Ordinary";
             pktType = "Ordinary";
+            k=3; 
             break;
         }
         case 1: 
         {   //trace()<<"@fromApplicationL: testing_Reliable";
             pktType = "Reliable";
+            k=2;
             break;
         }                                           //added  by raj to assign random values
         case 2: 
         {   //trace()<<"@fromApplicationL: testing_Delay";
             pktType = "Delay";
+            k=1;
             break;
         }
         case 3: 
         {  // trace()<<"@fromApplicationL: testing_Critical";
             pktType = "Critical";
+            k=0;
             break;
         }
 
     }
 
     data->dtype=pktType;
-    data->priority=1;   // NEED to CHANGE this priority to rand value this is for PRIMARY and SECONDARY paths. IMPORTANT
-    int priority = data->priority;//raj on 15/3/19
 
+    if (distr_Flag[k]== true)   // primary path 
+    {
+        data->priority = 1;
+        distr_Count[k][1]++;
+        path_Ratio_Value[k][0]--;
+
+        if ( (distr_Count[k][1] == distr_Count[k][0] ) || path_Ratio_Value[k][0] ==0 )
+        {    distr_Flag[k] = false; 
+             distr_Count[k][1]=0;
+        }
+
+    }
+    else if (distr_Flag[k]== false)   // secondary path
+    {
+        data->priority = 2;
+        distr_Count[k][2]++;
+        path_Ratio_Value[k][1]--;
+
+        if ( (distr_Count[k][2] == distr_Count[k][0]) || path_Ratio_Value[k][1] ==0 )  
+        {   distr_Flag[k] = true; 
+            distr_Count[k][2]=0;
+        }
+    }
+
+
+    int priority = data->priority;//raj on 15/3/19
    
     string s = to_string(data->priority); 
      char char_array[15], char_array1[20];
@@ -562,6 +622,13 @@ void AodvTestRouting::fromApplicationLayer(cPacket * pkt, const char *destinatio
          Recvd_Critical_Pkt_Count++;
          node_Critical_Pkt_Count++; // To compute percent of critical pkts being received from it's application layer .     
     }    
+    else if (data->dtype.compare("Delay")==0)
+        node_Delay_Load1++ ; 
+    else if (data->dtype.compare("Reliability")==0)
+        node_Reliability_Load1++;
+    else if (data->dtype.compare("Ordinary")==0)    
+        node_Ordinary_Load1++;
+
 
     // trace()<<"@fromApplicationL: data->dtype: "<< data->dtype<<" Recvd_Critical_Pkt_Count:"<<Recvd_Critical_Pkt_Count;   
      computeLoad();  // function defined by diana 
@@ -618,8 +685,15 @@ void AodvTestRouting::receivePktDATA(PacketDATA *pkt)
 {
     Recvd_Pkt_Count++;    // Receiving from other nodes to forward the data 
     // Keeps track of number of critical packets.
-    if (pkt->dtype.compare("Critical")==0)
-        Recvd_Critical_Pkt_Count++; 
+    if (pkt->dtype.compare("Critical")==0)   // increased alraedy in fromMAcLayer().
+       Recvd_Critical_Pkt_Count++; 
+    else if (pkt->dtype.compare("Delay")==0)
+        node_Delay_Load1++ ; 
+    else if (pkt->dtype.compare("Reliability")==0)
+        node_Reliability_Load1++;
+    else if (pkt->dtype.compare("Ordinary")==0)    
+        node_Ordinary_Load1++;
+
 
          
    // trace()<<"@ RecvDataPkt, Recvd_Pkt_Count():& pkt->dtype & prioiryt :" << Recvd_Pkt_Count << ":"<<pkt->dtype<<":"<<pkt->priority<<":Pkt_SEQ_No: "<< pkt->getSequenceNumber()<< ": Src is :"<< string(pkt->getSource()) ; 
@@ -771,7 +845,7 @@ void AodvTestRouting::sendPktRREQ(int hopCount, int id, string srcIP, string dst
 
 }
 // Added by diana which is ecexuted once in a RRREQ recv action
-void AodvTestRouting::periodicComputation()
+void AodvTestRouting::computeDropRatio()
 {
     SimTime arrivalTime1 = simTime() ;  //Returns current simulation time
     double pred_Traffic_Perc;
@@ -781,7 +855,7 @@ void AodvTestRouting::periodicComputation()
    // {
        // Prev_Time_Interval_1 = arrivalTime1;
 
-        pred_Traffic_Perc = node_Load1 / 2000 ;  // SN.node[*].Communication.Routing.netBufferSize = 2000  which is max. buffer size set @ omnetpp.ini file of RadioTest simulator 
+        pred_Traffic_Perc = node_Load1 / max_Buffer_Size ;  // SN.node[*].Communication.Routing.netBufferSize = 2000  which is max. buffer size set @ omnetpp.ini file of RadioTest simulator 
         pred_Critical_Traffic_Perc = node_Critical_Load1 / node_Load1 ; 
          if (pred_Traffic_Perc >= 0.6 && pred_Critical_Traffic_Perc >= 0.5 && pred_Critical_Traffic_Perc <= 0.9 ) // Actual code
        // if (pred_Traffic_Perc >= 0.021 && pred_Critical_Traffic_Perc >= 0.2 && pred_Critical_Traffic_Perc <= 0.9 ) // for testing 
@@ -789,7 +863,7 @@ void AodvTestRouting::periodicComputation()
         
         //drop_Ratio = 0.10;     
         no_of_Pkts_to_Drop =   drop_Ratio *   (node_Load1-node_Critical_Load1); 
-        trace()<<"@ periodicComputat(), no_of_Pkts_to_Drop "<<no_of_Pkts_to_Drop;
+        trace()<<"@ computeDropRatio(), no_of_Pkts_to_Drop "<<no_of_Pkts_to_Drop;
       // trace()<<"drop_Ratio: & * : "<< drop_Ratio<<" "<< (pred_Traffic_Perc * pred_Critical_Traffic_Perc) ; 
       //  trace()<<"pred_Traffic_Perc & pred_Critical_Traffic_Perc & node_Load1 & node_Critical_Load1"<<pred_Traffic_Perc<<" "<<pred_Critical_Traffic_Perc<<" "<<node_Load1<<" "<<node_Critical_Load1;    
   //  }
@@ -808,12 +882,26 @@ void AodvTestRouting::periodicComputation()
     
     SimTime arrivalTime1 = simTime() ;  //Returns current simulation time
     
-  
-        if ( ( arrivalTime1 - Prev_Time_Interval) > 5  )  // Load computation is done once in a 5 secs. 
-       {   //trace()<<" arrivalTime1 and Prev_Time_Interval "<< arrivalTime1<< "  "<< Prev_Time_Interval;
+        //trace()<<" @ computeLoad Recvd_Pkt_Co  BEFORE IF" ;
+       // trace()<<" arrivalTime1 and Prev_Time_Interval:"<< arrivalTime1<< ":"<< Prev_Time_Interval;
+
+        if ( ( arrivalTime1 - Prev_Time_Interval) >= 3  )  // Load computation is done once in a 3 secs, which is the end of the RREQ pkt. . 
+       {   
+
+                        
             Prev_Time_Interval = arrivalTime1; // Interval_Start_Pkt_Count_Val is initialised to 0 in .h file
             curr_Load_Val = Recvd_Pkt_Count - Interval_Start_Pkt_Count_Val; // Recvd_Pkt_Count variable is incraesed twice, while receiving data from application layer and while receiving dat from neighbours (i.e. fromAppl() and ReceDataPkt())
             curr_Critical_Load_Val = Recvd_Critical_Pkt_Count - Interval_Start_Critical_Pkt_Count_Val;
+
+            pkt_Type_Load[0]= curr_Critical_Load_Val ; 
+            pkt_Type_Load[1]= node_Delay_Load1 ; 
+            pkt_Type_Load[2]= node_Reliability_Load1 ; 
+            pkt_Type_Load[3]= node_Ordinary_Load1; 
+
+            // Reinitialised to 0. 
+            node_Delay_Load1 = 0;
+            node_Reliability_Load1 = 0;
+            node_Ordinary_Load1 = 0;
 
             trace()<<" @ computeLoad Recvd_Pkt_Count() && Interval_Start_Pkt_Count_Val " << Recvd_Pkt_Count <<" && "<< Interval_Start_Pkt_Count_Val;
             Interval_Start_Pkt_Count_Val = Recvd_Pkt_Count ;     
@@ -853,9 +941,14 @@ void AodvTestRouting::periodicComputation()
             
             path_Load = node_Load1; 
            
-
+            // Below 2 functions has to be called periodiccaly over RREQ interval or more than that. (In our case it is 5 secs)
           //  trace()<<" @ computeLoad, Current load is :"<<  curr_Load_Val<< " past_Load is :"<< past_Load <<" node load "<< node_Load1 ; // << " path Load is: "<< pkt->getpathLoad() ;
-           
+            computeDropRatio(); // Computes Drop ratio, added by diana    
+
+            // IMP: need to use currentload - no. of pkts dropped (computed using computeDropRatio() ) for the compute path ratio function. 
+            computePathRatio(); // finding pkt distribution ratio over each path (Primary and secondary paths)
+
+
        }    
     //*************
      // Added by diana for tetsting 
@@ -867,6 +960,154 @@ void AodvTestRouting::periodicComputation()
     // }
 }
 
+/*********************** 
+Function decides ratio of data transmission over primary and secondary paths over next time interval (i.e till next RREQ pcket process), over all 8 routes. 
+At the end of RREQ process for each data type two paths are identified , each path is having all path informations, 
+which will be the input for ratio computation function.
+*/
+void AodvTestRouting::computePathRatio()  // Added by diana 
+{
+    
+    string val; 
+    long Max_Path_Laod_Val = max_Buffer_Size; // which is max. buffer size. 
+    double Pri_Path_Cri, Sec_Path_Cri ;
+    double Pri_Path_Delay, Sec_Path_Delay;  
+    double Pri_Path_Reli, Sec_Path_Reli;
+    double Dela, Reli, Lod ;  
+    // Normalise both laod and reliabity values.
+    std::size_t pos;
+    std::size_t pos1;
+    std::string Dtype ;
+    std::string pri;    
+    std::string rel;
+    std::string del;
+    std::string load;
+
+    double Pri_Path_Load_C, Sec_Path_Load_C, Sec_Path_Load_D, Sec_Path_Load_R, Sec_Path_Load_O, Pri_Path_Load_D, Pri_Path_Load_R, Pri_Path_Load_O ; 
+    // Path information have to get from the routing table itself, at the end of RREQ process and after the route values are modified in the routing table. 
+    
+    for (int j=0; val.compare("V") != 0 ;j++)
+    {       val = rtable->getRouteFromTable(j);
+            //trace()<<"@computePathRatio, Routing Tbl row is :"<<val; 
+            if (val.compare("V")==0)
+                break; 
+            // val1= r.dtype+":"+ pri +":"+p_rel+":"+p_delay+":"+p_load;        
+            
+            pos = val.find(":"); 
+            Dtype = val.substr (0, pos );     // type 
+            pri = val.substr (pos+1, 1 );
+            pos1 = val.find(":",pos+1,1);
+            pos = val.find(":",pos1+1,1); 
+            rel = val.substr (pos1+1, pos-pos1-1 );
+            pos1 = val.find(":",pos+1,1);
+            del = val.substr (pos+1, pos1-pos-1 );
+            pos = val.find(":",pos1+1,1); 
+            load = val.substr (pos1+1, pos-pos1-1 );
+
+            Dela = std::stod(del);
+            Reli = std::stod(rel);
+            Lod = std::stod(load);
+
+            trace()<<"Dtype is :"<<Dtype<<":priority:"<<pri<<":relia:"<<rel<<":delay:"<<del<<":load:"<<load; 
+            
+            if (Dtype.compare("Critical") && pri.compare("1"))
+            {
+                Pri_Path_Load_C = Lod ;
+                Pri_Path_Cri = 0.5*Reli + 0.5 * Dela; 
+
+            }
+            else if(Dtype.compare("Critical") && pri.compare("2"))
+            {
+                Sec_Path_Load_C = Lod ;
+                Sec_Path_Cri = 0.5*Reli + 0.5 * Dela; 
+            }
+            else if (Dtype.compare("Delay") && pri.compare("1"))
+            {
+                Pri_Path_Load_D = Lod ;
+                Pri_Path_Delay =  Dela; 
+
+            }
+            else if(Dtype.compare("Delay") && pri.compare("2"))
+            {
+                Sec_Path_Load_D = Lod ;
+                Sec_Path_Delay =  Dela; 
+            }
+            else if (Dtype.compare("Reliability") && pri.compare("1"))
+            {
+                Pri_Path_Load_R = Lod ;
+                Pri_Path_Reli = Reli ; 
+
+            }
+            else if(Dtype.compare("Reliability") && pri.compare("2"))
+            {
+                Sec_Path_Load_R = Lod ;
+                Sec_Path_Reli = Reli ; 
+            }
+            else if (Dtype.compare("Ordinary") && pri.compare("1"))
+            {
+                Pri_Path_Load_O = Lod ;
+                }
+            else if(Dtype.compare("Ordinary") && pri.compare("2"))
+            {
+                Sec_Path_Load_O = Lod ;
+            }
+
+      }
+            // Compute rigidity and ratio for all 4 types
+             int devide_Portion = 3;     
+            // For Critical path
+            double Pri_Cri_Rigidity = ((Pri_Path_Cri/2 ) *  ( Pri_Path_Load_C / Max_Path_Laod_Val)) ; 
+            double Sec_Cri_Rigidity = ((Sec_Path_Cri/2 ) *  ( Sec_Path_Load_C / Max_Path_Laod_Val));
+            // Laod distribution computation using rigidity vales.
+            path_Ratio_Value[0][0] = 1- (Pri_Cri_Rigidity/ (Pri_Cri_Rigidity+Sec_Cri_Rigidity) ) ; // Critical
+            path_Ratio_Value[0][1] = 1- (Sec_Cri_Rigidity/ (Pri_Cri_Rigidity+Sec_Cri_Rigidity) ) ; // ratio value for each path which is %
+
+            path_Ratio_Value[0][0] = pkt_Type_Load[0] * path_Ratio_Value[0][0]; // No. of pkts through primary critical path 
+            path_Ratio_Value[0][1] = pkt_Type_Load[0] * path_Ratio_Value[0][1]; // No. of pkts through secondary critical path 
+
+            distr_Count[0][0]=path_Ratio_Value[0][0] / devide_Portion ;    // [0][0] is used to store maximum no. of pkts to be sent through primary path and [0][1] for secondary path for critical pkts.
+            
+             trace()<<"@Pat_Ratio for CRITI: pkt_Type_Load[0]:"<<pkt_Type_Load[0]<<"Pri_Rat:"<<path_Ratio_Value[0][0]<<":"<<path_Ratio_Value[0][1]<<"distr_Count[0][0]:"<<distr_Count[0][0]; 
+            // Delay path
+            double Pri_Delay_Rigidity = ((Pri_Path_Delay/2)  *  ( Pri_Path_Load_D / Max_Path_Laod_Val) ); 
+            double Sec_Delay_Rigidity = ((Sec_Path_Delay/2 ) *  ( Sec_Path_Load_D / Max_Path_Laod_Val));
+            path_Ratio_Value[1][0] = 1- (Pri_Delay_Rigidity/ (Pri_Delay_Rigidity+Sec_Delay_Rigidity) ) ; // Delay
+            path_Ratio_Value[1][1] = 1- (Sec_Delay_Rigidity/ (Pri_Delay_Rigidity+Sec_Delay_Rigidity) ) ; 
+
+            path_Ratio_Value[1][0] = pkt_Type_Load[1] * path_Ratio_Value[1][0]; // No. of pkts through primary delay path 
+            path_Ratio_Value[1][1] = pkt_Type_Load[1] * path_Ratio_Value[1][1]; // No. of pkts through secondary delay path 
+            distr_Count[1][0]=path_Ratio_Value[1][0] / devide_Portion ;
+            trace()<<"@Pat_Ratio for delay: pkt_Type_Load[1]:"<<pkt_Type_Load[1]<<"Pri_Rat:"<<path_Ratio_Value[1][0]<<":"<<path_Ratio_Value[1][1]<<"distr_Count[1][0]:"<<distr_Count[1][0]; 
+       
+
+            // for Primary path all parameters are different 
+            double Pri_Reli_Rigidity = (1 - (Pri_Path_Reli/2) ) *  ( Pri_Path_Load_R / Max_Path_Laod_Val) ; // here 2 is maxi. reliable value for the simulation 
+            double Sec_Reli_Rigidity = (1 - (Sec_Path_Reli/2) ) *  ( Sec_Path_Load_R / Max_Path_Laod_Val);
+            path_Ratio_Value[2][0] = 1- (Pri_Reli_Rigidity/ (Pri_Reli_Rigidity+Sec_Reli_Rigidity) ) ; // Relaibility
+            path_Ratio_Value[2][1] = 1- (Sec_Reli_Rigidity/ (Pri_Reli_Rigidity+Sec_Reli_Rigidity) ) ; 
+
+            path_Ratio_Value[2][0] = pkt_Type_Load[2] * path_Ratio_Value[2][0]; // No. of pkts through primary Rel path 
+            path_Ratio_Value[2][1] = pkt_Type_Load[2] * path_Ratio_Value[2][1]; // No. of pkts through secondary rel path 
+            distr_Count[2][0]=path_Ratio_Value[2][0] / devide_Portion ;
+            // For Ordinary path
+            double Pri_Ordinary_Rigidity =  Pri_Path_Load_O / Max_Path_Laod_Val ; 
+            double Sec_Ordinary_Rigidity =  Sec_Path_Load_O / Max_Path_Laod_Val ;
+            path_Ratio_Value[3][0] = 1- (Pri_Ordinary_Rigidity/ (Pri_Ordinary_Rigidity+Sec_Ordinary_Rigidity) ) ; // Ordinary
+            path_Ratio_Value[3][1] = 1- (Sec_Ordinary_Rigidity/ (Pri_Ordinary_Rigidity+Sec_Ordinary_Rigidity) ) ; 
+
+            path_Ratio_Value[3][0] = pkt_Type_Load[3] * path_Ratio_Value[3][0]; // No. of pkts through primary Ordinary path 
+            path_Ratio_Value[3][1] = pkt_Type_Load[3] * path_Ratio_Value[3][1]; // No. of pkts through secondary Ordinary path 
+            distr_Count[3][0]=path_Ratio_Value[3][0] / devide_Portion ;
+
+            for (int i=0; i<3; i++)
+            {   
+                 distr_Flag[i]=true;
+                 distr_Count[i][1] = 0;    // [0][1]  is used to store the no. pkts passed through primary path so far, this is used in fromAPP and fromMAC layer()
+                 distr_Count[i][2] = 0;  // for secondary paths 
+            }
+           
+
+}
 
 void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double rssi, double lqi) 
 {
@@ -877,13 +1118,14 @@ void AodvTestRouting::receivePktRREQ(PacketRREQ* pkt,int srcMacAddress, double r
     SimTime prevTotal = pkt->getpathDelay(); //added by raj 21/1
     SimTime pathDelay = prevTotal + pDelay;  //added by raj 21/1
 
-    double reli = (rssi-lqi)/rssi;//added by raj on 23/2/19
+    double reli = (rssi-lqi)/rssi;//added by raj on 23/2/19 , IMP: is it path reliabaility or link ?, need to modify
+    // IMP need to convert path relaibility and path laod to normalised form. may be relaiability = reli/ max reli value and path load/ max load value.  
 
      trace()<<"@ recvRREQ pkt->getpathLoad()& path_Load & pkt->getpathDelay(): "<<pkt->getpathLoad()<<" "<< path_Load <<" "<<pkt->getpathDelay();
      if ( pkt->getpathLoad() > path_Load )  // path_Load added by diana
         path_Load = pkt->getpathLoad()  ; 
 
-     periodicComputation(); // Computes Drop ratio, added by diana    
+    
 
     if(isBlacklisted(pkt->getSource()))
 	{
@@ -1501,7 +1743,7 @@ void AodvTestRouting::scheduling()   // added by diana
 
             TXBuffer.pop();
            // trace()<< " @ocessBufferedata, TXBuffer.pop() is called "<<" currPkt, string(dstIP), currPkt->getDestinationAodv() currPkt->dtype, currPkt->priority "<<currPkt<<"  "<<string(dstIP)<<"  "<<currPkt->getDestinationAodv()<<":"<<currPkt->dtype<<":"<<currPkt->priority<<":" ;
-            updateLifetimeRoute(string(dstIP), activeRouteTimeout,currPkt->dtype,currPkt->priority);
+         //   updateLifetimeRoute(string(dstIP), activeRouteTimeout,currPkt->dtype,currPkt->priority);  IMP: Is this statement is required ? 
         }
 
         while (!bufferTemp.empty()) {   // reload rest of the packets
@@ -1532,7 +1774,7 @@ void AodvTestRouting::processBufferedDATA(string dstIP, bool drop)
     
     scheduling(); // called 
 
-
+    // val1= r.dtype+":"+ str +":"+p_rel+":"+p_delay+":"+p_load; 
     trace()<<"@ting::processBufferedD,  TXBuffer. not empty():"<<TXBuffer.empty();  // for testing, returns routing table's each row 
     for (int j=0; val.compare("V") != 0 ;j++)
     {   val = rtable->getRouteFromTable(j);
